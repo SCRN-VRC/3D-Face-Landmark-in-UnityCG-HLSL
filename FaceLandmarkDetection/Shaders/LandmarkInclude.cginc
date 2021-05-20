@@ -6,6 +6,41 @@ float sdCircle( float2 p, float r )
     return length(p) - r;
 }
 
+float2x2 rot2(float rot)
+{
+    float sinRot;
+    float cosRot;
+    sincos(rot, sinRot, cosRot);
+    return float2x2(cosRot, -sinRot, sinRot, cosRot);
+}
+
+float3x3 lookAt(float3 forward, float3 up)
+{ 
+    float3 right = normalize(cross(up, forward));
+    float3x3 lookMat;
+ 
+    lookMat[0][0] = right.x;
+    lookMat[1][0] = right.y;
+    lookMat[2][0] = right.z;
+    lookMat[0][1] = up.x;
+    lookMat[1][1] = up.y;
+    lookMat[2][1] = up.z;
+    lookMat[0][2] = forward.x;
+    lookMat[1][2] = forward.y;
+    lookMat[2][2] = forward.z;
+
+    // static const float3x3 invY =
+    // {
+    //     -1, 0, 0,
+    //     0, 1, 0,
+    //     0, 0, -1,
+    // };
+
+    // lookMat = mul(invY, lookMat);
+
+    return lookMat; 
+} 
+
 // Baked weight positions
 
 static const float4 weightPos[118] = 

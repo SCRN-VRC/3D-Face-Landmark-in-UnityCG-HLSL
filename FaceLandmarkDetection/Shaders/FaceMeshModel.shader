@@ -503,13 +503,14 @@
             #pragma target 5.0
 
             //RWStructuredBuffer<float4> buffer : register(u1);
-            Texture2D<float> _Layer1;
-            sampler2D        _CamIn;
-            float4           _CamIn_TexelSize;
+            Texture2D<float>  _Layer1;
+            Texture2D<float3> _Layer2;
+            sampler2D         _CamIn;
+            float4            _CamIn_TexelSize;
 
             float4 frag(v2f_customrendertexture IN) : COLOR
             {
-                float2 uv = IN.globalTexcoord.xy;
+                const float2 uv = IN.globalTexcoord.xy;
                 float4 col = tex2D(_CamIn, uv);
                 uint2 texWH;
                 _Layer1.GetDimensions(texWH.x, texWH.y);
@@ -520,15 +521,142 @@
                     for (uint j = 0; j < texWH.y; j++) {
                         float x = _Layer1[uint2(k, j)];
                         float y = _Layer1[uint2(k + 1, j)];
-                        float z = _Layer1[uint2(k + 2, j)];
+                        //float z = _Layer1[uint2(k + 2, j)];
 
                         d = min(d, sdCircle(uv - float2(y, x) / _CamIn_TexelSize.zw, 0.0055));
                     }
                 }
 
-                col.xyz = lerp(col.xyz, 1..xxx, 1.0-smoothstep(0.001,0.005,abs(d)));
+                col = lerp(col, float4(1, 1, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
+                d = 1000.0;
+
+                // // Reverse rotation debug
+                // _Layer2.GetDimensions(texWH.x, texWH.y);
+                // for (uint k = 0; k < texWH.x; k ++) {
+                //     for (uint j = 0; j < texWH.y; j++) {
+                //         float2 pos = _Layer2[uint2(k, j)].rg;
+                //         //float z = _Layer1[uint2(k + 2, j)];
+
+                //         d = min(d, sdCircle(uv - pos.yx / _CamIn_TexelSize.zw, 0.0055));
+                //     }
+                // }
+
+                // col = lerp(col, float4(1, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
 
                 return col;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "Calculate Vectors"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "LandmarkInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float> _Layer1;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+
+                float4 col = 0;
+
+                // Between eyes
+                const float3 p6 = { _Layer1[uint2(18, 0)], _Layer1[uint2(19, 0)], _Layer1[uint2(20, 0)] };
+
+                // Right Head
+                const float3 p103 = { _Layer1[uint2(36, 7)], _Layer1[uint2(37, 7)], _Layer1[uint2(38, 7)] };
+
+                // Left Head
+                const float3 p332 = { _Layer1[uint2(21, 25)], _Layer1[uint2(22, 25)], _Layer1[uint2(23, 25)] };
+
+                float3 vEyeToRH = p6 - p103;
+                float3 vEyetoLH = p6 - p332;
+                float3 vFace = normalize(cross(vEyeToRH, vEyetoLH));
+
+                float3 centerHead = (p103 + p332) * 0.5;
+                float3 vUp = normalize(p6 - centerHead);
+
+                if (px.y == 0)
+                {
+                    // Rotate head forward cause the head leans back a little
+                    vFace.yz = mul(rot2(0.5), vFace.yz);
+                    vUp.yz = mul(rot2(0.5), vUp.yz);
+                    float3x3 lookDir = lookAt(vFace, vUp);
+                    col.rgb = lookDir[min(px.x, 2)];
+                }
+                else if (px.y == 1)
+                {
+                    // Keep unmodified values
+                    float3x3 lookDir = lookAt(vFace, vUp);
+                    col.rgb = lookDir[min(px.x, 2)];
+                }
+                else if (all(px == uint2(0, 2)))
+                {
+                    uint2 texWH;
+                    _Layer1.GetDimensions(texWH.x, texWH.y);
+
+                    float3 fCentroid = 0.0;
+                    // Get fCentroid
+                    for (uint k = 0; k < texWH.x; k += 3) {
+                        for (uint j = 0; j < texWH.y; j++) {
+                            fCentroid.x += _Layer1[uint2(k, j)];
+                            fCentroid.y += _Layer1[uint2(k + 1, j)];
+                            fCentroid.z += _Layer1[uint2(k + 2, j)];
+                        }
+                    }
+
+                    col.rgb = fCentroid / 468.0;
+                }
+
+                return col;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "Reverse Rotation"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "LandmarkInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float> _Layer1;
+            Texture2D<float3> _Layer2;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+
+                float3 pos;
+                pos.x = _Layer1[uint2(px.x * 3, px.y)];
+                pos.y = _Layer1[uint2(px.x * 3 + 1, px.y)];
+                pos.z = _Layer1[uint2(px.x * 3 + 2, px.y)];
+
+                float3 fCentroid = _Layer2[uint2(0, 2)].rgb;
+
+                float3x3 look;
+
+                look[0] = _Layer2[uint2(0, 0)].rgb;
+                look[1] = _Layer2[uint2(1, 0)].rgb;
+                look[2] = _Layer2[uint2(2, 0)].rgb;
+
+                // Reverse the rotation
+                pos.xyz = mul(pos.xyz - fCentroid, look) + fCentroid;
+
+                return float4(pos, 0.0);
             }
             ENDCG
         }
