@@ -598,23 +598,6 @@
                     float3x3 lookDir = lookAt(vFace, vUp);
                     col.rgb = lookDir[min(px.x, 2)];
                 }
-                else if (all(px == uint2(0, 2)))
-                {
-                    uint2 texWH;
-                    _Layer1.GetDimensions(texWH.x, texWH.y);
-
-                    float3 fCentroid = 0.0;
-                    // Get fCentroid
-                    for (uint k = 0; k < texWH.x; k += 3) {
-                        for (uint j = 0; j < texWH.y; j++) {
-                            fCentroid.x += _Layer1[uint2(k, j)];
-                            fCentroid.y += _Layer1[uint2(k + 1, j)];
-                            fCentroid.z += _Layer1[uint2(k + 2, j)];
-                        }
-                    }
-
-                    col.rgb = fCentroid / 468.0;
-                }
 
                 return col;
             }
@@ -645,7 +628,8 @@
                 pos.y = _Layer1[uint2(px.x * 3 + 1, px.y)];
                 pos.z = _Layer1[uint2(px.x * 3 + 2, px.y)];
 
-                float3 fCentroid = _Layer2[uint2(0, 2)].rgb;
+                // Point 6
+                float3 fCentroid = { _Layer1[uint2(18, 0)], _Layer1[uint2(19, 0)], _Layer1[uint2(20, 0)] };
 
                 float3x3 look;
 
