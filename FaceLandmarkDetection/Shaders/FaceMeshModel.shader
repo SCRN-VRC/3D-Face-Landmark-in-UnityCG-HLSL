@@ -560,6 +560,7 @@
 
             //RWStructuredBuffer<float4> buffer : register(u1);
             Texture2D<float> _Layer1;
+            Texture2D<float3> _Layer2;
 
             float4 frag(v2f_customrendertexture IN) : COLOR
             {
@@ -597,6 +598,14 @@
                     // Keep unmodified values
                     float3x3 lookDir = lookAt(vFace, vUp);
                     col.rgb = lookDir[min(px.x, 2)];
+                }
+                else if (px.y == 2)
+                {
+                    col.rgb = _Layer2[uint2(px.x, px.y - 2)];
+                }
+                else if (px.y == 3)
+                {
+                    col.rgb = _Layer2[uint2(px.x, px.y - 1)];
                 }
 
                 return col;

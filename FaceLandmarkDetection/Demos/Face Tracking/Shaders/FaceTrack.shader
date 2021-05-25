@@ -116,9 +116,9 @@
 
                     float3x3 look;
 
-                    look[0] = _FaceRotate[uint2(0, 0)];
-                    look[1] = _FaceRotate[uint2(1, 0)];
-                    look[2] = _FaceRotate[uint2(2, 0)];
+                    look[0] = (_FaceRotate[uint2(0, 0)] + _FaceRotate[uint2(0, 2)] + _FaceRotate[uint2(0, 3)]) * 0.3333;
+                    look[1] = (_FaceRotate[uint2(1, 0)] + _FaceRotate[uint2(1, 2)] + _FaceRotate[uint2(1, 3)]) * 0.3333;
+                    look[2] = (_FaceRotate[uint2(2, 0)] + _FaceRotate[uint2(2, 2)] + _FaceRotate[uint2(2, 3)]) * 0.3333;
                     float rotMask = 1.0 - tex2Dlod(_MaskRotate, float4(v.texcoord.xy, 0, 0)).r;
                     v.vertex.xyz = lerp(v.vertex.xyz, mul(look, v.vertex.xyz), rotMask);
                 // }

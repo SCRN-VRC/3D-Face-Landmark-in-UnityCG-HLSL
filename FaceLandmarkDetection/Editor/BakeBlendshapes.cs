@@ -28,7 +28,7 @@ public class BakeBlendshapes : EditorWindow
         smr = (SkinnedMeshRenderer) EditorGUILayout.ObjectField("Skinned Mesh", smr, typeof(SkinnedMeshRenderer), true);
         defaultShape = (Texture2D) EditorGUILayout.ObjectField("Default Blendshape", defaultShape, typeof(Texture2D), false);
         EditorGUILayout.EndVertical();
-        if (GUILayout.Button("Bake!") && smr != null && defaultShape != null) {
+        if (GUILayout.Button("Bake!") && smr != null) {
             onBake();
         }
     }
@@ -47,10 +47,18 @@ public class BakeBlendshapes : EditorWindow
         {
             int x = i % 128;
             int y = i / 128;
-            Color pix = defaultShape.GetPixel(x, y);
-            Color col = new Color(vertices[i].x, vertices[i].y, vertices[i].z, 0);
-            col = col - pix;
-            tex.SetPixel(x, y, col);
+            if (defaultShape != null)
+            {
+                Color pix = defaultShape.GetPixel(x, y);
+                Color col = new Color(vertices[i].x, vertices[i].y, vertices[i].z, 0);
+                col = col - pix;
+                tex.SetPixel(x, y, col);
+            }
+            else
+            {
+                Color col = new Color(vertices[i].x, vertices[i].y, vertices[i].z, 0);
+                tex.SetPixel(x, y, col);
+            }
             //Debug.Log(col);
         }
 
