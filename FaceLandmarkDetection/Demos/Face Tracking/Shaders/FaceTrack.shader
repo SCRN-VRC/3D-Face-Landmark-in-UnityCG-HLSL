@@ -96,8 +96,8 @@
                     float3 p386 = _FacePositions[uint2(9, 29)];
                     float3 p374 = _FacePositions[uint2(10, 28)];
 
-                    float MSD = (distance(p61, p91) - 8.8) / 8.0;
-                    float MOD = distance(p13, p14) / 12.0 - 0.4;
+                    float MSD = (distance(p61, p91) - 8.8) / 6.0;
+                    float MOD = distance(p13, p14) / 8.0 - 0.3;
                     float BRD = 1.0 - distance(p159, p145) / 6.0;
                     float BLD = 1.0 - distance(p386, p374) / 6.0;
 

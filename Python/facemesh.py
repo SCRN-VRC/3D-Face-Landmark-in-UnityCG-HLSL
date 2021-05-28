@@ -90,7 +90,7 @@ def test(size=(192, 192)):
     a = np.expand_dims(a, 0)
     return a
 
-INPUT_PATH = './data/face4.jpg'
+INPUT_PATH = './data/face5.jpg'
 
 src_image = load_image(INPUT_PATH)
 org_image = load_img(INPUT_PATH)
