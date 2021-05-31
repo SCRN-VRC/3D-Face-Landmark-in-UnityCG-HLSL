@@ -318,6 +318,8 @@ public:
         const116 = getArray(&fin, 1, 1, 32);
         const117 = getArray(&fin, 1, 1, 128);
 
+        fin.close();
+
         l0 = (float***)createArray(96, 96, 16, sizeof(float));
         l1 = (float***)createArray(96, 96, 16, sizeof(float));
         bnl1 = (float***)createArray(96, 96, 16, sizeof(float));
