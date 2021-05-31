@@ -55,7 +55,9 @@ private:
 
     // layers
     float*** l0, *** l1, *** l2, *** l3, *** l4, *** l5, *** l6, *** l7, *** l8, *** l9,
-        *** l10, *** l11, *** l12, *** l13, *** l14, *** l15, *** l16, *** l17, *** l18, *** l19;
+        *** l10, *** l11, *** l12, *** l13, *** l14, *** l16, *** l17, *** l18, *** l19,
+        *** l20, *** l21, *** l22, *** l23, *** l24, *** l25, *** l26, *** l27, *** l28, *** l29,
+        ***l30, *** l32, *** l33, *** l34, *** l35, *** l36, *** l37, *** l38, *** l39;
 
     float*** test;
 
@@ -447,10 +449,24 @@ public:
         l12 = (float***)createArray(32, 32, 64, sizeof(float));
         l13 = (float***)createArray(16, 16, 64, sizeof(float));
         l14 = (float***)createArray(16, 16, 64, sizeof(float));
-        l15 = (float***)createArray(16, 16, 64, sizeof(float));
+        //l15 = (float***)createArray(16, 16, 64, sizeof(float));
         l16 = (float***)createArray(16, 16, 128, sizeof(float));
         l17 = (float***)createArray(16, 16, 64, sizeof(float));
         l18 = (float***)createArray(16, 16, 64, sizeof(float));
+        l19 = (float***)createArray(16, 16, 128, sizeof(float));
+        l20 = (float***)createArray(16, 16, 64, sizeof(float));
+        l21 = (float***)createArray(16, 16, 64, sizeof(float));
+        l22 = (float***)createArray(16, 16, 128, sizeof(float));
+        l23 = (float***)createArray(16, 16, 64, sizeof(float));
+        l24 = (float***)createArray(16, 16, 64, sizeof(float));
+        l25 = (float***)createArray(16, 16, 128, sizeof(float));
+        l26 = (float***)createArray(16, 16, 64, sizeof(float));
+        l27 = (float***)createArray(16, 16, 64, sizeof(float));
+        l28 = (float***)createArray(16, 16, 128, sizeof(float));
+        l29 = (float***)createArray(8, 8, 64, sizeof(float));
+        l30 = (float***)createArray(8, 8, 64, sizeof(float));
+        //l31 = (float***)createArray(8, 8, 128, sizeof(float));
+        l32 = (float***)createArray(8, 8, 128, sizeof(float));
     }
 
     ~iris()
@@ -808,7 +824,7 @@ public:
         }
     }
 
-    void maxPool2x2Stride2(float*** cl, float*** pl,
+    void maxPool2x2Stride2(float*** cl, float**** cw, float* bias, float**** slope, float*** pl, float*** pl2,
         uint im, uint jm, uint k, uint lm)
     {
         for (uint i = 0; i < im; i++) {
@@ -817,15 +833,45 @@ public:
                 uint i0 = i * 2, i1 = i0 + 1;
                 uint j0 = j * 2, j1 = j0 + 1;
 
+                // kernel
+                for (uint l = 0; l < lm; l++) {
+                    cl[i][j][k] += pl[i][j][l] * cw[k][l][0][0];
+                }
+
+                // max pool
+                float mp = 0.0f;
                 if (k < lm)
                 {
-                    cl[i][j][k] =
-                        fmaxf(pl[i0][j0][k], fmaxf(pl[i0][j1][k],
-                            fmaxf(pl[i1][j0][k], pl[i1][j1][k])));
+                    mp = fmaxf(pl2[i0][j0][k], fmaxf(pl2[i0][j1][k],
+                        fmaxf(pl2[i1][j0][k], pl2[i1][j1][k])));
                 }
+
+                // bias + skip in
+                cl[i][j][k] = cl[i][j][k] + bias[k] + mp;
+                // activation
+                cl[i][j][k] = PRelu(cl[i][j][k], slope[0][k][0][0]);
             }
         }
     }
+
+    //void maxPool2x2Stride2(float*** cl, float*** pl,
+    //    uint im, uint jm, uint k, uint lm)
+    //{
+    //    for (uint i = 0; i < im; i++) {
+    //        for (uint j = 0; j < jm; j++) {
+    //            cl[i][j][k] = 0.0f;
+    //            uint i0 = i * 2, i1 = i0 + 1;
+    //            uint j0 = j * 2, j1 = j0 + 1;
+
+    //            if (k < lm)
+    //            {
+    //                cl[i][j][k] =
+    //                    fmaxf(pl[i0][j0][k], fmaxf(pl[i0][j1][k],
+    //                        fmaxf(pl[i1][j0][k], pl[i1][j1][k])));
+    //            }
+    //        }
+    //    }
+    //}
 
     void forwardProp(float*** imgIn)
     {
@@ -937,7 +983,7 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        // L13, kernel=1x1, stride=1, padding=none
+        // L13, kernel=2x2, stride=2, padding=none
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D2x2Stride2, this, l13, const69, const73, const96, l12, 16, 16, k, 64);
             threads.push_back(move(t));
@@ -953,17 +999,17 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        // L15, max pool=2x2, stride=2
-        for (uint k = 0; k < 128; k++) {
-            thread t(&iris::maxPool2x2Stride2, this, l15, l12, 16, 16, k, 64);
-            threads.push_back(move(t));
-        }
-        for (auto& th : threads) th.join();
-        threads.clear();
+        //// L15, max pool=2x2, stride=2
+        //for (uint k = 0; k < 128; k++) {
+        //    thread t(&iris::maxPool2x2Stride2, this, l15, l12, 16, 16, k, 64);
+        //    threads.push_back(move(t));
+        //}
+        //for (auto& th : threads) th.join();
+        //threads.clear();
 
         // L16, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 128; k++) {
-            thread t(&iris::conv2D1x1Stride1Add, this, l16, const57, const64, const10, l14, l15, 16, 16, k, 64);
+            thread t(&iris::maxPool2x2Stride2, this, l16, const57, const64, const10, l14, l12, 16, 16, k, 64);
             threads.push_back(move(t));
         }
         for (auto& th : threads) th.join();
@@ -985,7 +1031,119 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        cout << l16[15][2][62] << endl;
+        // L19, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l19, const99, const106, const140, l18, l16, 16, 16, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L20, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l20, const164, const170, const192, l19, 16, 16, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L21, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l21, const103, const108, l20, 16, 16, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L22, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l22, const130, const139, const171, l21, l19, 16, 16, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L23, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l23, const199, const207, const105, l22, 16, 16, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L24, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l24, const135, const141, l23, 16, 16, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L25, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l25, const161, const168, const208, l24, l22, 16, 16, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L26, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l26, const112, const121, const138, l25, 16, 16, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L27, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l27, const165, const172, l26, 16, 16, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L28, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l28, const197, const206, const16, l27, l25, 16, 16, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L29, kernel=2x2, stride=2, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D2x2Stride2, this, l29, const40, const44, const61, l28, 8, 8, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L30, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l30, const85, const88, l29, 8, 8, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        //// L31, max pool=2x2, stride=2
+        //for (uint k = 0; k < 128; k++) {
+        //    thread t(&iris::maxPool2x2Stride2, this, l31, l28, 8, 8, k, 64);
+        //    threads.push_back(move(t));
+        //}
+        //for (auto& th : threads) th.join();
+        //threads.clear();
+
+        // L32, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::maxPool2x2Stride2, this, l32, const109, const116, const166, l30, l28, 8, 8, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        cout << l32[2][6][60] << endl;
     }
 };
 
