@@ -115,80 +115,80 @@ private:
     }
 
 public:
-    // Annoying callocs
-    static void** createArray(int i, int j, size_t size)
+    // Annoying mallocs
+    static float** createArray(int i, int j, size_t size)
     {
-        void** r = (void**)calloc(i, sizeof(void*));
+        float** r = new float* [i * sizeof(float*)];
         for (int x = 0; x < i; x++) {
-            r[x] = (void*)calloc(j, size);
+            r[x] = new float[j * size];
         }
         return r;
     }
 
-    static void*** createArray(int i, int j, int k, size_t size)
+    static float*** createArray(int i, int j, int k, size_t size)
     {
-        void*** r = (void***)calloc(i, sizeof(void*));
+        float*** r = new float** [i * sizeof(float*)];
         for (int x = 0; x < i; x++) {
-            r[x] = (void**)calloc(j, sizeof(void*));
+            r[x] = new float* [j * sizeof(float*)];
             for (int y = 0; y < j; y++) {
-                r[x][y] = (void*)calloc(k, size);
+                r[x][y] = new float[k * size];
             }
         }
         return r;
     }
 
-    static void**** createArray(int i, int j, int k, int l, size_t size)
+    static float**** createArray(int i, int j, int k, int l, size_t size)
     {
-        void**** r = (void****)calloc(i, sizeof(void*));
+        float**** r = new float*** [i * sizeof(float*)];
         for (int x = 0; x < i; x++) {
-            r[x] = (void***)calloc(j, sizeof(void*));
+            r[x] = new float** [j * sizeof(float*)];
             for (int y = 0; y < j; y++) {
-                r[x][y] = (void**)calloc(k, sizeof(void*));
+                r[x][y] = new float* [k * sizeof(float*)];
                 for (int z = 0; z < k; z++) {
-                    r[x][y][z] = (void*)calloc(l, size);
+                    r[x][y][z] = new float[l * size];
                 }
             }
         }
         return r;
     }
 
-    // Annoying calloc frees
-    static void freeArray(int i, void* a)
+    // Annoying malloc frees
+    static void freeArray(int i, float* a)
     {
-        std::free(a);
+        delete[] a;
     }
 
-    static void freeArray(int i, int j, void** a)
+    static void freeArray(int i, int j, float** a)
     {
         for (int x = 0; x < i; x++) {
-            std::free(a[x]);
+            delete[] a[x];
         }
-        std::free(a);
+        delete[] a;
     }
 
-    static void freeArray(int i, int j, int k, void*** a)
+    static void freeArray(int i, int j, int k, float*** a)
     {
         for (int x = 0; x < i; x++) {
             for (int y = 0; y < j; y++) {
-                std::free(a[x][y]);
+                delete[] a[x][y];
             }
-            std::free(a[x]);
+            delete[] a[x];
         }
-        std::free(a);
+        delete[] a;
     }
 
-    static void freeArray(int i, int j, int k, int l, void**** a)
+    static void freeArray(int i, int j, int k, int l, float**** a)
     {
         for (int x = 0; x < i; x++) {
             for (int y = 0; y < j; y++) {
                 for (int z = 0; z < k; z++) {
-                    std::free(a[x][y][z]);
+                    delete[] a[x][y][z];
                 }
-                std::free(a[x][y]);
+                delete[] a[x][y];
             }
-            std::free(a[x]);
+            delete[] a[x];
         }
-        std::free(a);
+        delete[] a;
     }
 
     facemesh(string path)
@@ -369,124 +369,124 @@ public:
 
     ~facemesh()
     {
-        freeArray(3, 3, 3, 16, (void****)const0);
-        freeArray(16, (void*)const1);
-        freeArray(1, 1, 16, 16, (void****)const2);
-        freeArray(16, (void*)const3);
-        freeArray(1, 1, 16, 16, (void****)const4);
-        freeArray(16, (void*)const5);
-        freeArray(1, 1, 16, 32, (void****)const6);
-        freeArray(1, 1, 32, 32, (void****)const7);
-        freeArray(32, (void*)const8);
-        freeArray(1, 1, 32, 32, (void****)const9);
-        freeArray(32, (void*)const10);
-        freeArray(1, 1, 32, 32, (void****)const11);
-        freeArray(32, (void*)const12);
-        freeArray(32, (void*)const13);
-        freeArray(1, 1, 32, 64, (void****)const14);
-        freeArray(64, (void*)const15);
-        freeArray(1, 1, 64, 64, (void****)const16);
-        freeArray(64, (void*)const17);
-        freeArray(1, 1, 64, 64, (void****)const18);
-        freeArray(64, (void*)const19);
-        freeArray(1, 1, 64, 128, (void****)const20);
-        freeArray(128, (void*)const21);
-        freeArray(1, 1, 128, 128, (void****)const22);
-        freeArray(128, (void*)const23);
-        freeArray(1, 1, 128, 128, (void****)const24);
-        freeArray(128, (void*)const25);
-        freeArray(1, 1, 128, 128, (void****)const26);
-        freeArray(128, (void*)const27);
-        freeArray(1, 1, 128, 128, (void****)const28);
-        freeArray(128, (void*)const29);
-        freeArray(1, 1, 128, 128, (void****)const30);
-        freeArray(128, (void*)const31);
-        freeArray(1, 1, 128, 128, (void****)const32);
-        freeArray(128, (void*)const33);
-        freeArray(1, 1, 128, 128, (void****)const34);
-        freeArray(128, (void*)const35);
-        freeArray(1, 1, 128, 128, (void****)const36);
-        freeArray(1, 1, 32, 32, (void****)const37);
-        freeArray(128, (void*)const38);
-        freeArray(1, 1, 128, 32, (void****)const39);
-        freeArray(32, (void*)const40);
-        freeArray(1, 1, 128, 128, (void****)const41);
-        freeArray(32, (void*)const42);
-        freeArray(128, (void*)const43);
-        freeArray(1, 1, 128, 128, (void****)const44);
-        freeArray(128, (void*)const45);
-        freeArray(1, 1, 32, 32, (void****)const46);
-        freeArray(32, (void*)const47);
-        freeArray(1, 1, 128, 128, (void****)const48);
-        freeArray(128, (void*)const49);
-        freeArray(1, 1, 128, 128, (void****)const50);
-        freeArray(128, (void*)const51);
-        freeArray(1, 1, 128, 32, (void****)const52);
-        freeArray(32, (void*)const53);
-        freeArray(1, 1, 128, 32, (void****)const54);
-        freeArray(32, (void*)const55);
-        freeArray(1, 1, 16, (void***)const56);
-        freeArray(3, 3, 16, 1, (void****)const57);
-        freeArray(1, 1, 16, (void***)const58);
-        freeArray(3, 3, 16, 1, (void****)const59);
-        freeArray(1, 1, 16, (void***)const60);
-        freeArray(4, 2, (void**)const61);
-        freeArray(3, 3, 16, 1, (void****)const62);
-        freeArray(1, 1, 32, (void***)const63);
-        freeArray(3, 3, 32, 1, (void****)const64);
-        freeArray(1, 1, 32, (void***)const65);
-        freeArray(3, 3, 32, 1, (void****)const66);
-        freeArray(1, 1, 32, (void***)const67);
-        freeArray(4, 2, (void**)const68);
-        freeArray(3, 3, 32, 1, (void****)const69);
-        freeArray(1, 1, 64, (void***)const70);
-        freeArray(3, 3, 64, 1, (void****)const71);
-        freeArray(1, 1, 64, (void***)const72);
-        freeArray(3, 3, 64, 1, (void****)const73);
-        freeArray(1, 1, 64, (void***)const74);
-        freeArray(4, 2, (void**)const75);
-        freeArray(3, 3, 64, 1, (void****)const76);
-        freeArray(1, 1, 128, (void***)const77);
-        freeArray(3, 3, 128, 1, (void****)const78);
-        freeArray(1, 1, 128, (void***)const79);
-        freeArray(3, 3, 128, 1, (void****)const80);
-        freeArray(1, 1, 128, (void***)const81);
-        freeArray(3, 3, 128, 1, (void****)const82);
-        freeArray(1, 1, 128, (void***)const83);
-        freeArray(3, 3, 128, 1, (void****)const84);
-        freeArray(1, 1, 128, (void***)const85);
-        freeArray(3, 3, 128, 1, (void****)const86);
-        freeArray(1, 1, 128, (void***)const87);
-        freeArray(3, 3, 128, 1, (void****)const88);
-        freeArray(1, 1, 128, (void***)const89);
-        freeArray(3, 3, 128, 1, (void****)const90);
-        freeArray(1, 1, 128, (void***)const91);
-        freeArray(3, 3, 128, 1, (void****)const92);
-        freeArray(1, 1, 128, (void***)const93);
-        freeArray(1, 1, 32, (void***)const94);
-        freeArray(3, 3, 32, 1, (void****)const95);
-        freeArray(1, 1, 32, (void***)const96);
-        freeArray(3, 3, 32, 1404, (void****)const97);
-        freeArray(1404, (void*)const98);
-        freeArray(2, (void*)const99);
-        freeArray(3, 3, 128, 1, (void****)const100);
-        freeArray(3, 3, 32, 1, (void****)const101);
-        freeArray(1, (void*)const102);
-        freeArray(3, 3, 32, 1, (void****)const103);
-        freeArray(3, 3, 128, 1, (void****)const104);
-        freeArray(1, 1, 32, (void***)const105);
-        freeArray(3, 3, 128, 1, (void****)const106);
-        freeArray(1, 1, 128, (void***)const107);
-        freeArray(1, 1, 32, (void***)const108);
-        freeArray(1, 1, 128, (void***)const109);
-        freeArray(266, (void*)const110);
-        freeArray(3, 3, 128, 1, (void****)const111);
-        freeArray(1, 1, 128, (void***)const112);
-        freeArray(3, 3, 32, 266, (void****)const113);
-        freeArray(3, 3, 32, 1, (void****)const114);
-        freeArray(1, 1, 32, (void***)const115);
-        freeArray(1, 1, 32, (void***)const116);
-        freeArray(1, 1, 128, (void***)const117);
+        freeArray(3, 3, 3, 16, const0);
+        freeArray(16, const1);
+        freeArray(1, 1, 16, 16, const2);
+        freeArray(16, const3);
+        freeArray(1, 1, 16, 16, const4);
+        freeArray(16, const5);
+        freeArray(1, 1, 16, 32, const6);
+        freeArray(1, 1, 32, 32, const7);
+        freeArray(32, const8);
+        freeArray(1, 1, 32, 32, const9);
+        freeArray(32, const10);
+        freeArray(1, 1, 32, 32, const11);
+        freeArray(32, const12);
+        freeArray(32, const13);
+        freeArray(1, 1, 32, 64, const14);
+        freeArray(64, const15);
+        freeArray(1, 1, 64, 64, const16);
+        freeArray(64, const17);
+        freeArray(1, 1, 64, 64, const18);
+        freeArray(64, const19);
+        freeArray(1, 1, 64, 128, const20);
+        freeArray(128, const21);
+        freeArray(1, 1, 128, 128, const22);
+        freeArray(128, const23);
+        freeArray(1, 1, 128, 128, const24);
+        freeArray(128, const25);
+        freeArray(1, 1, 128, 128, const26);
+        freeArray(128, const27);
+        freeArray(1, 1, 128, 128, const28);
+        freeArray(128, const29);
+        freeArray(1, 1, 128, 128, const30);
+        freeArray(128, const31);
+        freeArray(1, 1, 128, 128, const32);
+        freeArray(128, const33);
+        freeArray(1, 1, 128, 128, const34);
+        freeArray(128, const35);
+        freeArray(1, 1, 128, 128, const36);
+        freeArray(1, 1, 32, 32, const37);
+        freeArray(128, const38);
+        freeArray(1, 1, 128, 32, const39);
+        freeArray(32, const40);
+        freeArray(1, 1, 128, 128, const41);
+        freeArray(32, const42);
+        freeArray(128, const43);
+        freeArray(1, 1, 128, 128, const44);
+        freeArray(128, const45);
+        freeArray(1, 1, 32, 32, const46);
+        freeArray(32, const47);
+        freeArray(1, 1, 128, 128, const48);
+        freeArray(128, const49);
+        freeArray(1, 1, 128, 128, const50);
+        freeArray(128, const51);
+        freeArray(1, 1, 128, 32, const52);
+        freeArray(32, const53);
+        freeArray(1, 1, 128, 32, const54);
+        freeArray(32, const55);
+        freeArray(1, 1, 16, const56);
+        freeArray(3, 3, 16, 1, const57);
+        freeArray(1, 1, 16, const58);
+        freeArray(3, 3, 16, 1, const59);
+        freeArray(1, 1, 16, const60);
+        freeArray(4, 2, const61);
+        freeArray(3, 3, 16, 1, const62);
+        freeArray(1, 1, 32, const63);
+        freeArray(3, 3, 32, 1, const64);
+        freeArray(1, 1, 32, const65);
+        freeArray(3, 3, 32, 1, const66);
+        freeArray(1, 1, 32, const67);
+        freeArray(4, 2, const68);
+        freeArray(3, 3, 32, 1, const69);
+        freeArray(1, 1, 64, const70);
+        freeArray(3, 3, 64, 1, const71);
+        freeArray(1, 1, 64, const72);
+        freeArray(3, 3, 64, 1, const73);
+        freeArray(1, 1, 64, const74);
+        freeArray(4, 2, const75);
+        freeArray(3, 3, 64, 1, const76);
+        freeArray(1, 1, 128, const77);
+        freeArray(3, 3, 128, 1, const78);
+        freeArray(1, 1, 128, const79);
+        freeArray(3, 3, 128, 1, const80);
+        freeArray(1, 1, 128, const81);
+        freeArray(3, 3, 128, 1, const82);
+        freeArray(1, 1, 128, const83);
+        freeArray(3, 3, 128, 1, const84);
+        freeArray(1, 1, 128, const85);
+        freeArray(3, 3, 128, 1, const86);
+        freeArray(1, 1, 128, const87);
+        freeArray(3, 3, 128, 1, const88);
+        freeArray(1, 1, 128, const89);
+        freeArray(3, 3, 128, 1, const90);
+        freeArray(1, 1, 128, const91);
+        freeArray(3, 3, 128, 1, const92);
+        freeArray(1, 1, 128, const93);
+        freeArray(1, 1, 32, const94);
+        freeArray(3, 3, 32, 1, const95);
+        freeArray(1, 1, 32, const96);
+        freeArray(3, 3, 32, 1404, const97);
+        freeArray(1404, const98);
+        freeArray(2, const99);
+        freeArray(3, 3, 128, 1, const100);
+        freeArray(3, 3, 32, 1, const101);
+        freeArray(1, const102);
+        freeArray(3, 3, 32, 1, const103);
+        freeArray(3, 3, 128, 1, const104);
+        freeArray(1, 1, 32, const105);
+        freeArray(3, 3, 128, 1, const106);
+        freeArray(1, 1, 128, const107);
+        freeArray(1, 1, 32, const108);
+        freeArray(1, 1, 128, const109);
+        freeArray(266, const110);
+        freeArray(3, 3, 128, 1, const111);
+        freeArray(1, 1, 128, const112);
+        freeArray(3, 3, 32, 266, const113);
+        freeArray(3, 3, 32, 1, const114);
+        freeArray(1, 1, 32, const115);
+        freeArray(1, 1, 32, const116);
+        freeArray(1, 1, 128, const117);
     }
 
     // Using seperate methods for each layer easier to debug
@@ -1995,6 +1995,6 @@ int main()
     imshow("Display window", img);
     waitKey(0); // Wait for a keystroke in the window
 
-    facemesh::freeArray(192, 192, 3, (void***)imgArray);
+    facemesh::freeArray(192, 192, 3, imgArray);
     return 0;
 }

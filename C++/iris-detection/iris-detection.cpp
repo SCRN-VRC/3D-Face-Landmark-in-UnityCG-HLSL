@@ -118,80 +118,80 @@ private:
     }
 
 public:
-    // Annoying callocs
-    static void** createArray(int i, int j, size_t size)
+    // Annoying mallocs
+    static float** createArray(int i, int j, size_t size)
     {
-        void** r = (void**)calloc(i, sizeof(void*));
+        float** r = new float* [i * sizeof(float*)];
         for (int x = 0; x < i; x++) {
-            r[x] = (void*)calloc(j, size);
+            r[x] = new float [j * size];
         }
         return r;
     }
 
-    static void*** createArray(int i, int j, int k, size_t size)
+    static float*** createArray(int i, int j, int k, size_t size)
     {
-        void*** r = (void***)calloc(i, sizeof(void*));
+        float*** r = new float** [i * sizeof(float*)];
         for (int x = 0; x < i; x++) {
-            r[x] = (void**)calloc(j, sizeof(void*));
+            r[x] = new float* [j * sizeof(float*)];
             for (int y = 0; y < j; y++) {
-                r[x][y] = (void*)calloc(k, size);
+                r[x][y] = new float [k * size];
             }
         }
         return r;
     }
 
-    static void**** createArray(int i, int j, int k, int l, size_t size)
+    static float**** createArray(int i, int j, int k, int l, size_t size)
     {
-        void**** r = (void****)calloc(i, sizeof(void*));
+        float**** r = new float*** [i * sizeof(float*)];
         for (int x = 0; x < i; x++) {
-            r[x] = (void***)calloc(j, sizeof(void*));
+            r[x] = new float** [j * sizeof(float*)];
             for (int y = 0; y < j; y++) {
-                r[x][y] = (void**)calloc(k, sizeof(void*));
+                r[x][y] = new float* [k * sizeof(float*)];
                 for (int z = 0; z < k; z++) {
-                    r[x][y][z] = (void*)calloc(l, size);
+                    r[x][y][z] = new float [l * size];
                 }
             }
         }
         return r;
     }
 
-    // Annoying calloc frees
-    static void freeArray(int i, void* a)
+    // Annoying malloc frees
+    static void freeArray(int i, float* a)
     {
-        std::free(a);
+        delete [] a;
     }
 
-    static void freeArray(int i, int j, void** a)
+    static void freeArray(int i, int j, float** a)
     {
         for (int x = 0; x < i; x++) {
-            std::free(a[x]);
+            delete[] a[x];
         }
-        std::free(a);
+        delete[] a;
     }
 
-    static void freeArray(int i, int j, int k, void*** a)
+    static void freeArray(int i, int j, int k, float*** a)
     {
         for (int x = 0; x < i; x++) {
             for (int y = 0; y < j; y++) {
-                std::free(a[x][y]);
+                delete[] a[x][y];
             }
-            std::free(a[x]);
+            delete[] a[x];
         }
-        std::free(a);
+        delete[] a;
     }
 
-    static void freeArray(int i, int j, int k, int l, void**** a)
+    static void freeArray(int i, int j, int k, int l, float**** a)
     {
         for (int x = 0; x < i; x++) {
             for (int y = 0; y < j; y++) {
                 for (int z = 0; z < k; z++) {
-                    std::free(a[x][y][z]);
+                    delete[] a[x][y][z];
                 }
-                std::free(a[x][y]);
+                delete[] a[x][y];
             }
-            std::free(a[x]);
+            delete[] a[x];
         }
-        std::free(a);
+        delete[] a;
     }
 
     iris(string path)
@@ -450,11 +450,238 @@ public:
         l15 = (float***)createArray(16, 16, 64, sizeof(float));
         l16 = (float***)createArray(16, 16, 128, sizeof(float));
         l17 = (float***)createArray(16, 16, 64, sizeof(float));
+        l18 = (float***)createArray(16, 16, 64, sizeof(float));
     }
 
     ~iris()
     {
-        // fuck it, i'm tired of doing this, the program exits after the passes are done anyway
+        freeArray(32, 1, 3, 3, const0);
+        freeArray(64, const1);
+        freeArray(64, const2);
+        freeArray(1, 64, 1, 1, const3);
+        freeArray(64, const4);
+        freeArray(32, const5);
+        freeArray(64, 32, 1, 1, const6);
+        freeArray(64, 1, 3, 3, const7);
+        freeArray(64, 128, 2, 2, const8);
+        freeArray(64, 1, 3, 3, const9);
+        freeArray(1, 128, 1, 1, const10);
+        freeArray(64, const11);
+        freeArray(1, 64, 1, 1, const12);
+        freeArray(64, const13);
+        freeArray(64, const14);
+        freeArray(64, const15);
+        freeArray(1, 128, 1, 1, const16);
+        freeArray(64, 1, 3, 3, const17);
+        freeArray(64, 1, 3, 3, const18);
+        freeArray(128, 64, 1, 1, const19);
+        freeArray(128, 64, 1, 1, const20);
+        freeArray(1, 128, 1, 1, const21);
+        freeArray(64, const22);
+        freeArray(1, 64, 1, 1, const23);
+        freeArray(64, const24);
+        freeArray(64, 32, 1, 1, const25);
+        freeArray(128, const26);
+        freeArray(32, 64, 1, 1, const27);
+        freeArray(128, const28);
+        freeArray(1, 64, 1, 1, const29);
+        freeArray(128, 64, 1, 1, const30);
+        freeArray(1, 64, 1, 1, const31);
+        freeArray(64, 128, 1, 1, const32);
+        freeArray(64, 1, 3, 3, const33);
+        freeArray(64, const34);
+        freeArray(2, const35);
+        freeArray(32, const36);
+        freeArray(128, const37);
+        freeArray(64, const38);
+        freeArray(64, const39);
+        freeArray(64, 128, 2, 2, const40);
+        freeArray(1, 128, 1, 1, const41);
+        freeArray(64, 1, 3, 3, const42);
+        freeArray(1, 64, 1, 1, const43);
+        freeArray(64, const44);
+        freeArray(1, 64, 1, 1, const45);
+        freeArray(64, const46);
+        freeArray(128, 64, 1, 1, const47);
+        freeArray(32, 64, 1, 1, const48);
+        freeArray(128, 64, 1, 1, const49);
+        freeArray(1, 64, 1, 1, const50);
+        freeArray(128, const51);
+        freeArray(64, 1, 3, 3, const52);
+        freeArray(128, const53);
+        freeArray(128, 64, 1, 1, const54);
+        freeArray(32, const55);
+        freeArray(1, 32, 1, 1, const56);
+        freeArray(128, 64, 1, 1, const57);
+        freeArray(128, 64, 1, 1, const58);
+        freeArray(64, 128, 1, 1, const59);
+        freeArray(64, const60);
+        freeArray(1, 64, 1, 1, const61);
+        freeArray(128, const62);
+        freeArray(1, 64, 1, 1, const63);
+        freeArray(128, const64);
+        freeArray(128, const65);
+        freeArray(128, 64, 1, 1, const66);
+        freeArray(64, const67);
+        freeArray(64, 3, 3, 3, const68);
+        freeArray(64, 64, 2, 2, const69);
+        freeArray(128, const70);
+        freeArray(64, 1, 3, 3, const71);
+        freeArray(64, const72);
+        freeArray(64, const73);
+        freeArray(64, const74);
+        freeArray(1, 32, 1, 1, const75);
+        freeArray(64, 1, 3, 3, const76);
+        freeArray(64, 1, 3, 3, const77);
+        freeArray(32, 1, 3, 3, const78);
+        freeArray(8, const79);
+        freeArray(15, const80);
+        freeArray(64, const81);
+        freeArray(64, const82);
+        freeArray(32, const83);
+        freeArray(128, 64, 1, 1, const84);
+        freeArray(64, 1, 3, 3, const85);
+        freeArray(32, 64, 1, 1, const86);
+        freeArray(64, 128, 1, 1, const87);
+        freeArray(64, const88);
+        freeArray(128, const89);
+        freeArray(1, 64, 1, 1, const90);
+        freeArray(1, 128, 1, 1, const91);
+        freeArray(128, 64, 1, 1, const92);
+        freeArray(32, const93);
+        freeArray(64, 1, 3, 3, const94);
+        freeArray(64, const95);
+        freeArray(1, 64, 1, 1, const96);
+        freeArray(1, 64, 1, 1, const97);
+        freeArray(128, const98);
+        freeArray(128, 64, 1, 1, const99);
+        freeArray(1, 128, 1, 1, const100);
+        freeArray(128, 64, 1, 1, const101);
+        freeArray(128, 64, 1, 1, const102);
+        freeArray(64, 1, 3, 3, const103);
+        freeArray(64, const104);
+        freeArray(1, 64, 1, 1, const105);
+        freeArray(128, const106);
+        freeArray(128, const107);
+        freeArray(64, const108);
+        freeArray(128, 64, 1, 1, const109);
+        freeArray(64, 128, 1, 1, const110);
+        freeArray(128, const111);
+        freeArray(64, 128, 1, 1, const112);
+        freeArray(1, 128, 1, 1, const113);
+        freeArray(128, 64, 1, 1, const114);
+        freeArray(64, 128, 1, 1, const115);
+        freeArray(128, const116);
+        freeArray(64, const117);
+        freeArray(64, 128, 2, 2, const118);
+        freeArray(32, 64, 1, 1, const119);
+        freeArray(1, 32, 1, 1, const120);
+        freeArray(64, const121);
+        freeArray(128, const122);
+        freeArray(64, const123);
+        freeArray(1, 64, 1, 1, const124);
+        freeArray(1, 64, 1, 1, const125);
+        freeArray(64, const126);
+        freeArray(64, 128, 1, 1, const127);
+        freeArray(32, const128);
+        freeArray(64, 1, 3, 3, const129);
+        freeArray(128, 64, 1, 1, const130);
+        freeArray(64, const131);
+        freeArray(1, 128, 1, 1, const132);
+        freeArray(1, 128, 1, 1, const133);
+        freeArray(128, 64, 1, 1, const134);
+        freeArray(64, 1, 3, 3, const135);
+        freeArray(64, 128, 1, 1, const136);
+        freeArray(64, const137);
+        freeArray(1, 64, 1, 1, const138);
+        freeArray(128, const139);
+        freeArray(1, 128, 1, 1, const140);
+        freeArray(64, const141);
+        freeArray(1, 64, 1, 1, const142);
+        freeArray(128, const143);
+        freeArray(64, const144);
+        freeArray(1, 64, 1, 1, const145);
+        freeArray(1, 128, 1, 1, const146);
+        freeArray(32, 1, 3, 3, const147);
+        freeArray(128, 64, 1, 1, const148);
+        freeArray(64, 128, 1, 1, const149);
+        freeArray(32, const150);
+        freeArray(1, 64, 1, 1, const151);
+        freeArray(128, const152);
+        freeArray(1, 128, 1, 1, const153);
+        freeArray(1, 32, 1, 1, const154);
+        freeArray(1, 128, 1, 1, const155);
+        freeArray(1, 128, 1, 1, const156);
+        freeArray(64, const157);
+        freeArray(64, 1, 3, 3, const158);
+        freeArray(64, 128, 1, 1, const159);
+        freeArray(1, 64, 1, 1, const160);
+        freeArray(128, 64, 1, 1, const161);
+        freeArray(64, const162);
+        freeArray(1, 128, 1, 1, const163);
+        freeArray(64, 128, 1, 1, const164);
+        freeArray(64, 1, 3, 3, const165);
+        freeArray(1, 128, 1, 1, const166);
+        freeArray(64, const167);
+        freeArray(128, const168);
+        freeArray(64, 128, 1, 1, const169);
+        freeArray(64, const170);
+        freeArray(1, 128, 1, 1, const171);
+        freeArray(64, const172);
+        freeArray(64, 1, 3, 3, const173);
+        freeArray(64, 32, 1, 1, const174);
+        freeArray(1, 128, 1, 1, const175);
+        freeArray(1, 64, 1, 1, const176);
+        freeArray(213, 128, 2, 2, const177);
+        freeArray(64, const178);
+        freeArray(64, 128, 1, 1, const179);
+        freeArray(64, const180);
+        freeArray(32, 1, 3, 3, const181);
+        freeArray(213, const182);
+        freeArray(64, const183);
+        freeArray(64, 1, 3, 3, const184);
+        freeArray(32, const185);
+        freeArray(128, 64, 1, 1, const186);
+        freeArray(64, const187);
+        freeArray(1, 64, 1, 1, const188);
+        freeArray(64, 128, 2, 2, const189);
+        freeArray(1, 128, 1, 1, const190);
+        freeArray(64, const191);
+        freeArray(1, 64, 1, 1, const192);
+        freeArray(64, 128, 1, 1, const193);
+        freeArray(128, const194);
+        freeArray(64, 1, 3, 3, const195);
+        freeArray(1, 64, 1, 1, const196);
+        freeArray(128, 64, 1, 1, const197);
+        freeArray(64, const198);
+        freeArray(64, 128, 1, 1, const199);
+        freeArray(1, 64, 1, 1, const200);
+        freeArray(1, 128, 1, 1, const201);
+        freeArray(64, const202);
+        freeArray(64, 128, 2, 2, const203);
+        freeArray(64, const204);
+        freeArray(64, 1, 3, 3, const205);
+        freeArray(128, const206);
+        freeArray(64, const207);
+        freeArray(1, 128, 1, 1, const208);
+        freeArray(1, 64, 1, 1, const209);
+        freeArray(15, 128, 2, 2, const210);
+        freeArray(64, 1, 3, 3, const211);
+        freeArray(64, const212);
+        freeArray(64, const213);
+        freeArray(1, 128, 1, 1, const214);
+        freeArray(64, 32, 1, 1, const215);
+        freeArray(64, 128, 1, 1, const216);
+        freeArray(4, const217);
+        freeArray(4, const218);
+        freeArray(4, const219);
+        freeArray(4, const220);
+        freeArray(4, const221);
+        freeArray(4, const222);
+        freeArray(4, const223);
+        freeArray(4, const224);
+        freeArray(4, const225);
+        freeArray(4, const226);
     }
 
     // Using seperate methods for each layer easier to debug
@@ -556,25 +783,6 @@ public:
         }
     }
 
-    void conv2D1x1Stride1AddDebug(float*** cl, float**** cw, float* bias, float**** slope, float*** pl, float*** pl2,
-        uint im, uint jm, uint k, uint lm)
-    {
-        for (uint i = 0; i < im; i++) {
-            for (uint j = 0; j < jm; j++) {
-                cl[i][j][k] = 0.0f;
-
-                // kernel
-                for (uint l = 0; l < lm; l++) {
-                    cl[i][j][k] += pl[i][j][l] * cw[k][l][0][0];
-                }
-                // bias + skip in
-                cl[i][j][k] = cl[i][j][k] + bias[k];
-                // activation
-                //cl[i][j][k] = PRelu(cl[i][j][k], slope[0][k][0][0]);
-            }
-        }
-    }
-
     void conv2D2x2Stride2(float*** cl, float**** cw, float* bias, float**** slope, float*** pl,
         uint im, uint jm, uint k, uint lm)
     {
@@ -605,12 +813,16 @@ public:
     {
         for (uint i = 0; i < im; i++) {
             for (uint j = 0; j < jm; j++) {
+                cl[i][j][k] = 0.0f;
                 uint i0 = i * 2, i1 = i0 + 1;
                 uint j0 = j * 2, j1 = j0 + 1;
-                cl[i][j][k] = k < lm ?
-                    fmaxf(pl[i0][j0][k], fmaxf(pl[i0][j1][k],
-                        fmaxf(pl[i1][j0][k], pl[i1][j1][k]))) :
-                    0.0f;
+
+                if (k < lm)
+                {
+                    cl[i][j][k] =
+                        fmaxf(pl[i0][j0][k], fmaxf(pl[i0][j1][k],
+                            fmaxf(pl[i1][j0][k], pl[i1][j1][k])));
+                }
             }
         }
     }
@@ -751,7 +963,7 @@ public:
 
         // L16, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 128; k++) {
-            thread t(&iris::conv2D1x1Stride1AddDebug, this, l16, const57, const64, const10, l14, l15, 16, 16, k, 64);
+            thread t(&iris::conv2D1x1Stride1Add, this, l16, const57, const64, const10, l14, l15, 16, 16, k, 64);
             threads.push_back(move(t));
         }
         for (auto& th : threads) th.join();
@@ -765,7 +977,15 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        cout << l16[15][2][123] << endl;
+        // L18, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l18, const76, const81, l17, 16, 16, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        cout << l16[15][2][62] << endl;
     }
 };
 
@@ -782,7 +1002,7 @@ int main()
     img = img / 255.0;
 
     // use a 3d array cause fuck opencv mats
-    float*** imgArray = (float***)iris::createArray(64, 64, 3, sizeof(float));
+    float*** imgArray = iris::createArray(64, 64, 3, sizeof(float));
     //for (int k = 0; k < 3; k++) {
     //    for (int i = 0; i < 64; i++) {
     //        for (int j = 0; j < 64; j++) {
@@ -810,6 +1030,6 @@ int main()
     //imshow("Display window", img);
     //waitKey(0); // Wait for a keystroke in the window
 
-    iris::freeArray(64, 64, 3, (void***)imgArray);
+    iris::freeArray(64, 64, 3, imgArray);
     return 0;
 }
