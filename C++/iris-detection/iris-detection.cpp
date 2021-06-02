@@ -57,9 +57,15 @@ private:
     float*** l0, *** l1, *** l2, *** l3, *** l4, *** l5, *** l6, *** l7, *** l8, *** l9,
         *** l10, *** l11, *** l12, *** l13, *** l14, *** l16, *** l17, *** l18, *** l19,
         *** l20, *** l21, *** l22, *** l23, *** l24, *** l25, *** l26, *** l27, *** l28, *** l29,
-        ***l30, *** l32, *** l33, *** l34, *** l35, *** l36, *** l37, *** l38, *** l39;
+        *** l30, *** l32, *** l33, *** l34, *** l35, *** l36, *** l37, *** l38, *** l39,
+        *** l40, *** l41, *** l42, *** l43, *** l44, *** l45, *** l46, *** l47, *** l48, *** l49,
+        *** l50, *** l51, *** l52, *** l53, *** l54, *** l55, *** l56, *** l58, *** l59,
+        *** l60, *** l61, *** l62, *** l63, *** l64, *** l65, *** l66, *** l67, *** l68, *** l69,
+        *** l70, *** l71, *** l72, *** l73, *** l74, *** l75, *** l76, *** l77, *** l78, *** l79,
+        *** l80, *** l81;
 
-    float*** test;
+    // outputs
+    float* l57, * l82;
 
     float**** getArray(ifstream* fin, int mi, int mj, int mk, int ml)
     {
@@ -76,7 +82,7 @@ private:
 
     float*** getArray(ifstream* fin, int mi, int mj, int mk)
     {
-        float*** buff = (float***)createArray(mi, mj, mk, sizeof(float));
+        float*** buff = createArray(mi, mj, mk, sizeof(float));
         for (int i = 0; i < mi; i++) {
             for (int j = 0; j < mj; j++) {
                 fin->read(reinterpret_cast<char*>(buff[i][j]), sizeof(float) * mk);
@@ -434,39 +440,89 @@ public:
 
         fin.close();
 
-        l0 = (float***)createArray(32, 32, 64, sizeof(float));
-        l1 = (float***)createArray(32, 32, 32, sizeof(float));
-        l2 = (float***)createArray(32, 32, 32, sizeof(float));
-        l3 = (float***)createArray(32, 32, 64, sizeof(float));
-        l4 = (float***)createArray(32, 32, 32, sizeof(float));
-        l5 = (float***)createArray(32, 32, 32, sizeof(float));
-        l6 = (float***)createArray(32, 32, 64, sizeof(float));
-        l7 = (float***)createArray(32, 32, 32, sizeof(float));
-        l8 = (float***)createArray(32, 32, 32, sizeof(float));
-        l9 = (float***)createArray(32, 32, 64, sizeof(float));
-        l10 = (float***)createArray(32, 32, 32, sizeof(float));
-        l11 = (float***)createArray(32, 32, 32, sizeof(float));
-        l12 = (float***)createArray(32, 32, 64, sizeof(float));
-        l13 = (float***)createArray(16, 16, 64, sizeof(float));
-        l14 = (float***)createArray(16, 16, 64, sizeof(float));
-        //l15 = (float***)createArray(16, 16, 64, sizeof(float));
-        l16 = (float***)createArray(16, 16, 128, sizeof(float));
-        l17 = (float***)createArray(16, 16, 64, sizeof(float));
-        l18 = (float***)createArray(16, 16, 64, sizeof(float));
-        l19 = (float***)createArray(16, 16, 128, sizeof(float));
-        l20 = (float***)createArray(16, 16, 64, sizeof(float));
-        l21 = (float***)createArray(16, 16, 64, sizeof(float));
-        l22 = (float***)createArray(16, 16, 128, sizeof(float));
-        l23 = (float***)createArray(16, 16, 64, sizeof(float));
-        l24 = (float***)createArray(16, 16, 64, sizeof(float));
-        l25 = (float***)createArray(16, 16, 128, sizeof(float));
-        l26 = (float***)createArray(16, 16, 64, sizeof(float));
-        l27 = (float***)createArray(16, 16, 64, sizeof(float));
-        l28 = (float***)createArray(16, 16, 128, sizeof(float));
-        l29 = (float***)createArray(8, 8, 64, sizeof(float));
-        l30 = (float***)createArray(8, 8, 64, sizeof(float));
-        //l31 = (float***)createArray(8, 8, 128, sizeof(float));
-        l32 = (float***)createArray(8, 8, 128, sizeof(float));
+        l0 = createArray(32, 32, 64, sizeof(float));
+        l1 = createArray(32, 32, 32, sizeof(float));
+        l2 = createArray(32, 32, 32, sizeof(float));
+        l3 = createArray(32, 32, 64, sizeof(float));
+        l4 = createArray(32, 32, 32, sizeof(float));
+        l5 = createArray(32, 32, 32, sizeof(float));
+        l6 = createArray(32, 32, 64, sizeof(float));
+        l7 = createArray(32, 32, 32, sizeof(float));
+        l8 = createArray(32, 32, 32, sizeof(float));
+        l9 = createArray(32, 32, 64, sizeof(float));
+        l10 = createArray(32, 32, 32, sizeof(float));
+        l11 = createArray(32, 32, 32, sizeof(float));
+        l12 = createArray(32, 32, 64, sizeof(float));
+        l13 = createArray(16, 16, 64, sizeof(float));
+        l14 = createArray(16, 16, 64, sizeof(float));
+        //l15 = createArray(16, 16, 64, sizeof(float));
+        l16 = createArray(16, 16, 128, sizeof(float));
+        l17 = createArray(16, 16, 64, sizeof(float));
+        l18 = createArray(16, 16, 64, sizeof(float));
+        l19 = createArray(16, 16, 128, sizeof(float));
+        l20 = createArray(16, 16, 64, sizeof(float));
+        l21 = createArray(16, 16, 64, sizeof(float));
+        l22 = createArray(16, 16, 128, sizeof(float));
+        l23 = createArray(16, 16, 64, sizeof(float));
+        l24 = createArray(16, 16, 64, sizeof(float));
+        l25 = createArray(16, 16, 128, sizeof(float));
+        l26 = createArray(16, 16, 64, sizeof(float));
+        l27 = createArray(16, 16, 64, sizeof(float));
+        l28 = createArray(16, 16, 128, sizeof(float));
+        l29 = createArray(8, 8, 64, sizeof(float));
+        l30 = createArray(8, 8, 64, sizeof(float));
+        //l31 = createArray(8, 8, 128, sizeof(float));
+        l32 = createArray(8, 8, 128, sizeof(float));
+        l33 = createArray(8, 8, 64, sizeof(float));
+        l34 = createArray(8, 8, 64, sizeof(float));
+        l35 = createArray(8, 8, 128, sizeof(float));
+        l36 = createArray(8, 8, 64, sizeof(float));
+        l37 = createArray(8, 8, 64, sizeof(float));
+        l38 = createArray(8, 8, 128, sizeof(float));
+        l39 = createArray(4, 4, 64, sizeof(float));
+        l40 = createArray(4, 4, 64, sizeof(float));
+        l41 = createArray(4, 4, 128, sizeof(float));
+        l42 = createArray(4, 4, 64, sizeof(float));
+        l43 = createArray(4, 4, 64, sizeof(float));
+        l44 = createArray(4, 4, 128, sizeof(float));
+        l45 = createArray(4, 4, 64, sizeof(float));
+        l46 = createArray(4, 4, 64, sizeof(float));
+        l47 = createArray(4, 4, 128, sizeof(float));
+        l48 = createArray(2, 2, 64, sizeof(float));
+        l49 = createArray(2, 2, 64, sizeof(float));
+        l50 = createArray(2, 2, 128, sizeof(float));
+        l51 = createArray(2, 2, 64, sizeof(float));
+        l52 = createArray(2, 2, 64, sizeof(float));
+        l53 = createArray(2, 2, 128, sizeof(float));
+        l54 = createArray(2, 2, 64, sizeof(float));
+        l55 = createArray(2, 2, 64, sizeof(float));
+        l56 = createArray(2, 2, 128, sizeof(float));
+        l57 = new float[213];
+        l58 = createArray(8, 8, 64, sizeof(float));
+        l59 = createArray(8, 8, 64, sizeof(float));
+        l60 = createArray(8, 8, 128, sizeof(float));
+        l61 = createArray(8, 8, 64, sizeof(float));
+        l62 = createArray(8, 8, 64, sizeof(float));
+        l63 = createArray(8, 8, 128, sizeof(float));
+        l64 = createArray(4, 4, 64, sizeof(float));
+        l65 = createArray(4, 4, 64, sizeof(float));
+        l66 = createArray(4, 4, 128, sizeof(float));
+        l67 = createArray(4, 4, 64, sizeof(float));
+        l68 = createArray(4, 4, 64, sizeof(float));
+        l69 = createArray(4, 4, 128, sizeof(float));
+        l70 = createArray(4, 4, 64, sizeof(float));
+        l71 = createArray(4, 4, 64, sizeof(float));
+        l72 = createArray(4, 4, 128, sizeof(float));
+        l73 = createArray(2, 2, 64, sizeof(float));
+        l74 = createArray(2, 2, 64, sizeof(float));
+        l75 = createArray(2, 2, 128, sizeof(float));
+        l76 = createArray(2, 2, 64, sizeof(float));
+        l77 = createArray(2, 2, 64, sizeof(float));
+        l78 = createArray(2, 2, 128, sizeof(float));
+        l79 = createArray(2, 2, 64, sizeof(float));
+        l80 = createArray(2, 2, 64, sizeof(float));
+        l81 = createArray(2, 2, 128, sizeof(float));
+        l82 = new float[15];
     }
 
     ~iris()
@@ -824,7 +880,22 @@ public:
         }
     }
 
-    void maxPool2x2Stride2(float*** cl, float**** cw, float* bias, float**** slope, float*** pl, float*** pl2,
+    void conv2D2x2Stride1(float* cl, float**** cw, float* bias, float*** pl,
+       uint k, uint lm)
+    {
+		cl[k] = 0.0f;
+		for (uint l = 0; l < lm; l++) {
+			cl[k] +=
+				pl[0][0][l] * cw[k][l][0][0] +
+				pl[0][1][l] * cw[k][l][0][1] +
+				pl[1][0][l] * cw[k][l][1][0] +
+				pl[1][1][l] * cw[k][l][1][1];
+		}
+		// bias
+		cl[k] = cl[k] + bias[k];
+    }
+
+    void maxPool2x2Stride2Padded(float*** cl, float**** cw, float* bias, float**** slope, float*** pl, float*** pl2,
         uint im, uint jm, uint k, uint lm)
     {
         for (uint i = 0; i < im; i++) {
@@ -854,24 +925,31 @@ public:
         }
     }
 
-    //void maxPool2x2Stride2(float*** cl, float*** pl,
-    //    uint im, uint jm, uint k, uint lm)
-    //{
-    //    for (uint i = 0; i < im; i++) {
-    //        for (uint j = 0; j < jm; j++) {
-    //            cl[i][j][k] = 0.0f;
-    //            uint i0 = i * 2, i1 = i0 + 1;
-    //            uint j0 = j * 2, j1 = j0 + 1;
+    void maxPool2x2Stride2NoPad(float*** cl, float**** cw, float* bias, float**** slope, float*** pl, float*** pl2,
+        uint im, uint jm, uint k, uint lm)
+    {
+        for (uint i = 0; i < im; i++) {
+            for (uint j = 0; j < jm; j++) {
+                cl[i][j][k] = 0.0f;
+                uint i0 = i * 2, i1 = i0 + 1;
+                uint j0 = j * 2, j1 = j0 + 1;
 
-    //            if (k < lm)
-    //            {
-    //                cl[i][j][k] =
-    //                    fmaxf(pl[i0][j0][k], fmaxf(pl[i0][j1][k],
-    //                        fmaxf(pl[i1][j0][k], pl[i1][j1][k])));
-    //            }
-    //        }
-    //    }
-    //}
+                // kernel
+                for (uint l = 0; l < lm; l++) {
+                    cl[i][j][k] += pl[i][j][l] * cw[k][l][0][0];
+                }
+
+				// max pool
+				float mp = fmaxf(pl2[i0][j0][k], fmaxf(pl2[i0][j1][k],
+					fmaxf(pl2[i1][j0][k], pl2[i1][j1][k])));
+
+                // bias + skip in
+                cl[i][j][k] = cl[i][j][k] + bias[k] + mp;
+                // activation
+                cl[i][j][k] = PRelu(cl[i][j][k], slope[0][k][0][0]);
+            }
+        }
+    }
 
     void forwardProp(float*** imgIn)
     {
@@ -999,17 +1077,9 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        //// L15, max pool=2x2, stride=2
-        //for (uint k = 0; k < 128; k++) {
-        //    thread t(&iris::maxPool2x2Stride2, this, l15, l12, 16, 16, k, 64);
-        //    threads.push_back(move(t));
-        //}
-        //for (auto& th : threads) th.join();
-        //threads.clear();
-
         // L16, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 128; k++) {
-            thread t(&iris::maxPool2x2Stride2, this, l16, const57, const64, const10, l14, l12, 16, 16, k, 64);
+            thread t(&iris::maxPool2x2Stride2Padded, this, l16, const57, const64, const10, l14, l12, 16, 16, k, 64);
             threads.push_back(move(t));
         }
         for (auto& th : threads) th.join();
@@ -1127,23 +1197,439 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        //// L31, max pool=2x2, stride=2
-        //for (uint k = 0; k < 128; k++) {
-        //    thread t(&iris::maxPool2x2Stride2, this, l31, l28, 8, 8, k, 64);
-        //    threads.push_back(move(t));
-        //}
-        //for (auto& th : threads) th.join();
-        //threads.clear();
-
         // L32, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 128; k++) {
-            thread t(&iris::maxPool2x2Stride2, this, l32, const109, const116, const166, l30, l28, 8, 8, k, 64);
+            thread t(&iris::maxPool2x2Stride2NoPad, this, l32, const109, const116, const166, l30, l28, 8, 8, k, 64);
             threads.push_back(move(t));
         }
         for (auto& th : threads) th.join();
         threads.clear();
 
-        cout << l32[2][6][60] << endl;
+        // Network splits up into two sections: [1] Contours/brows and [2] iris tracking
+
+        // [1] Contours/brows
+        // L33, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l33, const193, const202, const125, l32, 8, 8, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L34, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l34, const184, const191, l33, 8, 8, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L35, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l35, const20, const28, const91, l34, l32, 8, 8, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L36, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l36, const136, const144, const200, l35, 8, 8, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L37, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l37, const129, const137, l36, 8, 8, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L38, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l38, const186, const194, const155, l37, l35, 8, 8, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L39, kernel=2x2, stride=2, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D2x2Stride2, this, l39, const203, const212, const145, l38, 4, 4, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L40, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l40, const195, const204, l39, 4, 4, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L41, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::maxPool2x2Stride2NoPad, this, l41, const30, const37, const133, l40, l38, 4, 4, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L42, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l42, const179, const187, const124, l41, 4, 4, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L43, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l43, const173, const180, l42, 4, 4, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L44, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l44, const114, const122, const201, l43, l41, 4, 4, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L45, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l45, const127, const131, const188, l44, 4, 4, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L46, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l46, const17, const22, l45, 4, 4, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L47, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l47, const66, const70, const146, l46, l44, 4, 4, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L48, kernel=2x2, stride=2, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D2x2Stride2, this, l48, const189, const198, const31, l47, 2, 2, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L49, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l49, const71, const74, l48, 2, 2, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L50, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::maxPool2x2Stride2NoPad, this, l50, const19, const26, const21, l49, l47, 2, 2, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L51, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l51, const59, const67, const12, l50, 2, 2, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L52, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l52, const52, const60, l51, 2, 2, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L53, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l53, const101, const107, const190, l52, l50, 2, 2, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L54, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l54, const115, const123, const176, l53, 2, 2, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L55, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l55, const9, const15, l54, 2, 2, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L56, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l56, const54, const62, const132, l55, l53, 2, 2, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L57, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 213; k++) {
+            thread t(&iris::conv2D2x2Stride1, this, l57, const177, const182, l56, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // [2] Iris
+        // L58, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l58, const110, const117, const151, l32, 8, 8, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L59, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l59, const211, const2, l58, 8, 8, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L60, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l60, const49, const53, const113, l59, l32, 8, 8, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L61, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l61, const169, const178, const97, l60, 8, 8, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L62, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l62, const158, const162, l61, 8, 8, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L63, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l63, const102, const111, const175, l62, l60, 8, 8, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L64, kernel=2x2, stride=2, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D2x2Stride2, this, l64, const118, const126, const160, l63, 4, 4, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L65, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l65, const7, const11, l64, 4, 4, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L66, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::maxPool2x2Stride2NoPad, this, l66, const58, const65, const156, l65, l63, 4, 4, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L67, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l67, const216, const104, const142, l66, 4, 4, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L68, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l68, const205, const213, l67, 4, 4, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L69, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l69, const148, const152, const100, l68, l66, 4, 4, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L70, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l70, const159, const167, const209, l69, 4, 4, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L71, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l71, const42, const46, l70, 4, 4, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L72, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l72, const92, const98, const163, l71, l69, 4, 4, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L73, kernel=2x2, stride=2, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D2x2Stride2, this, l73, const8, const14, const45, l72, 2, 2, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L74, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l74, const94, const1, l73, 2, 2, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L75, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::maxPool2x2Stride2NoPad, this, l75, const47, const51, const41, l74, l72, 2, 2, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L76, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l76, const87, const95, const29, l75, 2, 2, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L77, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l77, const77, const82, l76, 2, 2, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L78, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l78, const134, const143, const214, l77, l75, 2, 2, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L79, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::conv2D1x1Stride1, this, l79, const149, const157, const196, l78, 2, 2, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L80, kernel=3x3, stride=1, padding=even
+        for (uint k = 0; k < 64; k++) {
+            thread t(&iris::depthConv2D3x3, this, l80, const33, const39, l79, 2, 2, k);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L81, kernel=1x1, stride=1, padding=even
+        for (uint k = 0; k < 128; k++) {
+            thread t(&iris::conv2D1x1Stride1Add, this, l81, const84, const89, const153, l80, l78, 2, 2, k, 64);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        // L82, kernel=1x1, stride=1, padding=none
+        for (uint k = 0; k < 15; k++) {
+            thread t(&iris::conv2D2x2Stride1, this, l82, const210, const80, l81, k, 128);
+            threads.push_back(move(t));
+        }
+        for (auto& th : threads) th.join();
+        threads.clear();
+
+        //cout << l82[14] << endl;
+    }
+
+    void drawPoints(Mat img)
+    {
+        // brows + contours
+        for (int i = 0; i < 71; i++)
+        {
+            float x = l57[i * 3];
+            float y = l57[i * 3 + 1];
+            float z = l57[i * 3 + 2];
+            circle(img, Point(x, y), 1, Scalar(255, 255, 255), 0.1, 8, 0);
+        }
+        // iris
+        for (int i = 0; i < 5; i++)
+        {
+            float x = l82[i * 3];
+            float y = l82[i * 3 + 1];
+            float z = l82[i * 3 + 2];
+            circle(img, Point(x, y), 1, Scalar(255, 0, 0), 0.1, 8, 0);
+        }
     }
 };
 
@@ -1161,33 +1647,34 @@ int main()
 
     // use a 3d array cause fuck opencv mats
     float*** imgArray = iris::createArray(64, 64, 3, sizeof(float));
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < 64; i++) {
+            for (int j = 0; j < 64; j++) {
+                imgArray[i][j][k] = img.at<Vec3f>(i, j)[k];
+            }
+        }
+    }
+
     //for (int k = 0; k < 3; k++) {
     //    for (int i = 0; i < 64; i++) {
     //        for (int j = 0; j < 64; j++) {
-    //            imgArray[i][j][k] = img.at<Vec3f>(i, j)[k];
+    //            if (k == 0) imgArray[i][j][k] = (i / 63.0f) * (j / 63.0f);
+    //            else if (k == 1) imgArray[i][j][k] = ((63.0f - i) / 63.0f) * (j / 63.0f);
+    //            else imgArray[i][j][k] = (i / 63.0f) * ((63.0f - j) / 63.0f);
     //        }
     //    }
     //}
 
-    for (int k = 0; k < 3; k++) {
-    	for (int i = 0; i < 64; i++) {
-    		for (int j = 0; j < 64; j++) {
-    			if (k == 0) imgArray[i][j][k] = (i / 63.0f) * (j / 63.0f);
-    			else if (k == 1) imgArray[i][j][k] = ((63.0f - i) / 63.0f) * (j / 63.0f);
-    			else imgArray[i][j][k] = (i / 63.0f) * ((63.0f - j) / 63.0f);
-    		}
-    	}
-    }
-
     string PATH = "D:\\Storage\\Unity\\facemesh-python\\data\\irisUnity.bytes";
     iris iris_detect = iris(PATH);
     iris_detect.forwardProp(imgArray);
-    //iris_detect.drawPoints(img);
+    iris_detect.drawPoints(img);
 
-    //cvtColor(img, img, COLOR_RGB2BGR);
-    //imshow("Display window", img);
-    //waitKey(0); // Wait for a keystroke in the window
+    cvtColor(img, img, COLOR_RGB2BGR);
+    imshow("Display window", img);
+    waitKey(0); // Wait for a keystroke in the window
 
+    //getchar();
     iris::freeArray(64, 64, 3, imgArray);
     return 0;
 }
