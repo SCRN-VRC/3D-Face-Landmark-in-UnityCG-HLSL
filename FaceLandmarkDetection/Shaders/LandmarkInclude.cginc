@@ -1,17 +1,11 @@
 ﻿#ifndef __LANDMARK__
 #define __LANDMARK__
 
+#include "MLCommon.cginc"
+
 float sdCircle( float2 p, float r )
 {
     return length(p) - r;
-}
-
-float2x2 rot2(float rot)
-{
-    float sinRot;
-    float cosRot;
-    sincos(rot, sinRot, cosRot);
-    return float2x2(cosRot, -sinRot, sinRot, cosRot);
 }
 
 float3x3 lookAt(float3 forward, float3 up)
@@ -38,12 +32,12 @@ float3x3 lookAt(float3 forward, float3 up)
 
     // lookMat = mul(invY, lookMat);
 
-    return lookMat; 
+    return lookMat;
 } 
 
 // Baked weight positions
 
-static const float4 weightPos[118] = 
+static const float4 faceWeight[118] = 
 {
     // X, Y, W, H
     1292, 416, 16, 27,        // Const 0
@@ -184,28 +178,13 @@ static const float4 weightPos[118] =
 //     return testGen(uint3(x, y, z));
 // }
 
-float relu(float x)
-{
-    return max(0.0, x);
-}
-
-float sigmoid(float x)
-{
-    return 1.0 / (1.0 + exp(-x));
-}
-
-float max4(float a, float b, float c, float d)
-{
-    return max(a, max(b, max(c, d)));
-}
-
 // Conv2D weights getter
 float getConst(Texture2D<float> tex, uint4 off, uint depth, uint ID)
 {
     uint2 pos;
     pos.x = off.w;
     pos.y = off.z + off.y * depth + off.x * depth * 3;
-    return tex[weightPos[ID].xy + pos];
+    return tex[faceWeight[ID].xy + pos];
 }
 
 // Depth-wise Conv2D weights getter
@@ -214,20 +193,20 @@ float getConst(Texture2D<float> tex, uint3 off, uint ID)
     uint2 pos;
     pos.x = off.z;
     pos.y = off.y + off.x * 3;
-    return tex[weightPos[ID].xy + pos];
+    return tex[faceWeight[ID].xy + pos];
 }
 
 // Batch normalization weights getter
 float getConst(Texture2D<float> tex, uint2 off, uint ID)
 {
-    return tex[weightPos[ID].xy + off.yx];
+    return tex[faceWeight[ID].xy + off.yx];
 }
 
 // Bias/Multiplier getter
 float getConst(Texture2D<float> tex, uint off, uint ID, bool flip)
 {
     uint2 pos = flip ? uint2(off, 0) : uint2(0, off);
-    return tex[weightPos[ID].xy + pos];
+    return tex[faceWeight[ID].xy + pos];
 }
 
 float getCameraVP(sampler2D tex, uint3 off, uint2 lim)

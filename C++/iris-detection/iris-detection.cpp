@@ -883,16 +883,16 @@ public:
     void conv2D2x2Stride1(float* cl, float**** cw, float* bias, float*** pl,
        uint k, uint lm)
     {
-		cl[k] = 0.0f;
-		for (uint l = 0; l < lm; l++) {
-			cl[k] +=
-				pl[0][0][l] * cw[k][l][0][0] +
-				pl[0][1][l] * cw[k][l][0][1] +
-				pl[1][0][l] * cw[k][l][1][0] +
-				pl[1][1][l] * cw[k][l][1][1];
-		}
-		// bias
-		cl[k] = cl[k] + bias[k];
+        cl[k] = 0.0f;
+        for (uint l = 0; l < lm; l++) {
+            cl[k] +=
+                pl[0][0][l] * cw[k][l][0][0] +
+                pl[0][1][l] * cw[k][l][0][1] +
+                pl[1][0][l] * cw[k][l][1][0] +
+                pl[1][1][l] * cw[k][l][1][1];
+        }
+        // bias
+        cl[k] = cl[k] + bias[k];
     }
 
     void maxPool2x2Stride2Padded(float*** cl, float**** cw, float* bias, float**** slope, float*** pl, float*** pl2,
@@ -939,9 +939,9 @@ public:
                     cl[i][j][k] += pl[i][j][l] * cw[k][l][0][0];
                 }
 
-				// max pool
-				float mp = fmaxf(pl2[i0][j0][k], fmaxf(pl2[i0][j1][k],
-					fmaxf(pl2[i1][j0][k], pl2[i1][j1][k])));
+                // max pool
+                float mp = fmaxf(pl2[i0][j0][k], fmaxf(pl2[i0][j1][k],
+                    fmaxf(pl2[i1][j0][k], pl2[i1][j1][k])));
 
                 // bias + skip in
                 cl[i][j][k] = cl[i][j][k] + bias[k] + mp;
@@ -1640,7 +1640,7 @@ int main()
 
     // opencv read stuff in BGR
     cvtColor(img, img, COLOR_BGR2RGB);
-    //resize(img, img, Size(64, 64), 0.0, 0.0, INTER_AREA);
+    resize(img, img, Size(64, 64), 0.0, 0.0, INTER_AREA);
     img.convertTo(img, CV_32FC3);
     // normalize values
     img = img / 255.0;
