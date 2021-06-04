@@ -965,6 +965,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu
+
         // L1, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 32; k++) {
             thread t(&iris::conv2D1x1Stride1, this, l1, const119, const128, const154, l0, 32, 32, k, 64);
@@ -972,6 +974,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_1
 
         // L2, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 32; k++) {
@@ -981,6 +985,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: depthwise_conv2d
+
         // L3, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D1x1Stride1Add, this, l3, const215, const4, const23, l2, l0, 32, 32, k, 32);
@@ -988,6 +994,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_2
 
         // L4, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 32; k++) {
@@ -997,6 +1005,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_3
+
         // L5, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 32; k++) {
             thread t(&iris::depthConv2D3x3, this, l5, const0, const5, l4, 32, 32, k);
@@ -1004,6 +1014,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: depthwise_conv2d_1
 
         // L6, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1013,6 +1025,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_4
+
         // L7, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 32; k++) {
             thread t(&iris::conv2D1x1Stride1, this, l7, const86, const93, const120, l6, 32, 32, k, 64);
@@ -1020,6 +1034,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+
 
         // L8, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 32; k++) {

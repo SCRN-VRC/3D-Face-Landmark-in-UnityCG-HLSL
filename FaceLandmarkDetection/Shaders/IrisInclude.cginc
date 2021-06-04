@@ -236,19 +236,46 @@ static const float4 irisWeight[227] =
     669, 640, 1, 4,       // const226
 };
 
+float testGen(uint3 pos)
+{
+    float r;
+    if (pos.z == 0)
+        r = (pos.x / 63.0) * (pos.y / 63.0);
+    else if (pos.z == 1)
+        r = ((63.0 - pos.x) / 63.0) * (pos.y / 63.0);
+    else
+        r = (pos.x / 63.0) * ((63.0 - pos.y) / 63.0);
+    return r;
+}
+
+float test(uint x, uint y, uint z)
+{
+    if (x >= 64 || y >= 64) return 0.0;
+    return testGen(uint3(x, y, z));
+}
+
 // Conv2D weights getter
 float getConst(Texture2D<float> tex, uint4 off, uint depth, uint kernSize, uint ID)
 {
     uint2 pos;
-    pos.x = off.z + off.y * depth + off.x * depth * kernSize;
-    pos.y = off.w;
-    return tex[irisWeight[ID].xy + uint2(1, 1)];
+    pos.x = off.w + off.z * depth + off.y * depth * kernSize;
+    pos.y = off.x;
+    return tex[irisWeight[ID].xy + pos];
+}
+
+// Depth-wise Conv2D weights getter
+float getConst(Texture2D<float> tex, uint3 off, uint ID)
+{
+    uint2 pos;
+    pos.x = off.z + off.y * 3;
+    pos.y = off.x;
+    return tex[irisWeight[ID].xy + pos];
 }
 
 // Bias/Activation slope getter
 float getConst(Texture2D<float> tex, uint2 off, uint ID)
 {
-    return tex[irisWeight[ID].xy + off.yx];
+    return tex[irisWeight[ID].xy + off];
 }
 
 #endif
