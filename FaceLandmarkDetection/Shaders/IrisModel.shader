@@ -631,5 +631,41 @@
             ENDCG
         }
 
+        Pass
+        {
+            Name "LR Brows Contours"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            sampler2D          _CamIn;
+            Texture2D<float>   _Layer1;
+            Texture2D<float4>  _Layer2;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+
+                uint eyeIndex = tex2D(_CamIn, 0..xx).x < 0.5 ? 0 : 1;
+
+                float4 col = _Layer2[px];
+                
+                if (eyeIndex == (px.y / 9))
+                {
+                    uint h = px.x + px.y * 8;
+                    col.r = _Layer1[uint2(0, h)];
+                    col.g = _Layer1[uint2(1, h)];
+                    col.b = _Layer1[uint2(2, h)];
+                }
+
+                return col;
+            }
+            ENDCG
+        }
+
     }
 }
