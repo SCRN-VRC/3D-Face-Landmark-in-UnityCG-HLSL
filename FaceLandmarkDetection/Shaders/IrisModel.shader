@@ -114,25 +114,25 @@
                 for (uint l = 0; l < _WHDM.z; l++)
                 {
                     cl +=
-/*                         getCameraVP(_CamIn, uint3(i0, j0, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 0, 0), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i0, j1, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 0, 1), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i0, j2, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 0, 2), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i1, j0, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 1, 0), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i1, j1, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 1, 1), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i1, j2, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 1, 2), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i2, j0, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 2, 0), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i2, j1, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 2, 1), _WHDM.z, _KernelSize, _WeightID) +
-                        getCameraVP(_CamIn, uint3(i2, j2, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 2, 2), _WHDM.z, _KernelSize, _WeightID);
-*/
-                        test(i0, j0, l) * getConst(_Weights, uint4(k, l, 0, 0), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i0, j1, l) * getConst(_Weights, uint4(k, l, 0, 1), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i0, j2, l) * getConst(_Weights, uint4(k, l, 0, 2), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i1, j0, l) * getConst(_Weights, uint4(k, l, 1, 0), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i1, j1, l) * getConst(_Weights, uint4(k, l, 1, 1), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i1, j2, l) * getConst(_Weights, uint4(k, l, 1, 2), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i2, j0, l) * getConst(_Weights, uint4(k, l, 2, 0), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i2, j1, l) * getConst(_Weights, uint4(k, l, 2, 1), _WHDM.z, _KernelSize, _WeightID) +
-                        test(i2, j2, l) * getConst(_Weights, uint4(k, l, 2, 2), _WHDM.z, _KernelSize, _WeightID);
+                        getCameraVP(_CamIn, uint3(i0, j0, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 0, 0), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i0, j1, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 0, 1), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i0, j2, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 0, 2), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i1, j0, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 1, 0), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i1, j1, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 1, 1), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i1, j2, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 1, 2), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i2, j0, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 2, 0), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i2, j1, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 2, 1), _KernelSize, _WeightID) +
+                        getCameraVP(_CamIn, uint3(i2, j2, l), _Layer12WH.xy) * getConst(_Weights, uint4(k, l, 2, 2), _KernelSize, _WeightID);
+
+                        // test(i0, j0, l) * getConst(_Weights, uint4(k, l, 0, 0), _KernelSize, _WeightID) +
+                        // test(i0, j1, l) * getConst(_Weights, uint4(k, l, 0, 1), _KernelSize, _WeightID) +
+                        // test(i0, j2, l) * getConst(_Weights, uint4(k, l, 0, 2), _KernelSize, _WeightID) +
+                        // test(i1, j0, l) * getConst(_Weights, uint4(k, l, 1, 0), _KernelSize, _WeightID) +
+                        // test(i1, j1, l) * getConst(_Weights, uint4(k, l, 1, 1), _KernelSize, _WeightID) +
+                        // test(i1, j2, l) * getConst(_Weights, uint4(k, l, 1, 2), _KernelSize, _WeightID) +
+                        // test(i2, j0, l) * getConst(_Weights, uint4(k, l, 2, 0), _KernelSize, _WeightID) +
+                        // test(i2, j1, l) * getConst(_Weights, uint4(k, l, 2, 1), _KernelSize, _WeightID) +
+                        // test(i2, j2, l) * getConst(_Weights, uint4(k, l, 2, 2), _KernelSize, _WeightID);
                 }
 
                 // bias
@@ -199,7 +199,7 @@
                 // activation
                 cl = PRelu(cl, getConst(_Weights, uint2(k, 0), _MultiplierID));
                 
-                //if (i == 30 && j == 26 && k == 29)
+                //if (i == 1 && j == 0 && k == 62)
                 //    buffer[0] = cl;
 
                 return cl;
@@ -259,7 +259,7 @@
                 // bias
                 cl = cl + getConst(_Weights, uint2(0, k), _BiasID);
                 
-                //if (i == 26 && j == 30 && k == 31)
+                //if (i == 15 && j == 14 && k == 55)
                 //    buffer[0] = cl;
 
                 return cl;
@@ -277,7 +277,7 @@
             #pragma fragment frag
             #pragma target 5.0
 
-            RWStructuredBuffer<float4> buffer : register(u1);
+            //RWStructuredBuffer<float4> buffer : register(u1);
             Texture2D<float> _Weights;
             Texture2D<float> _Layer1;
             Texture2D<float> _Layer2;
@@ -323,10 +323,310 @@
                 // activation
                 cl = PRelu(cl, getConst(_Weights, uint2(k, 0), _MultiplierID));
 
-                if (i == 31 && j == 26 && k == 19)
-                    buffer[0] = cl;
+                //if (i == 7 && j == 6 && k == 127)
+                //    buffer[0] = cl;
 
                 return cl;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "conv2D2x2Stride2"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float> _Weights;
+            Texture2D<float> _Layer1;
+            uint4            _WHDM;
+            uint4            _Layer12WH;
+            uint             _KernelSize;
+            uint             _WeightID;
+            uint             _BiasID;
+            uint             _MultiplierID;
+
+            float frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+                
+                const uint widthMult = floor(_CustomRenderTextureWidth / _WHDM.x);
+                
+                const uint i = px.y % _WHDM.y;
+                const uint j = px.x % _WHDM.x;
+                const uint k = (px.x / _WHDM.x) + (px.y / _WHDM.y) * widthMult;
+
+                const uint i0 = i * 2, i1 = i0 + 1;
+                const uint j0 = j * 2, j1 = j0 + 1;
+
+                uint2 PLD1;
+                _Layer1.GetDimensions(PLD1.x, PLD1.y);
+                const uint2 mult1 = PLD1 / _Layer12WH.xy;
+
+                float cl = 0.0;
+
+                // 2x2 kernel
+                for (uint l = 0; l < _WHDM.z; l++)
+                {
+                    cl +=
+                        getLayerNP(_Layer1, uint3(i0, j0, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 0, 0), _KernelSize, _WeightID) +
+                        getLayerNP(_Layer1, uint3(i0, j1, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 0, 1), _KernelSize, _WeightID) +
+                        getLayerNP(_Layer1, uint3(i1, j0, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 1, 0), _KernelSize, _WeightID) +
+                        getLayerNP(_Layer1, uint3(i1, j1, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 1, 1), _KernelSize, _WeightID);
+                }
+                // bias
+                cl = cl + getConst(_Weights, uint2(0, k), _BiasID);
+
+                // activation
+                cl = PRelu(cl, getConst(_Weights, uint2(k, 0), _MultiplierID));
+
+                //if (i == 1 && j == 0 && k == 62)
+                //    buffer[0] = cl;
+
+                return cl;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "maxPool2x2Stride2Padded"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float> _Weights;
+            Texture2D<float> _Layer1;
+            Texture2D<float> _Layer2;
+            uint4            _WHDM;
+            uint4            _Layer12WH;
+            uint             _KernelSize;
+            uint             _WeightID;
+            uint             _BiasID;
+            uint             _MultiplierID;
+
+            float frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+                
+                const uint widthMult = floor(_CustomRenderTextureWidth / _WHDM.x);
+                
+                const uint i = px.y % _WHDM.y;
+                const uint j = px.x % _WHDM.x;
+                const uint k = (px.x / _WHDM.x) + (px.y / _WHDM.y) * widthMult;
+
+                uint2 PLD1;
+                _Layer1.GetDimensions(PLD1.x, PLD1.y);
+                const uint2 mult1 = PLD1 / _Layer12WH.xy;
+
+                uint2 PLD2;
+                _Layer2.GetDimensions(PLD2.x, PLD2.y);
+                const uint2 mult2 = PLD2 / _Layer12WH.zw;
+
+                float cl = 0.0;
+
+                // 1x1 kernel
+                for (uint l = 0; l < _WHDM.z; l++)
+                {
+                    cl += getLayerNP(_Layer1, uint3(i, j, l), _Layer12WH.xy, mult1) *
+                        getConst(_Weights, uint2(l, k), _WeightID);
+                }
+
+                // max pool
+                const uint i0 = i * 2, i1 = i0 + 1;
+                const uint j0 = j * 2, j1 = j0 + 1;
+
+                // pad extra layers with 0
+                float mp = 0.0;
+                if (k < _WHDM.z)
+                {
+                    mp = max4(getLayerNP(_Layer2, uint3(i0, j0, k), _Layer12WH.zw, mult2),
+                        getLayerNP(_Layer2, uint3(i0, j1, k), _Layer12WH.zw, mult2),
+                        getLayerNP(_Layer2, uint3(i1, j0, k), _Layer12WH.zw, mult2),
+                        getLayerNP(_Layer2, uint3(i1, j1, k), _Layer12WH.zw, mult2));
+                }
+
+                // bias + skip in
+                cl = cl + getConst(_Weights, uint2(0, k), _BiasID) + mp;
+
+                // activation
+                cl = PRelu(cl, getConst(_Weights, uint2(k, 0), _MultiplierID));
+
+                //if (i == 15 && j == 14 && k == 127)
+                //    buffer[0] = cl;
+
+                return cl;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "maxPool2x2Stride2NoPad"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float> _Weights;
+            Texture2D<float> _Layer1;
+            Texture2D<float> _Layer2;
+            uint4            _WHDM;
+            uint4            _Layer12WH;
+            uint             _KernelSize;
+            uint             _WeightID;
+            uint             _BiasID;
+            uint             _MultiplierID;
+
+            float frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+                
+                const uint widthMult = floor(_CustomRenderTextureWidth / _WHDM.x);
+                
+                const uint i = px.y % _WHDM.y;
+                const uint j = px.x % _WHDM.x;
+                const uint k = (px.x / _WHDM.x) + (px.y / _WHDM.y) * widthMult;
+
+                uint2 PLD1;
+                _Layer1.GetDimensions(PLD1.x, PLD1.y);
+                const uint2 mult1 = PLD1 / _Layer12WH.xy;
+
+                uint2 PLD2;
+                _Layer2.GetDimensions(PLD2.x, PLD2.y);
+                const uint2 mult2 = PLD2 / _Layer12WH.zw;
+
+                float cl = 0.0;
+
+                // 1x1 kernel
+                for (uint l = 0; l < _WHDM.z; l++)
+                {
+                    cl += getLayerNP(_Layer1, uint3(i, j, l), _Layer12WH.xy, mult1) *
+                        getConst(_Weights, uint2(l, k), _WeightID);
+                }
+
+                // max pool
+                const uint i0 = i * 2, i1 = i0 + 1;
+                const uint j0 = j * 2, j1 = j0 + 1;
+
+                float mp = max4(getLayerNP(_Layer2, uint3(i0, j0, k), _Layer12WH.zw, mult2),
+                    getLayerNP(_Layer2, uint3(i0, j1, k), _Layer12WH.zw, mult2),
+                    getLayerNP(_Layer2, uint3(i1, j0, k), _Layer12WH.zw, mult2),
+                    getLayerNP(_Layer2, uint3(i1, j1, k), _Layer12WH.zw, mult2));
+
+                // bias + skip in
+                cl = cl + getConst(_Weights, uint2(0, k), _BiasID) + mp;
+
+                // activation
+                cl = PRelu(cl, getConst(_Weights, uint2(k, 0), _MultiplierID));
+
+                //if (i == 15 && j == 14 && k == 127)
+                //    buffer[0] = cl;
+
+                return cl;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "conv2D2x2Stride1"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float> _Weights;
+            Texture2D<float> _Layer1;
+            uint4            _WHDM;
+            uint4            _Layer12WH;
+            uint             _KernelSize;
+            uint             _WeightID;
+            uint             _BiasID;
+            uint             _MultiplierID;
+
+            float frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+
+                const uint k = px.x + px.y * _WHDM.x;
+
+                uint2 PLD1;
+                _Layer1.GetDimensions(PLD1.x, PLD1.y);
+                const uint2 mult1 = PLD1 / _Layer12WH.xy;
+
+                float cl = 0.0;
+
+                // 2x2 kernel
+                for (uint l = 0; l < _WHDM.z; l++)
+                {
+                    cl +=
+                        getLayerNP(_Layer1, uint3(0, 0, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 0, 0), _KernelSize, _WeightID) +
+                        getLayerNP(_Layer1, uint3(0, 1, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 0, 1), _KernelSize, _WeightID) +
+                        getLayerNP(_Layer1, uint3(1, 0, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 1, 0), _KernelSize, _WeightID) +
+                        getLayerNP(_Layer1, uint3(1, 1, l), _Layer12WH.xy, mult1) * getConst(_Weights, uint4(k, l, 1, 1), _KernelSize, _WeightID);
+                }
+                // bias
+                cl = cl + getConst(_Weights, uint2(0, k), _BiasID);
+
+                //if (k == 14)
+                //    buffer[0] = cl;
+
+                return cl;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "LR Eyes"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            sampler2D          _CamIn;
+            Texture2D<float>   _Layer1;
+            Texture2D<float4>  _Layer2;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+
+                uint eyeIndex = tex2D(_CamIn, 0..xx).x < 0.5 ? 0 : 1;
+
+                float4 col = _Layer2[px];
+                
+                if (eyeIndex == px.x)
+                {
+                    col.r = _Layer1[uint2(0, px.y)];
+                    col.g = _Layer1[uint2(1, px.y)];
+                    col.b = _Layer1[uint2(2, px.y)];
+                }
+
+                return col;
             }
             ENDCG
         }

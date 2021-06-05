@@ -1035,7 +1035,7 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-
+        // output layer: p_re_lu_5
 
         // L8, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 32; k++) {
@@ -1045,6 +1045,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: depthwise_conv2d_2
+
         // L9, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D1x1Stride1Add, this, l9, const174, const183, const3, l8, l6, 32, 32, k, 32);
@@ -1052,6 +1054,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_6
 
         // L10, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 32; k++) {
@@ -1061,6 +1065,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_7
+
         // L11, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 32; k++) {
             thread t(&iris::depthConv2D3x3, this, l11, const78, const83, l10, 32, 32, k);
@@ -1068,6 +1074,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: depthwise_conv2d_3
 
         // L12, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1077,6 +1085,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_8
+
         // L13, kernel=2x2, stride=2, padding=none
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D2x2Stride2, this, l13, const69, const73, const96, l12, 16, 16, k, 64);
@@ -1084,6 +1094,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_9
 
         // L14, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1093,6 +1105,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: depthwise_conv2d_4
+
         // L16, kernel=1x1, stride=1, padding=even
         for (uint k = 0; k < 128; k++) {
             thread t(&iris::maxPool2x2Stride2Padded, this, l16, const57, const64, const10, l14, l12, 16, 16, k, 64);
@@ -1101,6 +1115,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_10
+
         // L17, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D1x1Stride1, this, l17, const32, const38, const50, l16, 16, 16, k, 128);
@@ -1108,6 +1124,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_11
 
         // L18, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1125,6 +1143,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_12
+
         // L20, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D1x1Stride1, this, l20, const164, const170, const192, l19, 16, 16, k, 128);
@@ -1132,6 +1152,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_13
 
         // L21, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1149,6 +1171,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_14
+
         // L23, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D1x1Stride1, this, l23, const199, const207, const105, l22, 16, 16, k, 128);
@@ -1156,6 +1180,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_15
 
         // L24, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1181,6 +1207,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_17
+
         // L27, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l27, const165, const172, l26, 16, 16, k);
@@ -1204,6 +1232,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_19
 
         // L30, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1232,6 +1262,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_21
+
         // L34, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l34, const184, const191, l33, 8, 8, k);
@@ -1255,6 +1287,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_23
 
         // L37, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1280,6 +1314,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_25
+
         // L40, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l40, const195, const204, l39, 4, 4, k);
@@ -1303,6 +1339,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_27
 
         // L43, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1328,6 +1366,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_29
+
         // L46, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l46, const17, const22, l45, 4, 4, k);
@@ -1351,6 +1391,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_31
 
         // L49, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1376,6 +1418,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_33
+
         // L52, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l52, const52, const60, l51, 2, 2, k);
@@ -1400,6 +1444,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_35
+
         // L55, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l55, const9, const15, l54, 2, 2, k);
@@ -1416,13 +1462,15 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        // L57, kernel=1x1, stride=1, padding=none
+        // L57, kernel=2x2, stride=1, padding=none
         for (uint k = 0; k < 213; k++) {
             thread t(&iris::conv2D2x2Stride1, this, l57, const177, const182, l56, k, 128);
             threads.push_back(move(t));
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: conv_eyes_contours_and_brows
 
         // [2] Iris
         // L58, kernel=1x1, stride=1, padding=none
@@ -1432,6 +1480,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_37
 
         // L59, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1449,6 +1499,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_38
+
         // L61, kernel=1x1, stride=1, padding=none
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::conv2D1x1Stride1, this, l61, const169, const178, const97, l60, 8, 8, k, 128);
@@ -1456,6 +1508,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_39
 
         // L62, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1481,6 +1535,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_41
+
         // L65, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l65, const7, const11, l64, 4, 4, k);
@@ -1504,6 +1560,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_43
 
         // L68, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1529,6 +1587,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_45
+
         // L71, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l71, const42, const46, l70, 4, 4, k);
@@ -1552,6 +1612,8 @@ public:
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: p_re_lu_47
 
         // L74, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
@@ -1577,6 +1639,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_49
+
         // L77, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l77, const77, const82, l76, 2, 2, k);
@@ -1601,6 +1665,8 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
+        // output layer: p_re_lu_51
+
         // L80, kernel=3x3, stride=1, padding=even
         for (uint k = 0; k < 64; k++) {
             thread t(&iris::depthConv2D3x3, this, l80, const33, const39, l79, 2, 2, k);
@@ -1617,13 +1683,15 @@ public:
         for (auto& th : threads) th.join();
         threads.clear();
 
-        // L82, kernel=1x1, stride=1, padding=none
+        // L82, kernel=2x2, stride=1, padding=none
         for (uint k = 0; k < 15; k++) {
             thread t(&iris::conv2D2x2Stride1, this, l82, const210, const80, l81, k, 128);
             threads.push_back(move(t));
         }
         for (auto& th : threads) th.join();
         threads.clear();
+
+        // output layer: conv_iris
 
         //cout << l82[14] << endl;
     }

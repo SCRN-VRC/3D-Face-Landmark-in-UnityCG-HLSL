@@ -236,6 +236,7 @@ static const float4 irisWeight[227] =
     669, 640, 1, 4,       // const226
 };
 
+/* 
 float testGen(uint3 pos)
 {
     float r;
@@ -253,12 +254,13 @@ float test(uint x, uint y, uint z)
     if (x >= 64 || y >= 64) return 0.0;
     return testGen(uint3(x, y, z));
 }
+*/
 
 // Conv2D weights getter
-float getConst(Texture2D<float> tex, uint4 off, uint depth, uint kernSize, uint ID)
+float getConst(Texture2D<float> tex, uint4 off, uint kernSize, uint ID)
 {
     uint2 pos;
-    pos.x = off.w + off.z * depth + off.y * depth * kernSize;
+    pos.x = off.w + off.z * kernSize + off.y * kernSize * kernSize;
     pos.y = off.x;
     return tex[irisWeight[ID].xy + pos];
 }
