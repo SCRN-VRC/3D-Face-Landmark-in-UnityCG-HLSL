@@ -606,6 +606,7 @@
             #pragma fragment frag
             #pragma target 5.0
 
+            //RWStructuredBuffer<float4> buffer : register(u1);
             sampler2D          _CamIn;
             Texture2D<float>   _Layer1;
             Texture2D<float4>  _Layer2;
@@ -621,10 +622,13 @@
                 
                 if (eyeIndex == px.x)
                 {
-                    col.r = _Layer1[uint2(0, px.y)];
-                    col.g = _Layer1[uint2(1, px.y)];
-                    col.b = _Layer1[uint2(2, px.y)];
+                    col.r = _Layer1[uint2(0, px.y)] / 64.0;
+                    col.g = _Layer1[uint2(1, px.y)] / 64.0;
+                    col.b = _Layer1[uint2(2, px.y)] / 64.0;
                 }
+
+                //if (px.x == 1)
+                //buffer[0] = col;
 
                 return col;
             }
@@ -656,10 +660,10 @@
                 
                 if (eyeIndex == (px.y / 9))
                 {
-                    uint h = px.x + px.y * 8;
-                    col.r = _Layer1[uint2(0, h)];
-                    col.g = _Layer1[uint2(1, h)];
-                    col.b = _Layer1[uint2(2, h)];
+                    uint h = px.x + (px.y - (px.y / 9) * 9) * 8;
+                    col.r = _Layer1[uint2(0, h)] / 64.0;
+                    col.g = _Layer1[uint2(1, h)] / 64.0;
+                    col.b = _Layer1[uint2(2, h)] / 64.0;
                 }
 
                 return col;

@@ -494,66 +494,6 @@
 
         Pass
         {
-            Name "Draw Points"
-            CGPROGRAM
-            #include "UnityCustomRenderTexture.cginc"
-            #include "LandmarkInclude.cginc"
-            #pragma vertex CustomRenderTextureVertexShader
-            #pragma fragment frag
-            #pragma target 5.0
-
-            //RWStructuredBuffer<float4> buffer : register(u1);
-            Texture2D<float>  _Layer1;
-            Texture2D<float3> _Layer2;
-            sampler2D         _CamIn;
-            float4            _CamIn_TexelSize;
-
-            float4 frag(v2f_customrendertexture IN) : COLOR
-            {
-                const float2 uv = IN.globalTexcoord.xy;
-                float4 col = tex2D(_CamIn, uv);
-                uint2 texWH;
-                _Layer1.GetDimensions(texWH.x, texWH.y);
-                float d = 1000.0;
-
-                for (uint k = 0; k < texWH.x; k += 3) {
-                    for (uint j = 0; j < texWH.y; j++) {
-                        float x = _Layer1[uint2(k, j)];
-                        float y = _Layer1[uint2(k + 1, j)];
-                        //float z = _Layer1[uint2(k + 2, j)];
-
-                        d = min(d, sdCircle(uv - float2(y, x) / 192.0, 0.0055));
-                    }
-                }
-
-                col = lerp(col, float4(1, 1, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
-                d = 1000.0;
-
-                bool flipEye = false;
-
-                // Right/Left coords for eye position from facemesh
-                uint2 eyeNPos = flipEye ? uint2(9, 12) : uint2(27, 29);
-                uint2 eyeSPos = flipEye ? uint2(6, 11) : uint2(30, 28);
-                uint2 eyeEPos = flipEye ? uint2(9, 10) : uint2(9, 20);
-                uint2 eyeWPos = flipEye ? uint2(21, 2) : uint2(33, 27);
-
-                float2 eyeN = float2(_Layer1[eyeNPos], _Layer1[eyeNPos + uint2(1, 0)]);
-                float2 eyeS = float2(_Layer1[eyeSPos], _Layer1[eyeSPos + uint2(1, 0)]);
-                float2 eyeE = float2(_Layer1[eyeEPos], _Layer1[eyeEPos + uint2(1, 0)]);
-                float2 eyeW = float2(_Layer1[eyeWPos], _Layer1[eyeWPos + uint2(1, 0)]);
-
-                // Compute center
-                float2 eyeCentroid = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
-                d = min(d, sdCircle(uv - eyeCentroid.yx, 0.0055));
-
-                col = lerp(col, float4(1, 0, 0, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
-                return col;
-            }
-            ENDCG
-        }
-
-        Pass
-        {
             Name "Calculate Vectors"
             CGPROGRAM
             #include "UnityCustomRenderTexture.cginc"

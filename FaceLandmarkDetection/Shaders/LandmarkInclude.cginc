@@ -3,11 +3,6 @@
 
 #include "MLCommon.cginc"
 
-float sdCircle( float2 p, float r )
-{
-    return length(p) - r;
-}
-
 float3x3 lookAt(float3 forward, float3 up)
 { 
     float3 right = normalize(cross(up, forward));

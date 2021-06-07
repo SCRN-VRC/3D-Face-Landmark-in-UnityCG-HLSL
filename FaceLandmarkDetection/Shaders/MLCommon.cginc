@@ -1,6 +1,11 @@
 ﻿#ifndef __MLCOMMON__
 #define __MLCOMMON__
 
+float sdCircle( float2 p, float r )
+{
+    return length(p) - r;
+}
+
 float2x2 rot2(float rot)
 {
     float sinRot;
