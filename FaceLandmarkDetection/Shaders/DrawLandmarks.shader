@@ -4,6 +4,7 @@
     {
         _CamIn ("Camera Input", 2D) = "black" {}
         _FaceMeshTex ("Face Mesh Points", 2D) = "black" {}
+        _RCFaceMeshTex ("Rotation Corrected Face Mesh Points", 2D) = "black" {}
         _BrowContourTex ("Brow Countors Points", 2D) = "black" {}
         _EyeTex ("Eye Points", 2D) = "black" {}
     }
@@ -38,6 +39,7 @@
 
             sampler2D _CamIn;
             Texture2D<float> _FaceMeshTex;
+            Texture2D<float3> _RCFaceMeshTex;
             Texture2D<float3> _BrowContourTex;
             Texture2D<float3> _EyeTex;
 
@@ -58,8 +60,10 @@
                 _FaceMeshTex.GetDimensions(texWH.x, texWH.y);
                 float d = 1000.0;
 
-                for (uint k = 0; k < texWH.x; k += 3) {
-                    for (uint j = 0; j < texWH.y; j++) {
+                uint k;
+                uint j;
+                for (k = 0; k < texWH.x; k += 3) {
+                    for (j = 0; j < texWH.y; j++) {
                         float x = _FaceMeshTex[uint2(k, j)];
                         float y = _FaceMeshTex[uint2(k + 1, j)];
                         //float z = _FaceMeshTex[uint2(k + 2, j)];
@@ -71,7 +75,18 @@
                 col = lerp(col, float4(1, 1, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
                 d = 1000.0;
 
-                bool flipEye = false;
+                _RCFaceMeshTex.GetDimensions(texWH.x, texWH.y);
+
+                for (k = 0; k < texWH.x; k++) {
+                    for (j = 0; j < texWH.y; j++) {
+                        float2 pos = _RCFaceMeshTex[uint2(k, j)].xy;
+
+                        d = min(d, sdCircle(uv - pos.yx / 192.0, 0.0055));
+                    }
+                }
+
+                col = lerp(col, float4(1, 0, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
+                d = 1000.0;
 
                 // Right coords for eye position from facemesh
                 uint2 eyeNPos = uint2(9, 12);
@@ -106,12 +121,13 @@
 
                 _BrowContourTex.GetDimensions(texWH.x, texWH.y);
 
-                for (uint k = 0; k < texWH.x; k++)
+                for (k = 0; k < texWH.x; k++)
                 {
-                    for (uint l = 0; l < texWH.y; l++)
+                    for (j = 0; j < texWH.y; j++)
                     {
-                        float2 pos = _BrowContourTex[uint2(k, l)].yx;
-                        d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[l / 9].yx - eyeCentroid[l / 9].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                        if (k == 7 && (j == 8 || j == 17)) continue;
+                        float2 pos = _BrowContourTex[uint2(k, j)].yx;
+                        d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[j / 9].yx - eyeCentroid[j / 9].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                     }
                 }
 
@@ -120,11 +136,11 @@
 
                 _EyeTex.GetDimensions(texWH.x, texWH.y);
 
-                for (uint k = 0; k < texWH.x; k++)
+                for (k = 0; k < texWH.x; k++)
                 {
-                    for (uint l = 0; l < texWH.y; l++)
+                    for (j = 0; j < texWH.y; j++)
                     {
-                        float2 pos = _EyeTex[uint2(k, l)].yx;
+                        float2 pos = _EyeTex[uint2(k, j)].yx;
                         d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[k].yx - eyeCentroid[k].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                     }
                 }

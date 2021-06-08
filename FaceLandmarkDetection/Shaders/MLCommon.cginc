@@ -1,6 +1,13 @@
 ﻿#ifndef __MLCOMMON__
 #define __MLCOMMON__
 
+float3 findCenteroid(float3x3 M)
+{
+    return float3(M[0][0] + M[1][0] + M[2][0],
+        M[0][1] + M[1][1] + M[2][1],
+        M[0][2] + M[1][2] + M[2][2]) / 3.0;
+}
+
 float sdCircle( float2 p, float r )
 {
     return length(p) - r;
@@ -68,6 +75,12 @@ float getLayerNP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
     pos.x = off.y + (off.z % mult.x) * lim;
     pos.y = off.x + (off.z / mult.x) * lim;
     return tex[pos];
+}
+
+void StoreValue(in uint2 txPos, in float4 value, inout float4 col,
+    in uint2 fragPos)
+{
+    col = all(fragPos == txPos) ? value : col;
 }
 
 #endif

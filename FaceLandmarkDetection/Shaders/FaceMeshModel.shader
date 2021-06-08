@@ -492,17 +492,24 @@
             ENDCG
         }
 
+        /*
+            Python/MATLAB implementation of procrustes
+            https://stackoverflow.com/questions/18925181/procrustes-analysis-with-numpy
+        
+            We want to undo the rotations to best measure the face mesh deformations
+        */
         Pass
         {
-            Name "Calculate Vectors"
+            Name "Procrustes Analysis"
             CGPROGRAM
             #include "UnityCustomRenderTexture.cginc"
             #include "LandmarkInclude.cginc"
+            #include "svd_hlsl.cginc"
             #pragma vertex CustomRenderTextureVertexShader
             #pragma fragment frag
             #pragma target 5.0
 
-            //RWStructuredBuffer<float4> buffer : register(u1);
+            RWStructuredBuffer<float4> buffer : register(u1);
             Texture2D<float> _Layer1;
             Texture2D<float3> _Layer2;
 
@@ -514,7 +521,8 @@
                 float4 col = 0;
 
                 // Between eyes
-                const float3 p6 = { _Layer1[uint2(18, 0)], _Layer1[uint2(19, 0)], _Layer1[uint2(20, 0)] };
+                // Z + 23.0 to make the normal direction face forward
+                const float3 p6 = { _Layer1[uint2(18, 0)], _Layer1[uint2(19, 0)], _Layer1[uint2(20, 0)] + 23.0};
 
                 // Right Head
                 const float3 p103 = { _Layer1[uint2(36, 7)], _Layer1[uint2(37, 7)], _Layer1[uint2(38, 7)] };
@@ -522,33 +530,76 @@
                 // Left Head
                 const float3 p332 = { _Layer1[uint2(21, 25)], _Layer1[uint2(22, 25)], _Layer1[uint2(23, 25)] };
 
-                float3 vEyeToRH = p6 - p103;
-                float3 vEyetoLH = p6 - p332;
-                float3 vFace = normalize(cross(vEyeToRH, vEyetoLH));
-
-                float3 centerHead = (p103 + p332) * 0.5;
-                float3 vUp = normalize(p6 - centerHead);
-
                 if (px.y == 0)
                 {
-                    // Rotate head forward cause the head leans back a little
-                    vFace.yz = mul(rot2(0.5), vFace.yz);
-                    vUp.yz = mul(rot2(0.5), vUp.yz);
-                    float3x3 lookDir = lookAt(vFace, vUp);
-                    col.rgb = lookDir[min(px.x, 2)];
+                    // Procrustes Analysis
+                    // Find the rotation/translation/scale to map Y to X
+                    float3x3 X = fmInitPos;
+                    float3x3 Y = { p103, p6, p332 };
+
+                    const float3 muX = findCenteroid(X);
+                    const float3 muY = findCenteroid(Y);
+
+                    float3x3 X0;
+                    float3x3 Y0;
+                    uint i, j;
+                    for (i = 0; i < 3; i++)
+                    {
+                        X0[i] = X[i] - muX;
+                        Y0[i] = Y[i] - muY;
+                    }
+
+                    // squared error
+                    float ssX = 0.0;
+                    float ssY = 0.0;
+                    [unroll]
+                    for (i = 0; i < 3; i++)
+                    {
+                        [unroll]
+                        for (j = 0; j < 3; j++)
+                        {
+                            ssX += X0[i][j] * X0[i][j];
+                            ssY += Y0[i][j] * Y0[i][j];
+                        }
+                    }
+
+                    // centred Frobenius norm
+                    const float normX = sqrt(ssX);
+                    const float normY = sqrt(ssY);
+
+                    // scale to equal (unit) norm
+                    [unroll]
+                    for (i = 0; i < 3; i++)
+                    {
+                        [unroll]
+                        for (j = 0; j < 3; j++)
+                        {
+                            X0[i][j] /= normX;
+                            Y0[i][j] /= normY;
+                        }
+                    }
+
+                    // Singular value decomposition of a 3x3 matrix
+                    float3x3 A = mul(transpose(X0), Y0);
+                    float3x3 U;
+                    float3 D;
+                    float3x3 Vt;
+                    GetSVD3D(A, U, D, Vt);
+                    
+                    // solve optimum rotation matrix of Y
+                    float3x3 T = mul(transpose(U), transpose(Vt));
+                    const float traceTA = D[0] + D[1] + D[2];
+
+                    StoreValue(txRotation0, float4(T[0], 0.0), col, px);
+                    StoreValue(txRotation1, float4(T[1], 0.0), col, px);
+                    StoreValue(txRotation2, float4(T[2], 0.0), col, px);
+                    StoreValue(txScaleYNorm, float4(traceTA * normX, normY, 0.0, 0.0), col, px);
+                    StoreValue(txXCentroid, float4(muX, 0.0), col, px);
+                    StoreValue(txYCentroid, float4(muY, 0.0), col, px);
                 }
-                else if (px.y == 1)
+                else
                 {
-                    // Keep unmodified values
-                    float3x3 lookDir = lookAt(vFace, vUp);
-                    col.rgb = lookDir[min(px.x, 2)];
-                }
-                else if (px.y == 2)
-                {
-                    col.rgb = _Layer2[uint2(px.x, px.y - 2)];
-                }
-                else if (px.y == 3)
-                {
+                    // Keep history for smoothing
                     col.rgb = _Layer2[uint2(px.x, px.y - 1)];
                 }
 
@@ -568,7 +619,7 @@
             #pragma target 5.0
 
             //RWStructuredBuffer<float4> buffer : register(u1);
-            Texture2D<float> _Layer1;
+            Texture2D<float>  _Layer1;
             Texture2D<float3> _Layer2;
 
             float4 frag(v2f_customrendertexture IN) : COLOR
@@ -581,17 +632,19 @@
                 pos.y = _Layer1[uint2(px.x * 3 + 1, px.y)];
                 pos.z = _Layer1[uint2(px.x * 3 + 2, px.y)];
 
-                // Point 6
-                float3 fCentroid = { _Layer1[uint2(18, 0)], _Layer1[uint2(19, 0)], _Layer1[uint2(20, 0)] };
+                const float3 YCentroid = _Layer2[txYCentroid];
+                const float3 XCentroid = _Layer2[txXCentroid];
+                const float2 scaleYNorm = _Layer2[txScaleYNorm].xy;
 
                 float3x3 look;
 
-                look[0] = _Layer2[uint2(0, 0)].rgb;
-                look[1] = _Layer2[uint2(1, 0)].rgb;
-                look[2] = _Layer2[uint2(2, 0)].rgb;
+                look[0] = _Layer2[txRotation0];
+                look[1] = _Layer2[txRotation1];
+                look[2] = _Layer2[txRotation2];
 
-                // Reverse the rotation
-                pos.xyz = mul(pos.xyz - fCentroid, look) + fCentroid;
+                // Reverse the rotation, scale, and translation
+                pos.xyz = (pos.xyz - YCentroid) / scaleYNorm.y;
+                pos.xyz = scaleYNorm.x * mul(look, pos.xyz) + XCentroid;
 
                 return float4(pos, 0.0);
             }

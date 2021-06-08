@@ -27,6 +27,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 2c9db9c73d8a4ba4c8dadf1472aa3fdd, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _BrowContourTex:
+        m_Texture: {fileID: 8600000, guid: 9b5ba9a69214bcd4690c3a15dad0e101, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -45,6 +49,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EyeTex:
+        m_Texture: {fileID: 8600000, guid: 8fe787dfddc97f543b93537ba8ddbb5b, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FaceMeshTex:
+        m_Texture: {fileID: 8600000, guid: fd502bb57bdb5ee47adeca6ff5f0b133, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FacePositions:

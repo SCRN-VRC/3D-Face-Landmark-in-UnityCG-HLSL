@@ -3,32 +3,21 @@
 
 #include "MLCommon.cginc"
 
-float3x3 lookAt(float3 forward, float3 up)
-{ 
-    float3 right = normalize(cross(up, forward));
-    float3x3 lookMat;
- 
-    lookMat[0][0] = right.x;
-    lookMat[1][0] = right.y;
-    lookMat[2][0] = right.z;
-    lookMat[0][1] = up.x;
-    lookMat[1][1] = up.y;
-    lookMat[2][1] = up.z;
-    lookMat[0][2] = forward.x;
-    lookMat[1][2] = forward.y;
-    lookMat[2][2] = forward.z;
+// Texel locations for procustes analysis
+#define txRotation0          uint2(0, 0)
+#define txRotation1          uint2(1, 0)
+#define txRotation2          uint2(2, 0)
+#define txScaleYNorm         uint2(4, 0)
+#define txXCentroid          uint2(5, 0)
+#define txYCentroid          uint2(6, 0)
 
-    // static const float3x3 invY =
-    // {
-    //     -1, 0, 0,
-    //     0, 1, 0,
-    //     0, 0, -1,
-    // };
-
-    // lookMat = mul(invY, lookMat);
-
-    return lookMat;
-} 
+// The inital position of three points on face mesh
+static const float3x3 fmInitPos =
+{
+    49.013, 36.537, 8.433,
+    91.133, 74.9, 8.0,
+    136.065, 37.026, 7.810
+};
 
 // Baked weight positions
 

@@ -5,7 +5,10 @@
         _isFace ("Face Flag", 2D) = "black" {}
         _FaceRotate ("Face Rotations Input", 2D) = "black" {}
         _MaskRotate ("Rotation Mask", 2D) = "black" {}
-        _FacePositions ("Face Positions Input", 2D) = "black" {}
+        _FaceMeshTex ("Face Mesh Points", 2D) = "black" {}
+        _BrowContourTex ("Brow Countors Points", 2D) = "black" {}
+        _EyeTex ("Eye Points", 2D) = "black" {}
+
         _BlinkRightTex ("Blink Right Texture", 2D) = "black" {}
         _BlinkRightSlider ("Test Blink Right", Range(0, 1)) = 0
         _BlinkLeftTex ("Blink Left Texture", 2D) = "black" {}
@@ -39,7 +42,9 @@
             #include "UnityPBSLighting.cginc"
 
             Texture2D<float3> _FaceRotate;
-            Texture2D<float3> _FacePositions;
+            Texture2D<float3> _FaceMeshTex;
+            Texture2D<float3> _BrowContourTex;
+            Texture2D<float3> _EyeTex;
             Texture2D<float3> _BlinkRightTex;
             Texture2D<float3> _BlinkLeftTex;
             Texture2D<float3> _MouthOpenTex;
@@ -81,20 +86,20 @@
                 // {
 
                     // Mouth spread
-                    float3 p61 = _FacePositions[uint2(9, 4)];
-                    float3 p91 = _FacePositions[uint2(0, 7)];
+                    float3 p61 = _FaceMeshTex[uint2(9, 4)];
+                    float3 p91 = _FaceMeshTex[uint2(0, 7)];
 
                     // Mouth open
-                    float3 p13 = _FacePositions[uint2(0, 1)];
-                    float3 p14 = _FacePositions[uint2(1, 1)];
+                    float3 p13 = _FaceMeshTex[uint2(0, 1)];
+                    float3 p14 = _FaceMeshTex[uint2(1, 1)];
 
                     // Blink Right
-                    float3 p159 = _FacePositions[uint2(3, 12)];
-                    float3 p145 = _FacePositions[uint2(2, 11)];
+                    float3 p159 = _FaceMeshTex[uint2(3, 12)];
+                    float3 p145 = _FaceMeshTex[uint2(2, 11)];
 
                     // Blink Left
-                    float3 p386 = _FacePositions[uint2(9, 29)];
-                    float3 p374 = _FacePositions[uint2(10, 28)];
+                    float3 p386 = _FaceMeshTex[uint2(9, 29)];
+                    float3 p374 = _FaceMeshTex[uint2(10, 28)];
 
                     float MSD = (distance(p61, p91) - 8.8) / 6.0;
                     float MOD = distance(p13, p14) / 8.0 - 0.3;
@@ -120,7 +125,7 @@
                     look[1] = (_FaceRotate[uint2(1, 0)] + _FaceRotate[uint2(1, 2)] + _FaceRotate[uint2(1, 3)]) * 0.3333;
                     look[2] = (_FaceRotate[uint2(2, 0)] + _FaceRotate[uint2(2, 2)] + _FaceRotate[uint2(2, 3)]) * 0.3333;
                     float rotMask = 1.0 - tex2Dlod(_MaskRotate, float4(v.texcoord.xy, 0, 0)).r;
-                    v.vertex.xyz = lerp(v.vertex.xyz, mul(look, v.vertex.xyz), rotMask);
+                    v.vertex.xyz = lerp(v.vertex.xyz, mul(v.vertex.xyz, look), rotMask);
                 // }
 
                 #ifdef UNITY_PASS_SHADOWCASTER

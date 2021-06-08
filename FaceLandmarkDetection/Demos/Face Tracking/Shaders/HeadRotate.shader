@@ -5,7 +5,6 @@
         _isFace ("Face Flag", 2D) = "black" {}
         _FaceRotate ("Face Rotations Input", 2D) = "black" {}
         _MaskRotate ("Rotation Mask", 2D) = "black" {}
-        _FacePositions ("Face Positions Input", 2D) = "black" {}
 
         [Enum(Off, 0, Front, 1, Back, 2)] _Culling ("Culling Mode", Int) = 2
         _Cutoff("Cutout", Range(0,1)) = .5
@@ -31,7 +30,6 @@
             #include "UnityPBSLighting.cginc"
 
             Texture2D<float3> _FaceRotate;
-            Texture2D<float3> _FacePositions;
             Texture2D<float> _isFace;
             sampler2D _MaskRotate;
 
@@ -68,7 +66,7 @@
                     look[1] = (_FaceRotate[uint2(1, 0)] + _FaceRotate[uint2(1, 2)] + _FaceRotate[uint2(1, 3)]) * 0.3333;
                     look[2] = (_FaceRotate[uint2(2, 0)] + _FaceRotate[uint2(2, 2)] + _FaceRotate[uint2(2, 3)]) * 0.3333;
                     float rotMask = 1.0 - tex2Dlod(_MaskRotate, float4(v.texcoord.xy, 0, 0)).r;
-                    v.vertex.xyz = lerp(v.vertex.xyz, mul(look, v.vertex.xyz), rotMask);
+                    v.vertex.xyz = lerp(v.vertex.xyz, mul(v.vertex.xyz, look), rotMask);
                 // }
 
                 #ifdef UNITY_PASS_SHADOWCASTER
