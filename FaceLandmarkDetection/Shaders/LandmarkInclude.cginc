@@ -7,9 +7,9 @@
 #define txRotation0          uint2(0, 0)
 #define txRotation1          uint2(1, 0)
 #define txRotation2          uint2(2, 0)
-#define txScaleYNorm         uint2(4, 0)
-#define txXCentroid          uint2(5, 0)
-#define txYCentroid          uint2(6, 0)
+#define txScaleYNorm         uint2(3, 0)
+#define txXCentroid          uint2(4, 0)
+#define txYCentroid          uint2(5, 0)
 
 // The inital position of three points on face mesh
 static const float3x3 fmInitPos =

@@ -509,7 +509,7 @@
             #pragma fragment frag
             #pragma target 5.0
 
-            RWStructuredBuffer<float4> buffer : register(u1);
+            //RWStructuredBuffer<float4> buffer : register(u1);
             Texture2D<float> _Layer1;
             Texture2D<float3> _Layer2;
 
@@ -632,15 +632,25 @@
                 pos.y = _Layer1[uint2(px.x * 3 + 1, px.y)];
                 pos.z = _Layer1[uint2(px.x * 3 + 2, px.y)];
 
-                const float3 YCentroid = _Layer2[txYCentroid];
-                const float3 XCentroid = _Layer2[txXCentroid];
-                const float2 scaleYNorm = _Layer2[txScaleYNorm].xy;
+                float3 YCentroid = 0.0;
+                float3 XCentroid = 0.0;
+                float2 scaleYNorm = 0.0;
+                float3x3 look = 0.0;
 
-                float3x3 look;
+                for (uint i = 0; i < 6; i++)
+                {
+                    look[0] += _Layer2[uint2(0, i)];
+                    look[1] += _Layer2[uint2(1, i)];
+                    look[2] += _Layer2[uint2(2, i)];
+                    YCentroid += _Layer2[uint2(5, i)];
+                    XCentroid += _Layer2[uint2(4, i)];
+                    scaleYNorm += _Layer2[uint2(3, i)].xy;
+                }
 
-                look[0] = _Layer2[txRotation0];
-                look[1] = _Layer2[txRotation1];
-                look[2] = _Layer2[txRotation2];
+                look *= 0.1667;
+                YCentroid *= 0.1667;
+                XCentroid *= 0.1667;
+                scaleYNorm *= 0.1667;
 
                 // Reverse the rotation, scale, and translation
                 pos.xyz = (pos.xyz - YCentroid) / scaleYNorm.y;

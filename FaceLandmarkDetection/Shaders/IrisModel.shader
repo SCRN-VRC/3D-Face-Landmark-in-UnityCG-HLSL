@@ -671,5 +671,172 @@
             ENDCG
         }
 
+        Pass
+        {
+            Name "Procrustes Analysis"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #include "svd_hlsl.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float3> _Layer1;
+            Texture2D<float3> _Layer2;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+
+                bool leftSide = px.x < 8;
+                float4 col = 0.0;
+
+                if (px.y == 0)
+                {
+                    float3x3 X;
+                    X[0] = _Layer1[uint2(0, 7 + (leftSide ? 0 : 9))];
+                    X[1] = _Layer1[uint2(5, 7 + (leftSide ? 0 : 9))];
+                    X[2] = _Layer1[uint2(3, 8 + (leftSide ? 0 : 9))];
+
+                    float3x3 Y = leftSide ? eyeLInit : eyeRInit;
+
+                    const float3 muX = findCenteroid(X);
+                    const float3 muY = findCenteroid(Y);
+
+                    float3x3 X0;
+                    float3x3 Y0;
+                    uint i, j;
+                    for (i = 0; i < 3; i++)
+                    {
+                        X0[i] = X[i] - muX;
+                        Y0[i] = Y[i] - muY;
+                    }
+
+                    // squared error
+                    float ssX = 0.0;
+                    float ssY = 0.0;
+                    [unroll]
+                    for (i = 0; i < 3; i++)
+                    {
+                        [unroll]
+                        for (j = 0; j < 3; j++)
+                        {
+                            ssX += X0[i][j] * X0[i][j];
+                            ssY += Y0[i][j] * Y0[i][j];
+                        }
+                    }
+
+                    // centred Frobenius norm
+                    const float normX = sqrt(ssX);
+                    const float normY = sqrt(ssY);
+
+                    // scale to equal (unit) norm
+                    [unroll]
+                    for (i = 0; i < 3; i++)
+                    {
+                        [unroll]
+                        for (j = 0; j < 3; j++)
+                        {
+                            X0[i][j] /= normX;
+                            Y0[i][j] /= normY;
+                        }
+                    }
+
+                    // Singular value decomposition of a 3x3 matrix
+                    float3x3 A = mul(transpose(X0), Y0);
+                    float3x3 U;
+                    float3 D;
+                    float3x3 Vt;
+                    GetSVD3D(A, U, D, Vt);
+                    
+                    // solve optimum rotation matrix of Y
+                    float3x3 T = mul(transpose(Vt), transpose(U));
+                    const float traceTA = D[0] + D[1] + D[2];
+
+                    StoreValue(txIrisRotation0 + uint2(leftSide ? 0 : 8, 0),
+                        float4(T[0], 0.0), col, px);
+                    StoreValue(txIrisRotation1 + uint2(leftSide ? 0 : 8, 0),
+                        float4(T[1], 0.0), col, px);
+                    StoreValue(txIrisRotation2 + uint2(leftSide ? 0 : 8, 0),
+                        float4(T[2], 0.0), col, px);
+                    StoreValue(txIrisScaleYNorm + uint2(leftSide ? 0 : 8, 0),
+                        float4(traceTA * normX, normY, 0.0, 0.0), col, px);
+                    StoreValue(txIrisXCentroid + uint2(leftSide ? 0 : 8, 0),
+                        float4(muX, 0.0), col, px);
+                    StoreValue(txIrisYCentroid + uint2(leftSide ? 0 : 8, 0),
+                        float4(muY, 0.0), col, px);
+                }
+                else
+                {
+                    // Keep history for smoothing
+                    col.rgb = _Layer2[uint2(px.x, px.y - 1)];
+                }
+
+                return col;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "Reverse Rotation"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            Texture2D<float3> _Layer1;
+            Texture2D<float3> _Layer2;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                const uint2 px = IN.globalTexcoord.xy *
+                    float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
+                
+                uint2 texWH;
+                _Layer1.GetDimensions(texWH.x, texWH.y);
+
+                // iris or brow texture
+                bool isIris = (texWH.x == 2);
+                bool leftSide = isIris ? (px.x == 0) : (px.y < 9);
+
+                float3 pos = _Layer1[px];
+                // The iris depth fucks with the SVD rotation
+                pos.z = isIris ? 0.0 : pos.z;
+
+                float3 YCentroid = 0.0;
+                float3 XCentroid = 0.0;
+                float2 scaleYNorm = 0.0;
+                float3x3 look = 0.0;
+
+                for (uint i = 0; i < 6; i++)
+                {
+                    look[0] += _Layer2[txIrisRotation0 + uint2(leftSide ? 0 : 8, 0)];
+                    look[1] += _Layer2[txIrisRotation1 + uint2(leftSide ? 0 : 8, 0)];
+                    look[2] += _Layer2[txIrisRotation2 + uint2(leftSide ? 0 : 8, 0)];
+                    YCentroid += _Layer2[txIrisYCentroid + uint2(leftSide ? 0 : 8, 0)];
+                    XCentroid += _Layer2[txIrisXCentroid + uint2(leftSide ? 0 : 8, 0)];
+                    scaleYNorm += _Layer2[txIrisScaleYNorm + uint2(leftSide ? 0 : 8, 0)].xy;
+                }
+
+                look *= 0.1667;
+                YCentroid *= 0.1667;
+                XCentroid *= 0.1667;
+                scaleYNorm *= 0.1667;
+
+                // Reverse the rotation, scale, and translation
+                pos.xyz = (pos.xyz - YCentroid) / scaleYNorm.y;
+                pos.xyz = scaleYNorm.x * mul(look, pos.xyz) + XCentroid;
+
+                return float4(pos, 0.0);
+            }
+            ENDCG
+        }
     }
 }

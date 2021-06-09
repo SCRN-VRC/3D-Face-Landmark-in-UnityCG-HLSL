@@ -3,6 +3,29 @@
 
 #include "MLCommon.cginc"
 
+// Texel locations for procustes analysis
+#define txIrisRotation0          uint2(0, 0)
+#define txIrisRotation1          uint2(1, 0)
+#define txIrisRotation2          uint2(2, 0)
+#define txIrisScaleYNorm         uint2(3, 0)
+#define txIrisXCentroid          uint2(4, 0)
+#define txIrisYCentroid          uint2(5, 0)
+
+// The inital position of three points in the iris tracking
+static const float3x3 eyeLInit =
+{
+    0.226, 0.794, 0.134,
+    0.771, 0.753, -0.095,
+    0.621, 0.176, -0.218
+};
+
+static const float3x3 eyeRInit = 
+{
+    0.283, 0.835, 0.201,
+    0.802, 0.723, -0.122,
+    0.524, 0.168, -0.282
+};
+
 // Baked weight positions
 
 static const float4 irisWeight[227] = 

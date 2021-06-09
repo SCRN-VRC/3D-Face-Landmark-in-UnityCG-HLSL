@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HeadRotation
-  m_Shader: {fileID: 4800000, guid: 8a3e7094277a61a4b92b4e9f7a694ae2, type: 3}
+  m_Name: LR_Eyes RR
+  m_Shader: {fileID: 4800000, guid: a9a01339795912a4481b4e27b2b819e8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,6 +20,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CamIn:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -39,20 +43,16 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _FacePositions:
-        m_Texture: {fileID: 0}
+    - _Layer1:
+        m_Texture: {fileID: 8600000, guid: 8fe787dfddc97f543b93537ba8ddbb5b, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _FaceRotate:
-        m_Texture: {fileID: 8600000, guid: 372ecd106d333754e960a2623f265433, type: 2}
+    - _Layer2:
+        m_Texture: {fileID: 8600000, guid: 3e07061e1abc4c8489e85539a599558d, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MaskRotate:
-        m_Texture: {fileID: 2800000, guid: c82d5e71988a5fc4d824933c447b5a4e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -67,29 +67,33 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _isFace:
-        m_Texture: {fileID: 8600000, guid: 61fe376d7228f684d8fd13c23508fce9, type: 2}
+    - _Weights:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _BiasID: 0
     - _BumpScale: 1
-    - _Culling: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.748
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Metallic: 1
+    - _KernelSize: 3
+    - _Metallic: 0
     - _Mode: 0
+    - _MultiplierID: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Smoothness: 0.75
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _WeightID: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.80860585, b: 0.5058824, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Layer12WH: {r: 1, g: 1, b: 1, a: 1}
+    - _WHDM: {r: 1, g: 1, b: 0, a: 0}

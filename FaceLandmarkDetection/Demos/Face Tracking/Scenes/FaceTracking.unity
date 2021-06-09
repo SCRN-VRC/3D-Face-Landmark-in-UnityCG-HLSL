@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 231076818}
   - component: {fileID: 231076817}
   m_Layer: 0
-  m_Name: FaceMesh
+  m_Name: Landmarks Output
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -597,7 +597,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1310040704}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!23 &231076817
 MeshRenderer:
@@ -982,7 +982,7 @@ Transform:
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 1310040704}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &457128801
 MeshRenderer:
@@ -2919,10 +2919,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1577271041}
+  - {fileID: 1318057928}
   - {fileID: 1855959666}
   - {fileID: 457128800}
   - {fileID: 231076816}
-  - {fileID: 1318057928}
   - {fileID: 2106951502}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -2939,7 +2939,7 @@ GameObject:
   - component: {fileID: 1318057927}
   - component: {fileID: 1318057926}
   m_Layer: 0
-  m_Name: Iris
+  m_Name: Iris Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3002,7 +3002,7 @@ Transform:
   m_LocalScale: {x: 0.25000012, y: 0.25000012, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1310040704}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1 &1319475239
 GameObject:
@@ -4673,7 +4673,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1855959666}
   m_Layer: 0
-  m_Name: Layers
+  m_Name: FaceMesh Layers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4739,7 +4739,7 @@ Transform:
   - {fileID: 1447770040}
   - {fileID: 357433712}
   m_Father: {fileID: 1310040704}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1861608925
 GameObject:
@@ -4930,7 +4930,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e65c404337fd2404dba021df4601c7e8, type: 2}
+  - {fileID: 2100000, guid: 3d7d64b639753e648b9a8044bf923873, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

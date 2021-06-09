@@ -18,8 +18,7 @@
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
+            #pragma target 5.0
 
             #include "UnityCG.cginc"
             #include "MLCommon.cginc"
@@ -33,10 +32,10 @@
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
 
+            //RWStructuredBuffer<float4> buffer : register(u1);
             sampler2D _CamIn;
             Texture2D<float> _FaceMeshTex;
             Texture2D<float3> _RCFaceMeshTex;
@@ -48,7 +47,6 @@
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-                UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
 
@@ -75,18 +73,18 @@
                 col = lerp(col, float4(1, 1, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
                 d = 1000.0;
 
-                _RCFaceMeshTex.GetDimensions(texWH.x, texWH.y);
+                // _RCFaceMeshTex.GetDimensions(texWH.x, texWH.y);
 
-                for (k = 0; k < texWH.x; k++) {
-                    for (j = 0; j < texWH.y; j++) {
-                        float2 pos = _RCFaceMeshTex[uint2(k, j)].xy;
+                // for (k = 0; k < texWH.x; k++) {
+                //     for (j = 0; j < texWH.y; j++) {
+                //         float2 pos = _RCFaceMeshTex[uint2(k, j)].xy;
 
-                        d = min(d, sdCircle(uv - pos.yx / 192.0, 0.0055));
-                    }
-                }
+                //         d = min(d, sdCircle(uv - pos.yx / 192.0, 0.0055));
+                //     }
+                // }
 
-                col = lerp(col, float4(1, 0, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
-                d = 1000.0;
+                // col = lerp(col, float4(1, 0, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
+                // d = 1000.0;
 
                 // Right coords for eye position from facemesh
                 uint2 eyeNPos = uint2(9, 12);
@@ -125,7 +123,7 @@
                 {
                     for (j = 0; j < texWH.y; j++)
                     {
-                        if (k == 7 && (j == 8 || j == 17)) continue;
+                        if (k == 7 && j % 9 == 8) continue;
                         float2 pos = _BrowContourTex[uint2(k, j)].yx;
                         d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[j / 9].yx - eyeCentroid[j / 9].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                     }
