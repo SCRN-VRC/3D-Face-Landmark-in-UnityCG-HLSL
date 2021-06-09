@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BlendValTex:
+        m_Texture: {fileID: 8600000, guid: 372ecd106d333754e960a2623f265433, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BlinkLeftTex:
         m_Texture: {fileID: 2800000, guid: 0e3c232388aaecf4f8bc4ece96201133, type: 2}
         m_Scale: {x: 1, y: 1}

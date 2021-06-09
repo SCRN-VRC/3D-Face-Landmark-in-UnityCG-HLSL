@@ -83,6 +83,23 @@
                 //     }
                 // }
 
+                // // Debug
+                // float x = _FaceMeshTex[uint2(15, 4)];
+                // float y = _FaceMeshTex[uint2(16, 4)];
+                // d = min(d, sdCircle(uv - float2(y, x) / 192.0, 0.0055));
+
+                // x = _FaceMeshTex[uint2(3, 22)];
+                // y = _FaceMeshTex[uint2(4, 22)];
+                // d = min(d, sdCircle(uv - float2(y, x) / 192.0, 0.0055));
+
+                // x = _FaceMeshTex[uint2(0, 1)];
+                // y = _FaceMeshTex[uint2(1, 1)];
+                // d = min(d, sdCircle(uv - float2(y, x) / 192.0, 0.0055));
+
+                // x = _FaceMeshTex[uint2(3, 1)];
+                // y = _FaceMeshTex[uint2(4, 1)];
+                // d = min(d, sdCircle(uv - float2(y, x) / 192.0, 0.0055));
+
                 // col = lerp(col, float4(1, 0, 1, 1), 1.0-smoothstep(0.001,0.005,abs(d)));
                 // d = 1000.0;
 
@@ -132,6 +149,21 @@
                 col = lerp(col, float4(0, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
                 d = 1000.0;
 
+                float2 pos = _BrowContourTex[uint2(7, 9)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                
+                pos = _BrowContourTex[uint2(4, 17)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                
+                pos = _BrowContourTex[uint2(0, 8)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                
+                pos = _BrowContourTex[uint2(0, 2)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                
+                col = lerp(col, float4(1, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
+                d = 1000.0;
+                
                 _EyeTex.GetDimensions(texWH.x, texWH.y);
 
                 for (k = 0; k < texWH.x; k++)
