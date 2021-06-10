@@ -587,6 +587,7 @@
                     GetSVD3D(A, U, D, Vt);
                     
                     // solve optimum rotation matrix of Y
+                    // why flipped? I don't know but it works
                     float3x3 T = mul(transpose(U), transpose(Vt));
                     const float traceTA = D[0] + D[1] + D[2];
 

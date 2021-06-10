@@ -6,13 +6,19 @@
         _MaskRotate ("Rotation Mask", 2D) = "black" {}
 
         _BlinkRightTex ("Blink Right Texture", 2D) = "black" {}
-        _BlinkRightSlider ("Test Blink Right", Range(0, 1)) = 0
         _BlinkLeftTex ("Blink Left Texture", 2D) = "black" {}
-        _BlinkLeftSlider ("Test Blink Left", Range(0, 1)) = 0
         _MouthOpenTex ("Mouth Open Texture", 2D) = "black" {}
-        _MouthOpenSlider ("Test Mouth Open", Range(0, 1)) = 0
         _MouthShrinkTex ("Mouth Shrink Texture", 2D) = "black" {}
-        _MouthShrinkSlider ("Test Mouth Shrink", Range(0, 1)) = 0
+        _MouthSmileTex ("Mouth Smile Texture", 2D) = "black" {}
+        _MouthFrownTex ("Mouth Frown Texture", 2D) = "black" {}
+        _BrowLeftInTex ("Brow Left In Texture", 2D) = "black" {}
+        _BrowLeftOutTex ("Brow Left Out Texture", 2D) = "black" {}
+        _BrowRightInTex ("Brow Right In Texture", 2D) = "black" {}
+        _BrowRightOutTex ("Brow Right Out Texture", 2D) = "black" {}
+        _IrisLeftXTex ("Iris Left X Texture", 2D) = "black" {}
+        _IrisLeftYTex ("Iris Left Y Texture", 2D) = "black" {}
+        _IrisRightXTex ("Iris Right X Texture", 2D) = "black" {}
+        _IrisRightYTex ("Iris Right Y Texture", 2D) = "black" {}
 
         [Enum(Off, 0, Front, 1, Back, 2)] _Culling ("Culling Mode", Int) = 2
         _Cutoff("Cutout", Range(0,1)) = .5
@@ -43,12 +49,18 @@
         Texture2D<float3> _BlinkLeftTex;
         Texture2D<float3> _MouthOpenTex;
         Texture2D<float3> _MouthShrinkTex;
-        sampler2D _MaskRotate;
+        Texture2D<float3> _MouthSmileTex;
+        Texture2D<float3> _MouthFrownTex;
+        Texture2D<float3> _BrowLeftInTex;
+        Texture2D<float3> _BrowLeftOutTex;
+        Texture2D<float3> _BrowRightInTex;
+        Texture2D<float3> _BrowRightOutTex;
+        Texture2D<float3> _IrisLeftXTex;
+        Texture2D<float3> _IrisLeftYTex;
+        Texture2D<float3> _IrisRightXTex;
+        Texture2D<float3> _IrisRightYTex;
 
-        float _BlinkRightSlider;
-        float _BlinkLeftSlider;
-        float _MouthOpenSlider;
-        float _MouthShrinkSlider;
+        sampler2D _MaskRotate;
 
         float4 _Color;
         float _Metallic;
@@ -79,13 +91,31 @@
             px.y = vertexID / 128;
 
             v.vertex.xyz = v.vertex.xyz + _BlinkRightTex[px] *
-                (_BlinkRightSlider + _BlendValTex[txEyeBlinkLR].y);
+                _BlendValTex[txEyeBlinkLR].y;
             v.vertex.xyz = v.vertex.xyz + _BlinkLeftTex[px] *
-                (_BlinkLeftSlider + _BlendValTex[txEyeBlinkLR].x);
+                _BlendValTex[txEyeBlinkLR].x;
             v.vertex.xyz = v.vertex.xyz + _MouthOpenTex[px] *
-                (_MouthOpenSlider + _BlendValTex[txMouthOpShSmFl].x);
+                _BlendValTex[txMouthOpShSmFl].x;
             v.vertex.xyz = v.vertex.xyz + _MouthShrinkTex[px] *
-                (_MouthShrinkSlider + _BlendValTex[txMouthOpShSmFl].y);
+                _BlendValTex[txMouthOpShSmFl].y;
+            v.vertex.xyz = v.vertex.xyz +
+                lerp(_MouthFrownTex[px], _MouthSmileTex[px], _BlendValTex[txMouthOpShSmFl].z);
+            v.vertex.xyz = v.vertex.xyz + _BrowLeftInTex[px] *
+                _BlendValTex[txBrowLRInOut].x;
+            v.vertex.xyz = v.vertex.xyz + _BrowLeftOutTex[px] *
+                _BlendValTex[txBrowLRInOut].y;
+            v.vertex.xyz = v.vertex.xyz + _BrowRightInTex[px] *
+                _BlendValTex[txBrowLRInOut].z;
+            v.vertex.xyz = v.vertex.xyz + _BrowRightOutTex[px] *
+                _BlendValTex[txBrowLRInOut].w;
+            v.vertex.xyz = v.vertex.xyz + _IrisLeftXTex[px] *
+                _BlendValTex[txIrisLRXY].x;
+            v.vertex.xyz = v.vertex.xyz + _IrisLeftYTex[px] *
+                _BlendValTex[txIrisLRXY].y;
+            v.vertex.xyz = v.vertex.xyz + _IrisRightXTex[px] *
+                _BlendValTex[txIrisLRXY].z;
+            v.vertex.xyz = v.vertex.xyz + _IrisRightYTex[px] *
+                _BlendValTex[txIrisLRXY].w;
 
             float3x3 look;
 

@@ -24,15 +24,31 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BlinkLeftTex:
-        m_Texture: {fileID: 2800000, guid: 0e3c232388aaecf4f8bc4ece96201133, type: 2}
+        m_Texture: {fileID: 2800000, guid: a38e30e767ebebc42a2553e61e190715, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BlinkRightTex:
-        m_Texture: {fileID: 2800000, guid: 2c9db9c73d8a4ba4c8dadf1472aa3fdd, type: 2}
+        m_Texture: {fileID: 2800000, guid: f38957a9ede94084dac3372e347ed5ab, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BrowContourTex:
         m_Texture: {fileID: 8600000, guid: 9b5ba9a69214bcd4690c3a15dad0e101, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BrowLeftInTex:
+        m_Texture: {fileID: 2800000, guid: 7fa18a23cf4f2b34d8b2cba243846a98, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BrowLeftOutTex:
+        m_Texture: {fileID: 2800000, guid: 2031daba3874cbe45ab245c21f99413b, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BrowRightInTex:
+        m_Texture: {fileID: 2800000, guid: b7073343bbb7c1f4a92f147a992fb9e1, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BrowRightOutTex:
+        m_Texture: {fileID: 2800000, guid: c37d39a0acee6bb4692d70f2b6d29002, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -71,6 +87,22 @@ Material:
         m_Texture: {fileID: 8600000, guid: ce6a69dd1b4f4534fa5fd659c7262299, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _IrisLeftXTex:
+        m_Texture: {fileID: 2800000, guid: 2be3d3c0806096e43bfdb08cbbc3c811, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _IrisLeftYTex:
+        m_Texture: {fileID: 2800000, guid: ae6c39a947452d3459d339613c79298f, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _IrisRightXTex:
+        m_Texture: {fileID: 2800000, guid: a6b28fe784d24564cbae8255e2d310f2, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _IrisRightYTex:
+        m_Texture: {fileID: 2800000, guid: 3400c89bbd3992b40acb449b22b28612, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -83,12 +115,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MouthFrownTex:
+        m_Texture: {fileID: 2800000, guid: 6c41708b03f3e9245a2e1a721d25a08b, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MouthOpenTex:
-        m_Texture: {fileID: 2800000, guid: c8eadb2937c75ac46829461a9c5f1c1b, type: 2}
+        m_Texture: {fileID: 2800000, guid: fe3d3987ca1a9f946873123ba218e066, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MouthShrinkTex:
-        m_Texture: {fileID: 2800000, guid: c2289662d5f79ef438d7ff3d5d64338b, type: 2}
+        m_Texture: {fileID: 2800000, guid: 6fdff110600b4084f89170d0d3a16013, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MouthSmileTex:
+        m_Texture: {fileID: 2800000, guid: a45cfd67a26a82c4bb62aa84b01c4b1f, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:

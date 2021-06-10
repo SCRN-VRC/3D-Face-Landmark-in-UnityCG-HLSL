@@ -192,7 +192,7 @@
                     Shape: Closer, further from inner eye position
                 */
                 irisLRXY.x = distance(eyeLIn.x, irisL.x) / distance(eyeLIn.x, eyeLOut.x);
-                irisLRXY.x = (irisLRXY.x - 0.3) / 0.4;
+                irisLRXY.x = saturate((irisLRXY.x - 0.3) / 0.4);
 
                 /*
                     Iris Left Y
@@ -200,7 +200,7 @@
                     Shape: Down, up
                 */
                 irisLRXY.y = distance(blinkL1.y, irisL.y) / distance(blinkL1.y, eyeLTop.y);
-                irisLRXY.y = (irisLRXY.y - 0.3) / 0.2;
+                irisLRXY.y = saturate((irisLRXY.y - 0.3) / 0.2);
 
                 /*
                     Iris Right X
@@ -208,7 +208,7 @@
                     Shape: Closer, further from inner eye position
                 */
                 irisLRXY.z = distance(eyeRIn.x, irisR.x) / distance(eyeRIn.x, eyeROut.x);
-                irisLRXY.z = (irisLRXY.z - 0.3) / 0.35;
+                irisLRXY.z = saturate((irisLRXY.z - 0.3) / 0.35);
 
                 /*
                     Iris Right Y
@@ -216,7 +216,7 @@
                     Shape: Down, up
                 */
                 irisLRXY.w = distance(blinkR1.y, irisR.y) / distance(blinkR1.y, eyeRTop.y);
-                irisLRXY.w = (irisLRXY.w - 0.05) / 0.18;
+                irisLRXY.w = saturate((irisLRXY.w - 0.05) / 0.18);
 
                 StoreValue(txBlendRot0, float4(look[0], 0.0), col, px);
                 StoreValue(txBlendRot1, float4(look[1], 0.0), col, px);
