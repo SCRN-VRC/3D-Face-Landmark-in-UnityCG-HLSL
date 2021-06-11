@@ -29,7 +29,7 @@
             #include "MLCommon.cginc"
             #include "BlendValuesInclude.cginc"
 
-            RWStructuredBuffer<float4> buffer : register(u1);
+            //RWStructuredBuffer<float4> buffer : register(u1);
             Texture2D<float4> _Buffer;
             Texture2D<float3> _FaceRotate;
             Texture2D<float3> _FaceMeshTex;
@@ -99,11 +99,11 @@
 
                     // Iris Right
                     float3 irisR = _IrisTex[uint2(0, 0)];
-                    irisR.z = (eyeLIn.z + eyeLOut.z) * 0.5;
+                    irisR.z = (eyeRIn.z + eyeROut.z) * 0.5;
 
                     // Iris Left
                     float3 irisL = _IrisTex[uint2(1, 0)];
-                    irisL.z = (eyeRIn.z + eyeROut.z) * 0.5;
+                    irisL.z = (eyeLIn.z + eyeLOut.z) * 0.5;
 
                     float4 mouthOpShSmFl;
                     /*
@@ -194,37 +194,37 @@
 
                     /*
                         Iris Left X
-                        Unclamped Range: (0.35, 0.78)
+                        Unclamped Range: (0.1, 0.25)
                         Shape: Closer, further from inner eye position
                     */
-                    irisLRXY.x = distance(eyeLIn, irisL) / distance(eyeLIn, eyeLOut);
-                    irisLRXY.x = saturate((irisLRXY.x - 0.35) / 0.43);
+                    irisLRXY.x = distance(eyeLIn, irisL);
+                    irisLRXY.x = saturate((irisLRXY.x - 0.1) / 0.15);
 
                     /*
                         Iris Left Y
-                        Unclamped Range: (0.34, 0.46)
+                        Unclamped Range: (0.07, 0.14)
                         Shape: Down, up
                     */
-                    irisLRXY.y = distance(blinkL1, irisL) / distance(blinkL1, blinkR2);
-                    //irisLRXY.y = saturate((irisLRXY.y - 0.34) / 0.12);
+                    irisLRXY.y = distance(blinkL1, irisL);
+                    irisLRXY.y = saturate((irisLRXY.y - 0.07) / 0.07) * 0.8 + 0.1;
 
                     /*
                         Iris Right X
-                        Unclamped Range: (0.35, 0.75)
+                        Unclamped Range: (0.1, 0.25)
                         Shape: Closer, further from inner eye position
                     */
-                    irisLRXY.z = distance(eyeRIn, irisR) / distance(eyeRIn, eyeROut);
-                    irisLRXY.z = saturate((irisLRXY.z - 0.35) / 0.4);
+                    irisLRXY.z = distance(eyeRIn, irisR);
+                    irisLRXY.z = saturate((irisLRXY.z - 0.1) / 0.15);
 
                     /*
                         Iris Right Y
-                        Unclamped Range: (0.26, 0.37)
+                        Unclamped Range: (0.07, 0.14)
                         Shape: Down, up
                     */
-                    irisLRXY.w = distance(blinkR1, irisR) / distance(blinkR1, blinkR2);
-                    //irisLRXY.w = saturate((irisLRXY.w - 0.26) / 0.09);
-
-                    buffer[0] = float4(irisLRXY);
+                    irisLRXY.w = distance(blinkR1, irisR);
+                    irisLRXY.w = saturate((irisLRXY.w - 0.07) / 0.07) * 0.8 + 0.1;
+                    
+                    //buffer[0] = float4(irisLRXY);
 
                     StoreValue(txBlendRot0, float4(look[0], 0.0), col, px);
                     StoreValue(txBlendRot1, float4(look[1], 0.0), col, px);

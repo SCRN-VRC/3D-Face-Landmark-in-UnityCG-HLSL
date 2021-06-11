@@ -47,7 +47,9 @@
 
                 // Swap between both eyes so only one network needed
                 // for two eyes
-                bool flipEye = _Layer2[uint2(0, 0)].x < 0.5;
+                bool flipEye = dot(_Layer2[uint2(0, 0)], 0.3333.xxx) > 0.001;
+                // Initalize on load
+                flipEye = _Time.y < 2.0 ? true : flipEye;
 
                 // Right/Left coords for eye position from facemesh
                 uint2 eyeNPos = flipEye ? uint2(9, 12) : uint2(27, 29);
@@ -89,7 +91,7 @@
                 // Flip eye
                 if (all(uv.xy <= 0.01.xx))
                 {
-                    col = flipEye ? float4(1., 1., 1., 1.) : float4(0., 0., 0., 0.);
+                    col = flipEye ? float4(0., 0., 0., 0.) : float4(1., 1., 1., 1.);
                 }
                 return col;
             }
