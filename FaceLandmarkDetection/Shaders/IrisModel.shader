@@ -35,9 +35,11 @@
             #pragma fragment frag
             #pragma target 5.0
 
+            //RWStructuredBuffer<float4> buffer : register(u1);
             sampler2D         _CamIn;
             Texture2D<float>  _Layer1;
             Texture2D<float3> _Layer2;
+            Texture2D<float3> _Weights; // Use this texture for the face rotations
 
             float4 frag(v2f_customrendertexture IN) : COLOR
             {
@@ -58,10 +60,29 @@
                 float2 eyeE = float2(_Layer1[eyeEPos], _Layer1[eyeEPos + uint2(1, 0)]);
                 float2 eyeW = float2(_Layer1[eyeWPos], _Layer1[eyeWPos + uint2(1, 0)]);
 
+                // Undo rotation
+                float3x3 look = 0.0;
+
+                for (uint i = 0; i < 6; i++)
+                {
+                    look[0] += _Weights[uint2(0, i)];
+                    look[1] += _Weights[uint2(1, i)];
+                    look[2] += _Weights[uint2(2, i)];
+                }
+                look *= 0.1667;
+
+                // float angX = atan2(look[2][1], look[2][2]);
+                // float angY = atan2(-look[2][0],
+                //     sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
+                float angZ = atan2(look[1][0], look[0][0]);
+
+                //buffer[0] = float4(angX, angY, angZ, 1.0);
+
                 // Compute center
                 float2 eyeCentroid = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
                 float2 uvZoom = uv - eyeCentroid.yx;
                 uvZoom *= 0.225;
+                uvZoom = mul(rot2(angZ), uvZoom);
                 uvZoom += eyeCentroid.yx + eyeCentroid.yx * 0.1125 - float2(0.09, 0.05625);
 
                 float4 col = tex2D(_CamIn, uvZoom);
@@ -144,6 +165,11 @@
                 //if (i == 12 && j == 2 && k == 63)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += tex2D(_CamIn, float2(0, 0)).x < 0.5 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -202,6 +228,11 @@
                 //if (i == 1 && j == 0 && k == 62)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -262,6 +293,11 @@
                 //if (i == 15 && j == 14 && k == 55)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -326,6 +362,11 @@
                 //if (i == 7 && j == 6 && k == 127)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -389,6 +430,11 @@
                 //if (i == 1 && j == 0 && k == 62)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -466,6 +512,11 @@
                 //if (i == 15 && j == 14 && k == 127)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -538,6 +589,11 @@
                 //if (i == 15 && j == 14 && k == 127)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -591,6 +647,11 @@
                 //if (k == 14)
                 //    buffer[0] = cl;
 
+                if (all(px == 0))
+                {
+                    // Left/Right eye flag
+                    cl += _Layer1[uint2(0, 0)] < 100000.0 ? 0.0 : 10000000.0;
+                }
                 return cl;
             }
             ENDCG
@@ -607,7 +668,6 @@
             #pragma target 5.0
 
             //RWStructuredBuffer<float4> buffer : register(u1);
-            sampler2D          _CamIn;
             Texture2D<float>   _Layer1;
             Texture2D<float4>  _Layer2;
 
@@ -616,19 +676,21 @@
                 const uint2 px = IN.globalTexcoord.xy *
                     float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
 
-                uint eyeIndex = tex2D(_CamIn, 0..xx).x < 0.5 ? 0 : 1;
+                uint eyeIndex = _Layer1[uint2(0, 0)] < 100000.0 ? 0 : 1;
 
                 float4 col = _Layer2[px];
                 
                 if (eyeIndex == px.x)
                 {
-                    col.r = _Layer1[uint2(0, px.y)] / 64.0;
+                    col.r = _Layer1[uint2(0, px.y)];
+                    col.r = col.r > 100000.0 ? col.r - 10000000.0 : col.r;
+                    col.r /= 64.0;
                     col.g = _Layer1[uint2(1, px.y)] / 64.0;
                     col.b = _Layer1[uint2(2, px.y)] / 64.0;
                 }
 
                 //if (px.x == 1)
-                //buffer[0] = col;
+                //buffer[0] = float4(eyeIndex.xxxx);
 
                 return col;
             }
@@ -645,7 +707,6 @@
             #pragma fragment frag
             #pragma target 5.0
 
-            sampler2D          _CamIn;
             Texture2D<float>   _Layer1;
             Texture2D<float4>  _Layer2;
 
@@ -654,14 +715,16 @@
                 const uint2 px = IN.globalTexcoord.xy *
                     float2(_CustomRenderTextureWidth, _CustomRenderTextureHeight);
 
-                uint eyeIndex = tex2D(_CamIn, 0..xx).x < 0.5 ? 0 : 1;
+                uint eyeIndex = _Layer1[uint2(0, 0)] < 100000.0 ? 0 : 1;
 
                 float4 col = _Layer2[px];
                 
                 if (eyeIndex == (px.y / 9))
                 {
                     uint h = px.x + (px.y - (px.y / 9) * 9) * 8;
-                    col.r = _Layer1[uint2(0, h)] / 64.0;
+                    col.r = _Layer1[uint2(0, h)];
+                    col.r = col.r > 100000.0 ? col.r - 10000000.0 : col.r;
+                    col.r /= 64.0;
                     col.g = _Layer1[uint2(1, h)] / 64.0;
                     col.b = _Layer1[uint2(2, h)] / 64.0;
                 }

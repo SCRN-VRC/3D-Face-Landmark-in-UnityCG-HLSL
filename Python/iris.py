@@ -31,14 +31,14 @@ def test(size=(64, 64)):
     a = np.float32(a)
     return a
 
-# img = cv2.imread("D:/Storage/Unity/facemesh-python/data/eye2.jpg")
-# img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-# imgR = cv2.resize(img, dsize=(64, 64), interpolation=cv2.INTER_AREA)
-# imgR.resize((1, 3, 64, 64))
-# imgData = np.array(imgR).astype('float32')
-# imgData = imgData / 255.0
+img = cv2.imread("D:/Storage/Unity/facemesh-python/data/eye2.jpg")
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+imgR = cv2.resize(img, dsize=(64, 64), interpolation=cv2.INTER_AREA)
+imgR.resize((1, 3, 64, 64))
+imgData = np.array(imgR).astype('float32')
+imgData = imgData / 255.0
 
-imgData = test()
+# imgData = test()
 
 onnx_model = onnx.load("iris_landmark.onnx")  # load onnx model
 init = onnx_model.graph.initializer
@@ -71,12 +71,13 @@ for name, shape in end_node_shapes_and_names.items():
 
 # output = prepare(onnx_model).run(imgData)  # run the loaded model
 
-# x = output[0][0][0::3]
-# y = output[0][0][1::3]
+# iris, contours on index 22
+x = outputs[39][0][0][0::3]
+y = outputs[39][0][0][1::3]
 
-# # plot
-# plt.plot(x, y, 'o', color='black')
-# plt.imshow(img)
+# plot
+plt.plot(x, y, 'o', color='black')
+plt.imshow(img)
 
 if 0:
     # write to file

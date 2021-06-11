@@ -20,7 +20,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BrowContourTex:
-        m_Texture: {fileID: 8600000, guid: 0fca6066fa89cd34a8cee7dbf7350f7b, type: 2}
+        m_Texture: {fileID: 8600000, guid: 9b5ba9a69214bcd4690c3a15dad0e101, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Buffer:
+        m_Texture: {fileID: 8600000, guid: 372ecd106d333754e960a2623f265433, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -52,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _IrisTex:
-        m_Texture: {fileID: 8600000, guid: 94cecbb8d68c61d4880264a3231a3e89, type: 2}
+        m_Texture: {fileID: 8600000, guid: 8fe787dfddc97f543b93537ba8ddbb5b, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:

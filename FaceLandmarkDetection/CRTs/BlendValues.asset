@@ -12,11 +12,11 @@ CustomRenderTexture:
     Hash: 00000000000000000000000000000000
   m_ForcedFallbackFormat: 4
   m_DownscaleFallback: 0
-  m_Width: 4
-  m_Height: 4
+  m_Width: 8
+  m_Height: 8
   m_AntiAliasing: 1
   m_DepthFormat: 0
-  m_ColorFormat: 2
+  m_ColorFormat: 11
   m_MipMap: 0
   m_GenerateMips: 1
   m_SRGB: 0
@@ -50,5 +50,5 @@ CustomRenderTexture:
   m_UpdatePeriod: 0.01667
   m_ShaderPass: 0
   m_CubemapFaceMask: 4294967295
-  m_DoubleBuffered: 0
+  m_DoubleBuffered: 1
   m_WrapUpdateZones: 0

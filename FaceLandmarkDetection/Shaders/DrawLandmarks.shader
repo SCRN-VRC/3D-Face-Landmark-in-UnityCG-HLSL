@@ -117,7 +117,7 @@
                 float2 eyeCentroid[2];
 
                 // Compute center
-                eyeCentroid[1] = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
+                eyeCentroid[0] = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
                 //d = min(d, sdCircle(uv - eyeCentroid[0].yx, 0.0055));
 
                 // Left coords for eye position from facemesh
@@ -131,7 +131,7 @@
                 eyeE = float2(_FaceMeshTex[eyeEPos], _FaceMeshTex[eyeEPos + uint2(1, 0)]);
                 eyeW = float2(_FaceMeshTex[eyeWPos], _FaceMeshTex[eyeWPos + uint2(1, 0)]);
                 
-                eyeCentroid[0] = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
+                eyeCentroid[1] = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
                 //d = min(d, sdCircle(uv - eyeCentroid[1].yx, 0.0055));
 
                 _BrowContourTex.GetDimensions(texWH.x, texWH.y);
@@ -149,20 +149,20 @@
                 col = lerp(col, float4(0, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
                 d = 1000.0;
 
-                // float2 pos = _BrowContourTex[uint2(7, 9)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                float2 pos = _BrowContourTex[uint2(4, 9)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                 
-                // pos = _BrowContourTex[uint2(4, 17)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                pos = _BrowContourTex[uint2(4, 12)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                 
-                // pos = _BrowContourTex[uint2(0, 8)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                pos = _BrowContourTex[uint2(4, 3)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                 
-                // pos = _BrowContourTex[uint2(0, 2)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                pos = _BrowContourTex[uint2(4, 0)].yx;
+                d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
                 
-                // col = lerp(col, float4(1, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
-                // d = 1000.0;
+                col = lerp(col, float4(1, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
+                d = 1000.0;
                 
                 _EyeTex.GetDimensions(texWH.x, texWH.y);
 

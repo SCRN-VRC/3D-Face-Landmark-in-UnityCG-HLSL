@@ -279,6 +279,42 @@ float test(uint x, uint y, uint z)
 }
 */
 
+// Same padding
+float getLayerSP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
+{
+    if (any(off.xy == 0) || any(off.xy > lim)) return 0.0;
+    off.xy -= 1;
+    uint2 pos;
+    pos.x = off.y + (off.z % mult.x) * lim;
+    pos.y = off.x + (off.z / mult.x) * lim;
+    float rtn = tex[pos];
+    rtn = rtn > 100000.0 ? rtn - 10000000.0 : rtn;
+    return rtn;
+}
+
+// Valid padding
+float getLayerVP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
+{
+    if (any(off.xy >= lim)) return 0.0;
+    uint2 pos;
+    pos.x = off.y + (off.z % mult.x) * lim;
+    pos.y = off.x + (off.z / mult.x) * lim;
+    float rtn = tex[pos];
+    rtn = rtn > 100000.0 ? rtn - 10000000.0 : rtn;
+    return rtn;
+}
+
+// No padding
+float getLayerNP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
+{
+    uint2 pos;
+    pos.x = off.y + (off.z % mult.x) * lim;
+    pos.y = off.x + (off.z / mult.x) * lim;
+    float rtn = tex[pos];
+    rtn = rtn > 100000.0 ? rtn - 10000000.0 : rtn;
+    return rtn;
+}
+
 // Conv2D weights getter
 float getConst(Texture2D<float> tex, uint4 off, uint kernSize, uint ID)
 {

@@ -162,6 +162,36 @@ static const float4 faceWeight[118] =
 //     return testGen(uint3(x, y, z));
 // }
 
+// Same padding
+float getLayerSP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
+{
+    if (any(off.xy == 0) || any(off.xy > lim)) return 0.0;
+    off.xy -= 1;
+    uint2 pos;
+    pos.x = off.y + (off.z % mult.x) * lim;
+    pos.y = off.x + (off.z / mult.x) * lim;
+    return tex[pos];
+}
+
+// Valid padding
+float getLayerVP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
+{
+    if (any(off.xy >= lim)) return 0.0;
+    uint2 pos;
+    pos.x = off.y + (off.z % mult.x) * lim;
+    pos.y = off.x + (off.z / mult.x) * lim;
+    return tex[pos];
+}
+
+// No padding
+float getLayerNP(Texture2D<float> tex, uint3 off, uint2 lim, uint2 mult)
+{
+    uint2 pos;
+    pos.x = off.y + (off.z % mult.x) * lim;
+    pos.y = off.x + (off.z / mult.x) * lim;
+    return tex[pos];
+}
+
 // Conv2D weights getter
 float getConst(Texture2D<float> tex, uint4 off, uint depth, uint ID)
 {
