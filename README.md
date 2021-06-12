@@ -1,7 +1,7 @@
 # 3D Face Landmark in UnityCG HLSL
 <img src="./Media/bakapreview.gif" align="middle"/>
 
-### NOTE: This was built and tested with Unity 2018.4.20f1, there may be shader compatibility issues with other versions.
+### NOTE: This was built and tested with Unity 2018.4.20f1 using built-in render pipeline, there may be shader compatibility issues with other versions.
 
 ## Table of Contents
 - [Overview](#overview)
