@@ -56,6 +56,8 @@
         {
             v2f o;
 
+            // ------------------- FACE TRACKING START ------------------- //
+
             float3x3 look;
 
             look[0] = _FaceRotate[txBlendRot0];
@@ -63,6 +65,8 @@
             look[2] = _FaceRotate[txBlendRot2];
             float rotMask = 1.0 - tex2Dlod(_MaskRotate, float4(v.texcoord.xy, 0, 0)).r;
             v.vertex.xyz = lerp(v.vertex.xyz, mul(v.vertex.xyz, look), rotMask);
+
+            // ------------------- FACE TRACKING END ------------------- //
 
             #ifdef UNITY_PASS_SHADOWCASTER
             TRANSFER_SHADOW_CASTER_NOPOS(o, o.pos);

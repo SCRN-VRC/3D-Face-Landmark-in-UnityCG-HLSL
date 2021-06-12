@@ -10,7 +10,8 @@
     - [Facemesh Shader](#facemesh-shader-outputs)
     - [Iris Shader](#iris-shader-outputs)
     - [Blendshape Values](#blendshape-values-calculations)
-- [Setup](#setup)
+- [Avatar Setup](#avatar-setup)
+- [Python, C++ Code](#python,-c++-Code)
 - [Facemesh Architecture](#facemesh-architecture)
 - [Iris Architecture](#iris-architecture)
 - [Resources](#resources)
@@ -37,6 +38,7 @@ The Iris model has two outputs, same as the original, 71 3D brows and contour po
 At the final step, a shader takes Facemesh and Iris model outputs, calculates blendshape values based on key points and smooths the results.
 
 ## Problems
+- Baked vertices not in tangent space, will look kinda weird on skinned mesh renderers. (TODO)
 - No face detection, meaning the user must have their face within the center of the input camera.
 - SVD (singular value decomposition) not accurate, there isn't any SVD libraries written for HLSL. The only one I found was UnitySVDComputeShader and it only solves 3x3 matrices, meaning I can only use 3 points from Facemesh to solve the rotation.
 - Slow implementation, it's only fast cause it's made for mobile devices.
@@ -47,7 +49,7 @@ At the final step, a shader takes Facemesh and Iris model outputs, calculates bl
 <img src="./Media/facemeshfig.png" height="256" align="middle"/>
 
 ### Facemesh Shader Outputs
-Location: .../FaceLandmarkDetection/CRTs/FaceMesh
+Location: `.../FaceLandmarkDetection/CRTs/FaceMesh`
 * **CRT: L20**
     * Format: R Float
     * Size: 39 x 36
@@ -83,7 +85,7 @@ Source Centroid | 5, 0
 </p>
 
 ### Iris Shader Outputs
-Location: .../FaceLandmarkDetection/CRTs/Iris
+Location: `.../FaceLandmarkDetection/CRTs/Iris`
 
 *One iris network is used for both eyes. To keep track of which output is left or right, each layer of the network adds a 10000000.0 to output location (0, 0) if it's the right eye.*
 
@@ -111,7 +113,7 @@ Location: .../FaceLandmarkDetection/CRTs/Iris
     * Column 1 contains iris points for **left eye**
 
 ### Blendshape Values Calculations
-Location: .../FaceLandmarkDetection/CRTs/
+Location: `.../FaceLandmarkDetection/CRTs/`
 
 * **CRT: BlendValues**
     * Format: ARGB Float
@@ -132,16 +134,15 @@ Iris left XY, right XY position | 6, 0
 
 The rotation matrix is copied over from the Procrustes Analysis CRT.
 
-## Setup
+## Avatar Setup
 
 **This is more of a tech demo, not made for actual use. Setting this up correctly is a tedious process for an impractical effect. If you wish to continue, you'll need to know how to edit shaders.**
 
-<img src="./Media/blender1.png" height="180"/>
+<img src="./Media/blender1.png" height="200"/>
 
 1. At least two meshes, the face must be a completely separate mesh from the rest of the body. No more than 16384 vertices on the face because the blendshapes are baked onto 128 x 128 textures.
 
-2. Start creating the blendshapes:
-    0. basis ()
+2. Start creating the blendshapes in Blender:
     1. blink right
     2. blink left
     3. right brow inner down
@@ -160,6 +161,40 @@ The rotation matrix is copied over from the Procrustes Analysis CRT.
     16. mouth shrink
     17. mouth smile
     18. mouth frown
+
+3. Save as FBX, import into Unity.
+
+<img src="./Media/unity1.png" height="150"/>
+
+4. Make sure the object with the skinned mesh renderer on it has no rotation or scale.
+
+<img src="./Media/unity2.png" width="250"/>
+
+5. Open up the Bake Blendshapes editor window located under Tools -> SCRN -> Bake Blendshapes in your menu.
+
+6. Hit "Bake" when you're done filling out the blendshapes. The texture should save into `Assets/FaceLandmarkDetection/` as `xxxx_blendBaked.asset`
+
+7. If you want to use the example shaders in the Demo folder, put the FaceTrack material on the face mesh and HeadRotation on everything else.
+
+<img src="./Media/unity3.png" width="300"/>
+
+8. Set the `xxxx_blendBaked.asset` as the Baked Blendshape Texture in the FaceTrack material.
+
+<img src="./Media/unity4.png" height="200"/>
+
+9. Create a mask for HeadRotation, it uses UV0, 0.0 is no rotation, 1.0 is full rotation. Ex. if we want the neck to gradually follow the rotation, put a gradient on the neck UV.
+
+10. Most likely the example shaders aren't good enough, you can move it into your own shader by copying everything I have between these tags in both the shader into an equivalent **Vertex shader**
+
+```HLSL
+// ------------------- FACE TRACKING START ------------------- //
+
+...
+
+// ------------------- FACE TRACKING END ------------------- //
+```
+
+### Python, C++ Code
 
 ### Facemesh Architecture
 <img src="./Media/facemesh.pb.svg" height="512" align="middle"/>

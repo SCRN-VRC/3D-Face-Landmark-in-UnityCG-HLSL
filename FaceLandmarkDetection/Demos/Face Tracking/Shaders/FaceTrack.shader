@@ -59,6 +59,8 @@
         {
             v2f o;
 
+            // ------------------- FACE TRACKING START ------------------- //
+            
             uint2 px;
             px.x = vertexID % 128;
             px.y = vertexID / 128;
@@ -83,14 +85,24 @@
                 _BlendValTex[txBrowLRInOut].z;
             v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBrowRightOut] *
                 _BlendValTex[txBrowLRInOut].w;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedIrisLeftIn] *
-                _BlendValTex[txIrisLRXY].x;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedIrisLeftUp] *
-                _BlendValTex[txIrisLRXY].y;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedIrisRightIn] *
-                _BlendValTex[txIrisLRXY].z;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedIrisRightUp] *
-                _BlendValTex[txIrisLRXY].w;
+
+            v.vertex.xyz = v.vertex.xyz + 
+                lerp(_BakedBlendTex[px + txBakedIrisLeftOut],
+                    _BakedBlendTex[px + txBakedIrisLeftIn],
+                    _BlendValTex[txIrisLRXY].x);
+            v.vertex.xyz = v.vertex.xyz + 
+                lerp(_BakedBlendTex[px + txBakedIrisLeftDown],
+                    _BakedBlendTex[px + txBakedIrisLeftUp],
+                    _BlendValTex[txIrisLRXY].y);
+
+            v.vertex.xyz = v.vertex.xyz + 
+                lerp(_BakedBlendTex[px + txBakedIrisRightOut],
+                    _BakedBlendTex[px + txBakedIrisRightIn],
+                    _BlendValTex[txIrisLRXY].z);
+            v.vertex.xyz = v.vertex.xyz + 
+                lerp(_BakedBlendTex[px + txBakedIrisRightDown],
+                    _BakedBlendTex[px + txBakedIrisRightUp],
+                    _BlendValTex[txIrisLRXY].w);
 
             float3x3 look;
 
@@ -99,6 +111,8 @@
             look[2] = _BlendValTex[txBlendRot2];
             float rotMask = 1.0 - tex2Dlod(_MaskRotate, float4(v.texcoord.xy, 0, 0)).r;
             v.vertex.xyz = lerp(v.vertex.xyz, mul(v.vertex.xyz, look), rotMask);
+            
+            // ------------------- FACE TRACKING END ------------------- //
 
             #ifdef UNITY_PASS_SHADOWCASTER
             TRANSFER_SHADOW_CASTER_NOPOS(o, o.pos);
