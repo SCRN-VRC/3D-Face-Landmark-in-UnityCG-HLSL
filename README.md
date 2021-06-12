@@ -77,8 +77,10 @@ Scale and Frobenius norm | 3, 0
 Target Centroid | 4, 0
 Source Centroid | 5, 0
 
-<img src="./Media/irisfig2.png" height="275" align="middle"/>
-<img src="./Media/irisfig.png" height="256" align="middle"/>
+<p float="left">
+    <img src="./Media/irisfig2.png" height="275" align="middle"/>
+    <img src="./Media/irisfig.png" height="256" align="middle"/>
+</p>
 
 ### Iris Shader Outputs
 Location: .../FaceLandmarkDetection/CRTs/Iris
