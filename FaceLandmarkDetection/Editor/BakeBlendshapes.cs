@@ -10,15 +10,79 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class BakeBlendshapes : EditorWindow
 {
-    public Texture2D defaultShape;
     public SkinnedMeshRenderer smr;
-    public Mesh bakedMesh;
+    private Vector2 scrollPos;
+    private int [] shapes;
+    private string [] blendList;
+    private string [] labels =
+    {
+        "1. blink right",
+        "2. blink left",
+        "3. right brow inner down",
+        "4. right brow outer down",
+        "5. left brow inner down",
+        "6. left brow outer down",
+        "7. right eye looking in",
+        "8. right eye looking out",
+        "9. right eye looking up",
+        "10. right eye looking down",
+        "11. left eye looking in",
+        "12. left eye looking out",
+        "13. left eye looking up",
+        "14. left eye looking down",
+        "15. mouth wide open",
+        "16. mouth shrink",
+        "17. mouth smile",
+        "18. mouth frown",
+    };
 
     [MenuItem("Tools/SCRN/Bake Blendshapes")]
     static void Init()
     {
-        var window = GetWindowWithRect<BakeBlendshapes>(new Rect(0, 0, 400, 250));
+        var window = GetWindowWithRect<BakeBlendshapes>(new Rect(0, 0, 350, 600));
         window.Show();
+    }
+
+    public string [] getBlendShapeNames (Mesh m)
+    {
+        string[] arr;
+        arr = new string [m.blendShapeCount];
+        for (int i= 0; i < m.blendShapeCount; i++)
+        {
+            string s = m.GetBlendShapeName(i);
+            //Debug.Log("Blend Shape: " + i + " " + s);
+            arr[i] = s;
+        }
+        return arr;
+    }
+
+    void onBake()
+    {
+        Texture2D tex = new Texture2D(640, 512, TextureFormat.RGBAFloat, false);
+        tex.wrapMode = TextureWrapMode.Clamp;
+        tex.filterMode = FilterMode.Point;
+        tex.anisoLevel = 1;
+
+        Mesh mesh = smr.sharedMesh;
+        for (int i = 0; i < 18; i++)
+        {
+            Vector3[] dV = new Vector3[mesh.vertexCount];
+            Vector3[] dN = new Vector3[mesh.vertexCount];
+            Vector3[] dT = new Vector3[mesh.vertexCount];
+            mesh.GetBlendShapeFrameVertices(shapes[i], 0, dV, dN, dT);
+            for (int j = 0; j < mesh.vertexCount; j++)
+            {
+                if (j > 16383) continue; // 128 x 128 max texture block size
+                int x = j % 128 + (i % 5) * 128;
+                int y = j / 128 + (i / 5) * 128;
+                Color col = new Color(dV[j].x, dV[j].y, dV[j].z, 0);
+                //Debug.Log(dV);
+                tex.SetPixel(x, y, col);
+            }
+        }
+        string savePath = "Assets/FaceLandmarkDetection/" + smr.name + "_blendBaked.asset";
+        AssetDatabase.CreateAsset(tex, savePath);
+        AssetDatabase.SaveAssets();
     }
 
     void OnGUI()
@@ -26,44 +90,27 @@ public class BakeBlendshapes : EditorWindow
         GUILayout.Label("Bake Blendshapes", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical();
         smr = (SkinnedMeshRenderer) EditorGUILayout.ObjectField("Skinned Mesh", smr, typeof(SkinnedMeshRenderer), true);
-        defaultShape = (Texture2D) EditorGUILayout.ObjectField("Default Blendshape", defaultShape, typeof(Texture2D), false);
-        EditorGUILayout.EndVertical();
-        if (GUILayout.Button("Bake!") && smr != null) {
-            onBake();
-        }
-    }
-
-    void onBake()
-    {
-        Texture2D tex = new Texture2D(128, 128, TextureFormat.RGBAFloat, false);
-        tex.wrapMode = TextureWrapMode.Clamp;
-        tex.filterMode = FilterMode.Point;
-        tex.anisoLevel = 1;
-
-        bakedMesh = new Mesh();
-        smr.BakeMesh(bakedMesh);
-        Vector3[] vertices = bakedMesh.vertices;
-        for (int i = 0; i < vertices.Length; i++)
+        if (smr == null)
         {
-            int x = i % 128;
-            int y = i / 128;
-            if (defaultShape != null)
-            {
-                Color pix = defaultShape.GetPixel(x, y);
-                Color col = new Color(vertices[i].x, vertices[i].y, vertices[i].z, 0);
-                col = col - pix;
-                tex.SetPixel(x, y, col);
-            }
-            else
-            {
-                Color col = new Color(vertices[i].x, vertices[i].y, vertices[i].z, 0);
-                tex.SetPixel(x, y, col);
-            }
-            //Debug.Log(col);
+            this.ShowNotification(new GUIContent("No game object selected"));
         }
-
-        AssetDatabase.CreateAsset(tex, "Assets/shape.asset");
-        AssetDatabase.SaveAssets();
+        else
+        {
+            this.RemoveNotification();
+            if (shapes == null) shapes = new int[18];
+            if (blendList == null) blendList = getBlendShapeNames(smr.GetComponent<SkinnedMeshRenderer>().sharedMesh);
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(350), GUILayout.Height(530));
+            for (int i = 0; i < 18; i++)
+            {
+				EditorGUILayout.LabelField(labels[i], EditorStyles.label);
+				shapes[i] = EditorGUILayout.Popup(shapes[i], blendList);
+            }
+            EditorGUILayout.EndScrollView();
+            if (GUILayout.Button("Bake!") && smr != null) {
+                onBake();
+            }
+        }
+        EditorGUILayout.EndVertical();
     }
 }
 

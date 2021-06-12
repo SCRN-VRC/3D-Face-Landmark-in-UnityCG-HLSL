@@ -134,13 +134,14 @@ The rotation matrix is copied over from the Procrustes Analysis CRT.
 
 ## Setup
 
-**This is more of a tech demo, not made for actual use. Setting this up correctly is a tedious process for a impractical effect. If you wish to continue, you'll need to know how to edit shaders.**
+**This is more of a tech demo, not made for actual use. Setting this up correctly is a tedious process for an impractical effect. If you wish to continue, you'll need to know how to edit shaders.**
 
 <img src="./Media/blender1.png" height="180"/>
 
 1. At least two meshes, the face must be a completely separate mesh from the rest of the body. No more than 16384 vertices on the face because the blendshapes are baked onto 128 x 128 textures.
 
 2. Start creating the blendshapes:
+    0. basis ()
     1. blink right
     2. blink left
     3. right brow inner down
