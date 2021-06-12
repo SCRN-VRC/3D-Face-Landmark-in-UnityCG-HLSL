@@ -11,7 +11,7 @@
     - [Iris Shader](#iris-shader-outputs)
     - [Blendshape Values](#blendshape-values-calculations)
 - [Avatar Setup](#avatar-setup)
-- [Python, C++ Code](#python,-c++-Code)
+- [Python, C++ Code](#python-c-code)
 - [Facemesh Architecture](#facemesh-architecture)
 - [Iris Architecture](#iris-architecture)
 - [Resources](#resources)
@@ -196,6 +196,21 @@ The rotation matrix is copied over from the Procrustes Analysis CRT.
 
 ### Python, C++ Code
 
+The purpose of the Python and C++ code is to help me debug intermediate layers of the networks. It runs ***very slow*** because it has to output every single network layer.
+
+#### Requirements
+- C++
+    - OpenCV 4.0 or above
+- Python
+    - Facemesh
+        - Python 3.8.x
+        - Tensorflow 2.3.0
+    - Iris
+        - Python 3.8.x
+        - ONNX 1.9.0
+
+I suggest using a virtual environment and a package manager.
+
 ### Facemesh Architecture
 <img src="./Media/facemesh.pb.svg" height="512" align="middle"/>
 
@@ -208,3 +223,7 @@ The rotation matrix is copied over from the Procrustes Analysis CRT.
 - [Procrustes Analysis](https://stackoverflow.com/questions/18925181/procrustes-analysis-with-numpy)
 - [UnitySVDComputeShader](https://github.com/vanish87/UnitySVDComputeShader/blob/master/UnitySVDComputeShader/Assets/Math.cginc)
 - [CHARLIZE THERON_HEAD](https://sketchfab.com/3d-models/charlize-theron-head-ca8926f4284045c6a2e75a6f7642c851)
+
+Thanks to [Merlin](https://twitter.com/MerlinVR_), [Raliv](https://twitter.com/RalivDev) and [orels1](https://twitter.com/orels1_) for the help.
+
+If you have questions or comments, you can reach me on Discord: SCRN#8008 or Twitter: https://twitter.com/SCRNinVR
