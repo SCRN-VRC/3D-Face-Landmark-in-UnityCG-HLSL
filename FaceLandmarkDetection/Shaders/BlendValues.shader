@@ -82,16 +82,16 @@
                     //float3 eyeLTop = _BrowContourTex[uint2(4, 12)];
 
                     // Eye Right
-                    float3 eyeRIn = _BrowContourTex[uint2(0, 0)];
-                    float3 eyeROut = _BrowContourTex[uint2(7, 0)];
+                    float3 eyeRIn = _BrowContourTex[uint2(7, 0)];
+                    float3 eyeROut = _BrowContourTex[uint2(0, 0)];
 
                     // Eye Left
                     float3 eyeLIn = _BrowContourTex[uint2(7, 9)];
                     float3 eyeLOut = _BrowContourTex[uint2(0, 9)];
 
                     // Brow Right
-                    float3 browRIn = _BrowContourTex[uint2(0, 8)];
-                    float3 browROut = _BrowContourTex[uint2(5, 8)];
+                    float3 browRIn = _BrowContourTex[uint2(5, 8)];
+                    float3 browROut = _BrowContourTex[uint2(0, 8)];
 
                     // Brow Left
                     float3 browLIn = _BrowContourTex[uint2(5, 17)];
@@ -142,20 +142,22 @@
                     float4 eyeBlinkLR;
                     /*
                         Blink Left
-                        Unclamped Range: (4.0, 8.5)
+                        Unclamped Range: (5.0, 8.5)
                         Shape: Closed, open
                     */
                     eyeBlinkLR.x = distance(blinkL1, blinkL2) * 64;
-                    eyeBlinkLR.x = 1.0 - saturate((eyeBlinkLR.x - 4.0) / 4.5);
+                    eyeBlinkLR.x = smoothstep(0.0, 1.0, 1.0 - saturate((eyeBlinkLR.x - 5.0) / 3.5));
                     
                     /*
                         Blink Right
-                        Unclamped Range: (3.6, 8.5)
+                        Unclamped Range: (5.0, 8.5)
                         Shape: Closed, open
                     */
                     eyeBlinkLR.y = distance(blinkR1, blinkR2) * 64;
-                    eyeBlinkLR.y = 1.0 - saturate((eyeBlinkLR.y - 4.0) / 4.5);
+                    eyeBlinkLR.y = smoothstep(0.0, 1.0, 1.0 - saturate((eyeBlinkLR.y - 5.0) / 3.5));
                     eyeBlinkLR.zw = 0.0;
+                    
+                    //buffer[0] = float4(eyeBlinkLR);
 
                     float4 browLRInOut;
                     /*
@@ -223,8 +225,6 @@
                     */
                     irisLRXY.w = distance(blinkR1, irisR);
                     irisLRXY.w = saturate((irisLRXY.w - 0.07) / 0.07) * 0.8 + 0.1;
-                    
-                    //buffer[0] = float4(irisLRXY);
 
                     StoreValue(txBlendRot0, float4(look[0], 0.0), col, px);
                     StoreValue(txBlendRot1, float4(look[1], 0.0), col, px);

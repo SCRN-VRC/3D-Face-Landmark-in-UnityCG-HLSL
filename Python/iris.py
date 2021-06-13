@@ -31,7 +31,7 @@ def test(size=(64, 64)):
     a = np.float32(a)
     return a
 
-img = cv2.imread("D:/Storage/Unity/facemesh-python/data/eye2.jpg")
+img = cv2.imread("D:/Storage/Unity/facemesh-python/data/eye3.jpg")
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 imgR = cv2.resize(img, dsize=(64, 64), interpolation=cv2.INTER_AREA)
 imgR.resize((1, 3, 64, 64))

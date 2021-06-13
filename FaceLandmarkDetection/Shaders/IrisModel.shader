@@ -687,6 +687,8 @@
                     col.r /= 64.0;
                     col.g = _Layer1[uint2(1, px.y)] / 64.0;
                     col.b = _Layer1[uint2(2, px.y)] / 64.0;
+                    // Flip the right eye back
+                    col.r = eyeIndex ? col.r : 1.0 - col.r;
                 }
 
                 //if (px.x == 1)
@@ -727,6 +729,8 @@
                     col.r /= 64.0;
                     col.g = _Layer1[uint2(1, h)] / 64.0;
                     col.b = _Layer1[uint2(2, h)] / 64.0;
+                    // Flip the right eye back
+                    col.r = eyeIndex ? col.r : 1.0 - col.r;
                 }
 
                 return col;
@@ -816,7 +820,19 @@
                     GetSVD3D(A, U, D, Vt);
                     
                     // solve optimum rotation matrix of Y
-                    float3x3 T = mul(transpose(Vt), transpose(U));
+                    float3x3 V = transpose(Vt);
+                    float3x3 T = mul(V, transpose(U));
+
+                    bool have_reflection = determinant(T) < 0.0;
+                    if (have_reflection != false)
+                    {
+                        V[0][2] = -V[0][2];
+                        V[1][2] = -V[1][2];
+                        V[2][2] = -V[2][2];
+                        D[2] = -D[2];
+                        T = mul(V, transpose(U));
+                    }
+
                     const float traceTA = D[0] + D[1] + D[2];
 
                     StoreValue(txIrisRotation0 + uint2(leftSide ? 0 : 8, 0),
@@ -898,6 +914,42 @@
                 pos.xyz = scaleYNorm.x * mul(look, pos.xyz) + XCentroid;
 
                 return float4(pos, 0.0);
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "Flip Right Eye"
+            CGPROGRAM
+            #include "UnityCustomRenderTexture.cginc"
+            #include "IrisInclude.cginc"
+            #pragma vertex CustomRenderTextureVertexShader
+            #pragma fragment frag
+            #pragma target 5.0
+
+            //RWStructuredBuffer<float4> buffer : register(u1);
+            sampler2D  _Layer1;
+
+            float4 frag(v2f_customrendertexture IN) : COLOR
+            {
+                /*
+                    ​Image of proportionally cropped left eye with
+                    eyebrow (or horizontally flipped right eye) with a
+                    25% margin on each side and size 64x64
+                */
+                const float2 uv = IN.globalTexcoord.xy;
+
+                bool flipEye = abs(tex2D(_Layer1, 0..xx).x - 0.1337) < 0.001;
+                float2 flippedUV = uv;
+                flippedUV.y = flipEye ? flippedUV.y : 1.0 - flippedUV.y;
+
+                float4 col = tex2D(_Layer1, flippedUV);
+                if (all(uv.xy <= 0.01.xx))
+                {
+                    col = flipEye ? 0.1337.xxxx : 1..xxxx;
+                }
+                return col;
             }
             ENDCG
         }
