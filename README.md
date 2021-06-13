@@ -35,6 +35,8 @@ To retrieve the head rotations, I use SVD (singular value decomposition) on thre
 
 The Iris model has two outputs, same as the original, 71 3D brows and contour points and 5 3D iris points.
 
+Right eye inputs must be flipped horizontally during input and flipped back at output.
+
 At the final step, a shader takes Facemesh and Iris model outputs, calculates blendshape values based on key points and smooths the results.
 
 ## Problems
@@ -87,6 +89,8 @@ Source Centroid | 5, 0
 Location: `.../FaceLandmarkDetection/CRTs/Iris`
 
 *One iris network is used for both eyes. To keep track of which output is left or right, each layer of the network adds a 10000000.0 to output location (0, 0) if it's the right eye.*
+
+*Right eyes inputs are flipped horizontally.*
 
 * **CRT: iris_L57**
     * Format: R Float
@@ -215,8 +219,12 @@ I suggest using a virtual environment and a package manager.
 ### Facemesh Architecture
 <img src="./Media/facemesh.pb.svg" height="512" align="middle"/>
 
+[Facemesh model card](https://mediapipe.page.link/facemesh-mc)
+
 ### Iris Architecture
 <img src="./Media/iris_landmark.onnx.svg" height="512" align="middle"/>
+
+[Iris landmark model card](https://mediapipe.page.link/iris-mc)
 
 ## Resources
 - [MediaPipe Facemesh](https://tfhub.dev/mediapipe/tfjs-model/facemesh/1/default/1)
