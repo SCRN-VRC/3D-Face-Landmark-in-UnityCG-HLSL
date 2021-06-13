@@ -142,7 +142,7 @@
                     {
                         if (k == 7 && j % 9 == 8) continue;
                         float2 pos = _BrowContourTex[uint2(k, j)].yx;
-                        d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[j / 9].yx - eyeCentroid[j / 9].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                        d = min(d, sdCircle(uv - (pos * 0.30 + eyeCentroid[j / 9].yx - eyeCentroid[j / 9].yx * 0.150 - float2(0.12, 0.07)), 0.0055));
                     }
                 }
 
@@ -150,16 +150,16 @@
                 d = 1000.0;
 
                 // float2 pos = _BrowContourTex[uint2(4, 9)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                // d = min(d, sdCircle(uv - (pos * 0.30 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.150 - float2(0.12, 0.07)), 0.0055));
                 
                 // pos = _BrowContourTex[uint2(4, 10)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                // d = min(d, sdCircle(uv - (pos * 0.30 + eyeCentroid[1].yx - eyeCentroid[1].yx * 0.150 - float2(0.12, 0.07)), 0.0055));
                 
                 // pos = _BrowContourTex[uint2(4, 1)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                // d = min(d, sdCircle(uv - (pos * 0.30 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.150 - float2(0.12, 0.07)), 0.0055));
                 
                 // pos = _BrowContourTex[uint2(4, 0)].yx;
-                // d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                // d = min(d, sdCircle(uv - (pos * 0.30 + eyeCentroid[0].yx - eyeCentroid[0].yx * 0.150 - float2(0.12, 0.07)), 0.0055));
                 
                 // col = lerp(col, float4(1, 0, 1, 0), 1.0-smoothstep(0.001,0.005,abs(d)));
                 // d = 1000.0;
@@ -171,7 +171,7 @@
                     for (j = 0; j < texWH.y; j++)
                     {
                         float2 pos = _EyeTex[uint2(k, j)].yx;
-                        d = min(d, sdCircle(uv - (pos * 0.225 + eyeCentroid[k].yx - eyeCentroid[k].yx * 0.1125 - float2(0.09, 0.05625)), 0.0055));
+                        d = min(d, sdCircle(uv - (pos * 0.30 + eyeCentroid[k].yx - eyeCentroid[k].yx * 0.150 - float2(0.12, 0.07)), 0.0055));
                     }
                 }
 

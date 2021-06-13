@@ -47,9 +47,7 @@
 
                 // Swap between both eyes so only one network needed
                 // for two eyes
-                bool flipEye = dot(_Layer2[uint2(0, 0)], 0.3333.xxx) > 0.001;
-                // Initalize on load
-                flipEye = _Time.y < 2.0 ? true : flipEye;
+                bool flipEye = abs(_Layer2[uint2(0, 0)] - 0.1337) < 0.001;
 
                 // Right/Left coords for eye position from facemesh
                 uint2 eyeNPos = flipEye ? uint2(9, 12) : uint2(27, 29);
@@ -78,20 +76,20 @@
                 //     sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
                 float angZ = atan2(look[1][0], look[0][0]);
 
-                //buffer[0] = float4(angX, angY, angZ, 1.0);
+                //buffer[0] = float4(dot(_Layer2[uint2(0, 0)], 0.3333.xxx).xxxx);
 
                 // Compute center
                 float2 eyeCentroid = (eyeN + eyeS + eyeE + eyeW) * 0.25 / 192.0;
                 float2 uvZoom = uv - eyeCentroid.yx;
-                uvZoom *= 0.225;
+                uvZoom *= 0.3;
                 uvZoom = mul(rot2(angZ), uvZoom);
-                uvZoom += eyeCentroid.yx + eyeCentroid.yx * 0.1125 - float2(0.09, 0.05625);
+                uvZoom += eyeCentroid.yx + eyeCentroid.yx * 0.15 - float2(0.12, 0.07);
 
                 float4 col = tex2D(_CamIn, uvZoom);
                 // Flip eye
                 if (all(uv.xy <= 0.01.xx))
                 {
-                    col = flipEye ? float4(0., 0., 0., 0.) : float4(1., 1., 1., 1.);
+                    col = flipEye ? 1..xxxx : 0.1337.xxxx;
                 }
                 return col;
             }

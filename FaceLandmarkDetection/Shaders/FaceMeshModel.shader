@@ -588,7 +588,19 @@
                     
                     // solve optimum rotation matrix of Y
                     // why flipped? I don't know but it works
-                    float3x3 T = mul(transpose(U), transpose(Vt));
+                    float3x3 V = transpose(Vt);
+                    float3x3 T = mul(transpose(U), V);
+
+                    bool have_reflection = determinant(T) < 0.0;
+                    if (have_reflection != false)
+                    {
+                        V[0][2] = -V[0][2];
+                        V[1][2] = -V[1][2];
+                        V[2][2] = -V[2][2];
+                        D[2] = -D[2];
+                        T = mul(transpose(U), V);
+                    }
+
                     const float traceTA = D[0] + D[1] + D[2];
 
                     StoreValue(txRotation0, float4(T[0], 0.0), col, px);
