@@ -28,4 +28,9 @@
 #define txBakedMouthSmile                 uint2(128, 384)
 #define txBakedMouthFrown                 uint2(256, 384)
 
+float3 tanSpaceOffset(float3 bakedPos, float blendVal, float3 normal, float3 tangent, float3 binormal)
+{
+    return ((bakedPos.x * normal) + (bakedPos.y * tangent) + (bakedPos.z * binormal)) * blendVal;
+}
+
 #endif

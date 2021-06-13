@@ -55,7 +55,7 @@
             float2 uv : TEXCOORD1;
         };
 
-        v2f vert(appdata_base v, uint vertexID : SV_VertexID)
+        v2f vert(appdata_full v, uint vertexID : SV_VertexID)
         {
             v2f o;
 
@@ -65,44 +65,57 @@
             px.x = vertexID % 128;
             px.y = vertexID / 128;
 
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBlinkRight] *
-                _BlendValTex[txEyeBlinkLR].y;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBlinkLeft] *
-                _BlendValTex[txEyeBlinkLR].x;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedMouthOpen] *
-                _BlendValTex[txMouthOpShSmFl].x;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedMouthShrink] *
-                _BlendValTex[txMouthOpShSmFl].y;
-            v.vertex.xyz = v.vertex.xyz +
-                lerp(_BakedBlendTex[px + txBakedMouthFrown],
-                    _BakedBlendTex[px + txBakedMouthSmile],
-                    _BlendValTex[txMouthOpShSmFl].z);
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBrowLeftIn] *
-                _BlendValTex[txBrowLRInOut].x;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBrowLeftOut] *
-                _BlendValTex[txBrowLRInOut].y;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBrowRightIn] *
-                _BlendValTex[txBrowLRInOut].z;
-            v.vertex.xyz = v.vertex.xyz + _BakedBlendTex[px + txBakedBrowRightOut] *
-                _BlendValTex[txBrowLRInOut].w;
+            float3 Lnormal = normalize( v.normal );
+            float3 Ltangent = normalize( v.tangent.xyz );
+            float3 Lbinormal = normalize(cross( Lnormal , Ltangent ));
 
-            v.vertex.xyz = v.vertex.xyz + 
-                lerp(_BakedBlendTex[px + txBakedIrisLeftOut],
-                    _BakedBlendTex[px + txBakedIrisLeftIn],
-                    _BlendValTex[txIrisLRXY].x);
-            v.vertex.xyz = v.vertex.xyz + 
-                lerp(_BakedBlendTex[px + txBakedIrisLeftDown],
-                    _BakedBlendTex[px + txBakedIrisLeftUp],
-                    _BlendValTex[txIrisLRXY].y);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedBlinkRight],
+                _BlendValTex[txEyeBlinkLR].y, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedBlinkLeft],
+                _BlendValTex[txEyeBlinkLR].x, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedMouthOpen],
+                _BlendValTex[txMouthOpShSmFl].x, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedMouthShrink],
+                _BlendValTex[txMouthOpShSmFl].y, Lnormal, Ltangent, Lbinormal);
 
-            v.vertex.xyz = v.vertex.xyz + 
-                lerp(_BakedBlendTex[px + txBakedIrisRightOut],
-                    _BakedBlendTex[px + txBakedIrisRightIn],
-                    _BlendValTex[txIrisLRXY].z);
-            v.vertex.xyz = v.vertex.xyz + 
-                lerp(_BakedBlendTex[px + txBakedIrisRightDown],
-                    _BakedBlendTex[px + txBakedIrisRightUp],
-                    _BlendValTex[txIrisLRXY].w);
+            float3 frown = tanSpaceOffset(_BakedBlendTex[px + txBakedMouthFrown],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            float3 smile = tanSpaceOffset(_BakedBlendTex[px + txBakedMouthSmile],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += lerp(frown, smile, _BlendValTex[txMouthOpShSmFl].z);
+
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedBrowLeftIn],
+                _BlendValTex[txBrowLRInOut].x, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedBrowLeftOut],
+                _BlendValTex[txBrowLRInOut].y, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedBrowRightIn],
+                _BlendValTex[txBrowLRInOut].z, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += tanSpaceOffset(_BakedBlendTex[px + txBakedBrowRightOut],
+                _BlendValTex[txBrowLRInOut].w, Lnormal, Ltangent, Lbinormal);
+
+            float3 val1 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisLeftOut],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            float3 val2 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisLeftIn],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += lerp(val1, val2, _BlendValTex[txIrisLRXY].x);
+
+            val1 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisLeftDown],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            val2 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisLeftUp],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += lerp(val1, val2, _BlendValTex[txIrisLRXY].y);
+
+            val1 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisRightOut],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            val2 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisRightIn],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += lerp(val1, val2, _BlendValTex[txIrisLRXY].z);
+
+            val1 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisRightDown],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            val2 = tanSpaceOffset(_BakedBlendTex[px + txBakedIrisRightUp],
+                1.0, Lnormal, Ltangent, Lbinormal);
+            v.vertex.xyz += lerp(val1, val2, _BlendValTex[txIrisLRXY].w);
 
             float3x3 look;
 

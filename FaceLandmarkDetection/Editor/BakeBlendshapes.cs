@@ -66,16 +66,25 @@ public class BakeBlendshapes : EditorWindow
         Mesh mesh = smr.sharedMesh;
         for (int i = 0; i < 18; i++)
         {
+            // Thank you Raliv for the example :)
             Vector3[] dV = new Vector3[mesh.vertexCount];
             Vector3[] dN = new Vector3[mesh.vertexCount];
             Vector3[] dT = new Vector3[mesh.vertexCount];
+            Vector3[] v = mesh.vertices;
+            Vector3[] n = mesh.normals;
+            Vector4[] t = mesh.tangents;
+
             mesh.GetBlendShapeFrameVertices(shapes[i], 0, dV, dN, dT);
             for (int j = 0; j < mesh.vertexCount; j++)
             {
                 if (j > 16383) continue; // 128 x 128 max texture block size
                 int x = j % 128 + (i % 5) * 128;
                 int y = j / 128 + (i / 5) * 128;
-                Color col = new Color(dV[j].x, dV[j].y, dV[j].z, 0);
+                Vector3 deltaVert = dV[j];
+                float tn=Vector3.Project(deltaVert, n[j]).magnitude * Mathf.Sign(Vector3.Dot(deltaVert, n[j]));
+                float tt=Vector3.Project(deltaVert, t[j]).magnitude * Mathf.Sign(Vector3.Dot(deltaVert, t[j]));
+                float tb=Vector3.Project(deltaVert, Vector3.Cross(n[j].normalized, t[j].normalized)).magnitude * Mathf.Sign(Vector3.Dot(deltaVert, Vector3.Cross(n[j].normalized, t[j].normalized)));
+                Color col = new Color(tn, tt, tb, 0);
                 //Debug.Log(dV);
                 tex.SetPixel(x, y, col);
             }
@@ -102,8 +111,8 @@ public class BakeBlendshapes : EditorWindow
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(350), GUILayout.Height(530));
             for (int i = 0; i < 18; i++)
             {
-				EditorGUILayout.LabelField(labels[i], EditorStyles.label);
-				shapes[i] = EditorGUILayout.Popup(shapes[i], blendList);
+                EditorGUILayout.LabelField(labels[i], EditorStyles.label);
+                shapes[i] = EditorGUILayout.Popup(shapes[i], blendList);
             }
             EditorGUILayout.EndScrollView();
             if (GUILayout.Button("Bake!") && smr != null) {

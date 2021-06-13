@@ -38,7 +38,6 @@ The Iris model has two outputs, same as the original, 71 3D brows and contour po
 At the final step, a shader takes Facemesh and Iris model outputs, calculates blendshape values based on key points and smooths the results.
 
 ## Problems
-- Baked vertices not in tangent space, will look kinda weird on skinned mesh renderers. (TODO)
 - No face detection, meaning the user must have their face within the center of the input camera.
 - SVD (singular value decomposition) not accurate, there isn't any SVD libraries written for HLSL. The only one I found was UnitySVDComputeShader and it only solves 3x3 matrices, meaning I can only use 3 points from Facemesh to solve the rotation.
 - Slow implementation, it's only fast cause it's made for mobile devices.
