@@ -189,8 +189,6 @@ The rotation matrix is copied over from the Procrustes Analysis CRT.
 
 10. Most likely the example shaders aren't good enough, you can move it into your own shader by copying everything I have between these tags in both the shader into an equivalent **Vertex shader**
 
-11. Drop the FaceLandmarkDetection.prefab from the `FaceLandmarkDetection/Demoes/Face Tracking/Prefabs` folder somewhere on your avatar so the CRTs get referenced.
-
 ```HLSL
 // ------------------- FACE TRACKING START ------------------- //
 
@@ -198,6 +196,8 @@ The rotation matrix is copied over from the Procrustes Analysis CRT.
 
 // ------------------- FACE TRACKING END ------------------- //
 ```
+
+11. Drop the FaceLandmarkDetection.prefab from the `FaceLandmarkDetection/Demoes/Face Tracking/Prefabs` folder somewhere on your avatar so the CRTs get referenced.
 
 ### Python, C++ Code
 
