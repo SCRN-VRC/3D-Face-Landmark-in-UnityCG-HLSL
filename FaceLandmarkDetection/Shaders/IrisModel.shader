@@ -72,8 +72,8 @@
                 look *= 0.1667;
 
                 // float angX = atan2(look[2][1], look[2][2]);
-                // float angY = atan2(-look[2][0],
-                //     sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
+                float angY = atan2(-look[2][0],
+                     sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
                 float angZ = atan2(look[1][0], look[0][0]);
 
                 //buffer[0] = float4(dot(_Layer2[uint2(0, 0)], 0.3333.xxx).xxxx);
