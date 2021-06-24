@@ -231,7 +231,8 @@ I suggest using a virtual environment and a package manager.
 - [Keijiro's MediaPipe Iris Implementation](https://github.com/keijiro/IrisBarracuda)
 - [Procrustes Analysis](https://stackoverflow.com/questions/18925181/procrustes-analysis-with-numpy)
 - [UnitySVDComputeShader](https://github.com/vanish87/UnitySVDComputeShader/blob/master/UnitySVDComputeShader/Assets/Math.cginc)
-- [CHARLIZE THERON_HEAD](https://sketchfab.com/3d-models/charlize-theron-head-ca8926f4284045c6a2e75a6f7642c851)
+- [CHARLIZE THERON_HEAD](https://sketchfab.com/3d-models/charlize-theron-head-ca8926f4284045c6a2e75a6f7642c851)\
+- [Bricks Game](https://www.shadertoy.com/view/MddGzf)
 
 Thanks to [Merlin](https://twitter.com/MerlinVR_), [Raliv](https://twitter.com/RalivDev) and [orels1](https://twitter.com/orels1_) for the help.
 

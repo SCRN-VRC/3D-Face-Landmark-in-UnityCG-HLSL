@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Breakout_Out
-  m_Shader: {fileID: 4800000, guid: ab4017021be176d468f17e257e8c372d, type: 3}
+  m_Name: BricksState
+  m_Shader: {fileID: 4800000, guid: 244b9ce3a03bb0e4e885755b43cd55a9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -23,8 +23,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _CamIn:
-        m_Texture: {fileID: 8400000, guid: 8b37f169f1a41e94b9ed7af524519f90, type: 2}
+    - _ControlIn:
+        m_Texture: {fileID: 8600000, guid: 372ecd106d333754e960a2623f265433, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -59,20 +59,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _OutTex:
-        m_Texture: {fileID: 8600000, guid: 9725d67292f327d438fedae84d183183, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _StateTex:
         m_Texture: {fileID: 8600000, guid: ba08106d58f32e2408e9df933d193079, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TextTex:
-        m_Texture: {fileID: 2800000, guid: 4fc554815509457419e344622f9e3a5c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -87,6 +79,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Reset: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
