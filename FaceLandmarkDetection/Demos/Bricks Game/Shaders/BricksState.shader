@@ -2,6 +2,7 @@
 	Properties {
 		_StateTex ("State Input", 2D) = "black" {}
 		_ControlIn ("Head Rotation Input", 2D) = "black" {}
+        _ButtonsDepthIn ("Buttons Depth In", 2D) = "black" {}
         _NoiseTex ("Noise Texture", 2D) = "black" {}
 	}
 	SubShader
@@ -24,8 +25,10 @@
 
 			Texture2D<float4> _StateTex;
 			Texture2D<float4> _ControlIn;
+            Texture2D<float> _ButtonsDepthIn;
             sampler2D _NoiseTex;
 			float4 _StateTex_TexelSize;
+            float4 _ButtonsDepthIn_TexelSize;
 
             RWStructuredBuffer<float4> buffer : register(u1);
 
@@ -39,8 +42,8 @@
             // pixels. A filter in the end of the shader takes only the bit  of infomration that needs 
             // to be stored in each texl of the game-logic texture.
 
-            #define gameSpeed    8.0
-            #define inputSpeed   6.0
+            #define gameSpeed    6.0
+            #define inputSpeed   9.0
 
             #define iFrame state.y
             #define iTime state.y
@@ -86,18 +89,24 @@
 				float2 uv = IN.globalTexcoord.xy;
 				int2 fragCoord = int2(uv * _StateTex_TexelSize.zw);
                 float4 fragColor = 0..xxxx;
+
                 //---------------------------------------------------------------------------------   
                 // load game state.x
                 //---------------------------------------------------------------------------------
                 float4 balPosVel = LoadValue( _StateTex, txBallPosVel );
                 float  paddlePos = LoadValue( _StateTex, txPaddlePos ).x;
-                float  points    = LoadValue( _StateTex, txPoints ).x;
+                float4 points    = LoadValue( _StateTex, txPoints );
                 float4 state     = LoadValue( _StateTex, txState );
                 float3 lastHit   = LoadValue( _StateTex, txLastHit ).xyz;        // paddle, brick, wall
                 float2 brick     = LoadValue( _StateTex, fragCoord ).xy;               // visible, hittime
+                float4 touch     = LoadValue( _StateTex, txTouch );
+                float4 calibrate = LoadValue( _StateTex, txCalibrate );
 
+                //---------------------------------------------------------------------------------
+                // face rotations
+                //---------------------------------------------------------------------------------
+                
                 float3x3 look = 0.0;
-
                 for (uint i = 0; i < 6; i++)
                 {
                     look[0] += _ControlIn[uint2(0, i)];
@@ -107,19 +116,86 @@
                 look *= 0.1667;
 
                 float angX = atan2(look[2][1], look[2][2]);
-                // float angY = atan2(-look[2][0],
-                //     sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
+                float angY = atan2(-look[2][0],
+                    sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
                 float angZ = atan2(look[1][0], look[0][0]);
 
-                //buffer[0] = float4(angX, angY, angZ, 1.0);
+                //---------------------------------------------------------------------------------
+                // button logic
+                //---------------------------------------------------------------------------------
+                
+                touch.xy = 0.0;
+                float count = 0.0;
+                for (uint i = 0; i < _ButtonsDepthIn_TexelSize.z; i++)
+                {
+                    for (uint j = 0; j < _ButtonsDepthIn_TexelSize.w; j++)
+                    {
+                        bool handIn = _ButtonsDepthIn[uint2(i, j)] > 0.2;
+                        touch.x += (handIn ? i : 0.0);
+                        touch.y += (handIn ? j : 0.0);
+                        count += (handIn ? 1.0 : 0.0);
+                    }
+                }
+
+                // get uv of player hand input
+                touch.xy = floor(touch.xy / max(count, 1.));
+                touch.xy = touch.xy * _ButtonsDepthIn_TexelSize.xy +  _ButtonsDepthIn_TexelSize.xy;
+                touch.x = 1.0 - touch.x;
+
+                // 1.0 is calibrate, 2.0 is start
+                float side = 1.0 + floor(touch.x * 2.0);
+                // save how long buttons held
+                touch.w = (count > 0.0 && touch.z == side && touch.z > 0.0) ?
+                    touch.w + unity_DeltaTime.x : 0.0;
+                touch.z = count > 0.0 ? side : 0.0;
+
+                //---------------------------------------------------------------------------------
+                // calibrate
+                //---------------------------------------------------------------------------------
+                
+                uint stateCal = floor(calibrate.x);
+                if (stateCal == WAIT_INPUT)
+                {
+                    // only continue if player touching Calibrate for 2 seconds
+                    calibrate.x = (floor(touch.z) == 1 && touch.w >= 1.0) ?
+                        CAL_GUIDE : WAIT_INPUT;
+                    calibrate.w = 0.0;
+                }
+                else if (stateCal == CAL_GUIDE)
+                {
+                    // 2 seconds of instructions
+                    calibrate.w += unity_DeltaTime.x;
+                    calibrate.x = (calibrate.w >= 2.0) ? CAL_VAL : CAL_GUIDE;
+                    // initalize
+                    calibrate.y = angX;
+                    calibrate.z = angZ;
+                }
+                else if (stateCal == CAL_VAL)
+                {
+                    // sample face rotation for 1 second
+                    calibrate.w += unity_DeltaTime.x;
+                    calibrate.x = (calibrate.w >= 3.0) ? CAL_DONE : CAL_VAL;
+                    calibrate.y = calibrate.y * 0.75 + angX * 0.25;
+                    calibrate.z = calibrate.z * 0.75 + angZ * 0.25;
+                }
+                else if (stateCal == CAL_DONE)
+                {
+                    // wait for player to release control
+                    calibrate.x = touch.w <= 0.1 ? WAIT_INPUT : CAL_DONE;
+                }
+                else
+                {
+                    calibrate.x = WAIT_INPUT;
+                }
+                
+                buffer[0] = calibrate;
 
                 //---------------------------------------------------------------------------------
                 // reset
                 //---------------------------------------------------------------------------------
                 
-                bool reset = angX < -0.4;
+                bool reset = angX < -0.25;
                 state.y = reset ? 0.0 : state.y + unity_DeltaTime.x;
-                state.y = state.y + unity_DeltaTime.x;
 
                 if( iFrame < 1 ) state.x = -1.0;
                 
@@ -128,7 +204,7 @@
                     state.x = 0.0;
                     balPosVel = float4(0.0,paddlePosY+ballRadius+paddleWidth*0.5+0.001, 0.6,1.0);
                     paddlePos = 0.0;
-                    points = 0.0;
+                    points.x = 0.0;
                     state.x = 0.0;
                     brick = float2(1.0,-5.0);
                     lastHit = -1.0.xxx;
@@ -144,13 +220,13 @@
                 //---------------------------------------------------------------------------------
                 // do game
                 //---------------------------------------------------------------------------------
+                //buffer[0] = state;
 
                 // game over (or won), wait for space key press to resume
                 if( state.x > 0.5 )
                 {
                     state.x = reset ? -1.0 : state.x;
                 }
-                
                 // if game mode (not game over), play game
                 else if( state.x < 0.5 ) 
                 {
@@ -161,7 +237,7 @@
                     float oldPaddlePos = paddlePos;
 
                     // move with head rotation
-                    paddlePos += 0.02*inputSpeed*angZ;
+                    paddlePos = inputSpeed * angZ;
 
                     paddlePos = clamp( paddlePos, -1.0+0.5*paddleSize+paddleWidth*0.5, 1.0-0.5*paddleSize-paddleWidth*0.5 );
 
@@ -253,8 +329,8 @@
                         {
                             balPosVel.zw = reflect( balPosVel.zw, nor );
                             lastHit.y = iTime;
-                            points += 1.0;
-                            if( points>143.5 )
+                            points.x += 1.0;
+                            if( points.x>143.5 )
                             {
                                 state.x = 2.0; // won game!
                             }
@@ -279,9 +355,11 @@
                 StoreValue4( txBricks,     float4(brick,0.0,0.0),         fragColor, fragCoord );
                 StoreValue ( txBallPosVel, balPosVel,                     fragColor, fragCoord );
                 StoreValue ( txPaddlePos,  float4(paddlePos,0.0,0.0,0.0), fragColor, fragCoord );
-                StoreValue ( txPoints,     float4(points,0.0,0.0,0.0),    fragColor, fragCoord );
+                StoreValue ( txPoints,     float4(points.x,angX,angY,angZ),    fragColor, fragCoord );
                 StoreValue ( txState,      state,                         fragColor, fragCoord );
                 StoreValue ( txLastHit,    float4(lastHit,0.0),           fragColor, fragCoord );
+                StoreValue ( txTouch,      touch,                         fragColor, fragCoord );
+                StoreValue ( txCalibrate,  calibrate,                     fragColor, fragCoord );
                 return fragColor;
 			}
 			ENDCG

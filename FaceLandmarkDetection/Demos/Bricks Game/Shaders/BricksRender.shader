@@ -3,6 +3,7 @@
         _StateTex ("State Input", 2D) = "black" {}
         _TextTex ("Text Block Image", 2D) = "black" {}
         _CamIn ("Camera Input", 2D) = "black" {}
+        _GuideTex ("Camera Guide", 2D) = "black" {}
         _NoiseTex ("Noise Texture", 2D) = "black" {}
     }
     SubShader
@@ -28,6 +29,7 @@
 
             Texture2D<float4> _StateTex;
             sampler2D _CamIn;
+            sampler2D _GuideTex;
             sampler2D _TextTex;
             sampler2D _NoiseTex;
 
@@ -134,9 +136,10 @@
                 //------------------------
                 float2  ballPos   = LoadValue( _StateTex, txBallPosVel ).xy;
                 float paddlePos   = LoadValue( _StateTex, txPaddlePos ).x;
-                float points      = LoadValue( _StateTex, txPoints ).x;
+                float4 points      = LoadValue( _StateTex, txPoints );
                 float4 state      = LoadValue( _StateTex, txState );
                 float3  lastHit   = LoadValue( _StateTex, txLastHit ).xyz;
+                float4 calibrate = LoadValue( _StateTex, txCalibrate );
                 iTime = state.y;
                 
                 //------------------------
@@ -162,6 +165,12 @@
                     float2 vigUv = faceUv * (1.0 - faceUv.yx);
                     float vig = (vigUv.x * vigUv.y * 10.0);
                     col = tex2D(_CamIn, faceUv).rgb * vig + col * (1.0 - vig);
+                    if (floor(calibrate.x) == CAL_GUIDE ||
+                        floor(calibrate.x) == CAL_VAL)
+                    {
+                        float4 guide = tex2D(_GuideTex, faceUv);
+                        col = lerp(col, guide.rgb, guide.a);
+                    }
                 } 
 
                 // bricks
@@ -281,13 +290,18 @@
                 
                 // score
                 // {
-                //     float f = float(PrintInt( (uv-float2(-0.1,0.7))*12.0, int(points), 3 ));
+                //     float f = float(PrintInt( (uv-float2(-0.1,0.7))*12.0, int(points.x), 3 ));
                 //     col = lerp( col, float3(1.0,1.0,1.0), f );
                 // }
                 
                 // add emmission
                 col += emi;
                 col *= col;
+
+                col += PrintInt((uv + float2(0.8, 0.0)) * 18.0, abs(points.y * 1000), 4);
+                col += PrintInt((uv + float2(0.8, 0.1)) * 18.0, abs(points.z * 1000), 4);
+                col += PrintInt((uv + float2(0.8, 0.2)) * 18.0, abs(points.w * 1000), 4);
+                col += PrintInt((uv + float2(0.8, 0.3)) * 18.0, abs(paddlePos * 1000), 4);
 
                 return float4(col, 1.0);
             }
