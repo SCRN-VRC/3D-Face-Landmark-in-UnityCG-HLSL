@@ -44,7 +44,7 @@
             // to be stored in each texl of the game-logic texture.
 
             #define gameSpeed    6.0
-            #define inputSpeed   6.5
+            #define inputSpeed   4.75
 
             #define iFrame state.y
             #define iTime state.y
