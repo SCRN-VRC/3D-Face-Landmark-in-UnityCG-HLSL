@@ -1,5 +1,6 @@
 # 3D Face Landmark in UnityCG HLSL
-<img src="./Media/bakapreview.gif" align="middle"/>
+<img src="./Media/bakapreview.gif" height="250" align="middle"/>
+<img src="./Media/brickspreview.gif" height="250" align="middle"/>
 
 ### NOTE: This was built and tested with Unity 2018.4.20f1 using built-in render pipeline, there may be shader compatibility issues with other versions.
 
