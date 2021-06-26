@@ -1,8 +1,6 @@
 ﻿#ifndef BREAKOUT_INC
 #define BREAKOUT_INC
 
-#include "ShaderGames.cginc"
-
 #define txBallPosVel   int2(0,0)
 #define txPaddlePos    int2(1,0)
 #define txPoints       int2(2,0)
@@ -10,6 +8,7 @@
 #define txLastHit      int2(4,0)
 #define txCalibrate    int2(5,0)
 #define txTouch        int2(6,0)
+#define txStart        int2(7,0)
 #define txBricks       int4(0,1,13,12)
 
 #define ballRadius   0.035
@@ -25,5 +24,7 @@
 #define CAL_VAL         2
 #define CAL_DONE        3
 
+#define GAME_START      1
+#define GAME_END        2
 
 #endif

@@ -18,6 +18,7 @@
 			Name "Bricks State"
 			CGPROGRAM
 			#include "UnityCustomRenderTexture.cginc"
+            #include "ShaderGames.cginc"
 			#include "BricksInc.cginc"
 			#pragma vertex CustomRenderTextureVertexShader
 			#pragma fragment pixel_shader
@@ -43,7 +44,7 @@
             // to be stored in each texl of the game-logic texture.
 
             #define gameSpeed    6.0
-            #define inputSpeed   9.0
+            #define inputSpeed   6.5
 
             #define iFrame state.y
             #define iTime state.y
@@ -101,6 +102,8 @@
                 float2 brick     = LoadValue( _StateTex, fragCoord ).xy;               // visible, hittime
                 float4 touch     = LoadValue( _StateTex, txTouch );
                 float4 calibrate = LoadValue( _StateTex, txCalibrate );
+                float4 start     = LoadValue( _StateTex, txStart );
+                state.y *= 30.0;
 
                 //---------------------------------------------------------------------------------
                 // face rotations
@@ -116,8 +119,8 @@
                 look *= 0.1667;
 
                 float angX = atan2(look[2][1], look[2][2]);
-                float angY = atan2(-look[2][0],
-                    sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
+                // float angY = atan2(-look[2][0],
+                //     sqrt(look[2][1] * look[2][1] + look[2][2] * look[2][2]));
                 float angZ = atan2(look[1][0], look[0][0]);
 
                 //---------------------------------------------------------------------------------
@@ -150,7 +153,7 @@
                 touch.z = count > 0.0 ? side : 0.0;
 
                 //---------------------------------------------------------------------------------
-                // calibrate
+                // calibrate button
                 //---------------------------------------------------------------------------------
                 
                 uint stateCal = floor(calibrate.x);
@@ -187,14 +190,43 @@
                 {
                     calibrate.x = WAIT_INPUT;
                 }
+
+                //---------------------------------------------------------------------------------
+                // start button
+                //---------------------------------------------------------------------------------
                 
-                buffer[0] = calibrate;
+                bool reset = false;
+                uint stateStart = floor(start.x);
+                if (stateStart == WAIT_INPUT)
+                {
+                    // only continue if player touching Start for 2 seconds
+                    start.x = (floor(touch.z) == 2 && touch.w >= 1.0) ?
+                        GAME_START : WAIT_INPUT;
+                }
+                else if (stateStart == GAME_START)
+                {
+                    // reset the game
+                    reset = true;
+                    start.x = GAME_END;
+                }
+                else if (stateStart == GAME_END)
+                {
+                    // wait till the game's over
+                    // wait for player to release control
+                    start.x = (state.x > 0.5 && touch.w <= 0.1) ?
+                        WAIT_INPUT : GAME_END;
+                }
+                else
+                {
+                    start.x = WAIT_INPUT;
+                }
+
+                buffer[0] = start;
 
                 //---------------------------------------------------------------------------------
                 // reset
                 //---------------------------------------------------------------------------------
                 
-                bool reset = angX < -0.25;
                 state.y = reset ? 0.0 : state.y + unity_DeltaTime.x;
 
                 if( iFrame < 1 ) state.x = -1.0;
@@ -237,7 +269,7 @@
                     float oldPaddlePos = paddlePos;
 
                     // move with head rotation
-                    paddlePos = inputSpeed * angZ;
+                    paddlePos = inputSpeed * (angZ - calibrate.z);
 
                     paddlePos = clamp( paddlePos, -1.0+0.5*paddleSize+paddleWidth*0.5, 1.0-0.5*paddleSize-paddleWidth*0.5 );
 
@@ -352,14 +384,17 @@
                 // store game state.x
                 //---------------------------------------------------------------------------------
 
+                state.y /= 30.0;
                 StoreValue4( txBricks,     float4(brick,0.0,0.0),         fragColor, fragCoord );
                 StoreValue ( txBallPosVel, balPosVel,                     fragColor, fragCoord );
-                StoreValue ( txPaddlePos,  float4(paddlePos,0.0,0.0,0.0), fragColor, fragCoord );
-                StoreValue ( txPoints,     float4(points.x,angX,angY,angZ),    fragColor, fragCoord );
+                StoreValue ( txPaddlePos,  float4(paddlePos, 0..xxx),     fragColor, fragCoord );
+                StoreValue ( txPoints,     float4(points.x, 0..xxx),      fragColor, fragCoord );
                 StoreValue ( txState,      state,                         fragColor, fragCoord );
                 StoreValue ( txLastHit,    float4(lastHit,0.0),           fragColor, fragCoord );
                 StoreValue ( txTouch,      touch,                         fragColor, fragCoord );
                 StoreValue ( txCalibrate,  calibrate,                     fragColor, fragCoord );
+                StoreValue ( txStart,      start,                         fragColor, fragCoord );
+
                 return fragColor;
 			}
 			ENDCG

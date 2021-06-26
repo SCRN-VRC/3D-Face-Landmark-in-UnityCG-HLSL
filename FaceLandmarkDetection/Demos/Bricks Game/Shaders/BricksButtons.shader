@@ -17,7 +17,9 @@
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
+            #include "ShaderGames.cginc"
             #include "BricksInc.cginc"
+
 
             #define SMOOTH(r) (lerp(1.0, 0.0, smoothstep(0.9, 1.0, r)))
 
@@ -60,20 +62,19 @@
 
                 float4 touch     = LoadValue( _StateTex, txTouch );
                 float4 calibrate = LoadValue( _StateTex, txCalibrate );
+                float4 start     = LoadValue( _StateTex, txStart );
 
                 float2 uv = i.uv;
                 uv.y = uv.y * 0.5 + 0.5;
-                if (uv.x <= 0.5)
-                {
-                    // Calibrate button disable
-                    bool disabled = floor(calibrate.x) != WAIT_INPUT;
-                    uv.y -= disabled ? 0.5 : 0.0;
-                }
+
+                uint buttonState = floor((uv.x < 0.5) ? calibrate.x : start.x);
+                // button disable
+                uv.y -= (buttonState != WAIT_INPUT) ? 0.5 : 0.0;
 
                 float4 col = tex2D(_MainTex, uv);
 
                 // touched buttons
-                if (touch.z > 0.5 && floor(calibrate.x) == WAIT_INPUT)
+                if (touch.z > 0.5 && buttonState == WAIT_INPUT)
                 {
                     float2 ringUV = i.uv * float2(8.0, 1.0);
                     float ring = drawRing(ringUV, float2(2.0 + 4.0 * (touch.z - 1.0), 0.5), 0.3, 0.5,

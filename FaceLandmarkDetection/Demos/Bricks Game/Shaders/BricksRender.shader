@@ -20,6 +20,7 @@
             CGPROGRAM
 
             #include "UnityCustomRenderTexture.cginc"
+            #include "ShaderGames.cginc"
             #include "BricksInc.cginc"
             #pragma vertex CustomRenderTextureVertexShader
             #pragma fragment pixel_shader
@@ -140,6 +141,7 @@
                 float4 state      = LoadValue( _StateTex, txState );
                 float3  lastHit   = LoadValue( _StateTex, txLastHit ).xyz;
                 float4 calibrate = LoadValue( _StateTex, txCalibrate );
+                state.y *= 30.0;
                 iTime = state.y;
                 
                 //------------------------
@@ -289,19 +291,19 @@
                 }
                 
                 // score
-                // {
-                //     float f = float(PrintInt( (uv-float2(-0.1,0.7))*12.0, int(points.x), 3 ));
-                //     col = lerp( col, float3(1.0,1.0,1.0), f );
-                // }
+                {
+                    float f = float(PrintInt( (uv + float2(0.85, -0.05)) * 18.0, int(points.x), 3 ));
+                    col = lerp( col, float3(1.0,1.0,1.0), f );
+                }
                 
                 // add emmission
                 col += emi;
                 col *= col;
 
-                col += PrintInt((uv + float2(0.8, 0.0)) * 18.0, abs(points.y * 1000), 4);
-                col += PrintInt((uv + float2(0.8, 0.1)) * 18.0, abs(points.z * 1000), 4);
-                col += PrintInt((uv + float2(0.8, 0.2)) * 18.0, abs(points.w * 1000), 4);
-                col += PrintInt((uv + float2(0.8, 0.3)) * 18.0, abs(paddlePos * 1000), 4);
+                // col += PrintInt((uv + float2(0.8, 0.0)) * 18.0, abs(points.y * 1000), 4);
+                // col += PrintInt((uv + float2(0.8, 0.1)) * 18.0, abs(points.z * 1000), 4);
+                // col += PrintInt((uv + float2(0.8, 0.2)) * 18.0, abs(points.w * 1000), 4);
+                // col += PrintInt((uv + float2(0.8, 0.3)) * 18.0, abs(paddlePos * 1000), 4);
 
                 return float4(col, 1.0);
             }
