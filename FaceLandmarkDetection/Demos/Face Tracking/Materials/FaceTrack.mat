@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BakedBlendTex:
-        m_Texture: {fileID: 2800000, guid: 1f78109cfb359e84b8edd0676a8722de, type: 2}
+        m_Texture: {fileID: 2800000, guid: 38c111053fd4c9b46b23d23a9ca6307b, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BlendValTex:
