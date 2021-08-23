@@ -2,7 +2,7 @@
 <img src="./Media/bakapreview.gif" height="220" align="middle"/>
 <img src="./Media/brickspreview.gif" height="220" align="middle"/>
 
-### NOTE: This was built and tested with Unity 2018.4.20f1 using built-in render pipeline, there may be shader compatibility issues with other versions.
+### NOTE: This was built and tested with Unity 2019.4.29f1 using built-in render pipeline, there may be shader compatibility issues with other versions.
 
 ## Table of Contents
 - [Overview](#overview)
