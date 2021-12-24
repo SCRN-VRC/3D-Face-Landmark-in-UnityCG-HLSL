@@ -7,6 +7,7 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Problems](#problems)
+- [Setup](#setup)
 - [Implementation Details](#implementation-details)
     - [Facemesh Shader](#facemesh-shader-outputs)
     - [Iris Shader](#iris-shader-outputs)
@@ -45,6 +46,13 @@ At the final step, a shader takes Facemesh and Iris model outputs, calculates bl
 - SVD (singular value decomposition) not accurate, there isn't any SVD libraries written for HLSL. The only one I found was UnitySVDComputeShader and it only solves 3x3 matrices, meaning I can only use 3 points from Facemesh to solve the rotation.
 - Slow implementation, it's only fast cause it's made for mobile devices.
 - Iris tracking also requires the eyes to be in the very center. Without a good SVD method, it's harder to undo rotations and translations for the eyes accurately.
+
+## Setup
+
+1. Download the latest package in [Release](https://github.com/SCRN-VRC/3D-Face-Landmark-in-UnityCG-HLSL/releases)
+2. Import the .unitypackage into a Unity project.
+3. Open the prebuilt scene or drop in a prefab.
+4. Enter Playmode to run the network.
 
 ## Implementation Details
 
